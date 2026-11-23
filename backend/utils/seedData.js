@@ -14,7 +14,7 @@ const seedLibraryData = async () => {
         name: 'Viraj Kumar',
         email: studentEmail,
         passwordHash: studentHash,
-        studentId: '500106482',
+        studentId: '590029022',
         role: 'student'
       });
       console.log(`[SeatSync Seed] UPES Student account created: ${studentEmail} (Password: Password123)`);

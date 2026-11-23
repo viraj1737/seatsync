@@ -11,7 +11,7 @@ angular.module('seatSyncApp').controller('AuthController', ['$scope', '$window',
   $scope.registerData = {
     name: 'Viraj Kumar',
     email: 'viraj.29022@stu.upes.ac.in',
-    studentId: '500106482',
+    studentId: '590029022',
     password: '',
     confirmPassword: ''
   };
