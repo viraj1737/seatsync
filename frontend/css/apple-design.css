@@ -1,0 +1,477 @@
+/**
+ * SeatSync — Apple Human Interface Guidelines (HIG) Polish
+ * Genuine Apple-inspired visual depth, SF Pro typography, VisionOS glassmorphism,
+ * iOS segmented controls, physical desk maps, and Apple Wallet Digital Pass.
+ */
+
+/* ==========================================================================
+   1. Ambient Lighting & SF Pro Typography
+   ========================================================================== */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", sans-serif;
+  letter-spacing: -0.015em;
+  background-image: 
+    radial-gradient(circle at 50% -15%, rgba(10, 132, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(48, 209, 88, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 10% 40%, rgba(94, 92, 230, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+:root[data-theme="light"] body {
+  background-image: 
+    radial-gradient(circle at 50% -15%, rgba(0, 113, 227, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(52, 199, 89, 0.05) 0%, transparent 40%);
+}
+
+.hero-title, .page-title, .section-title {
+  letter-spacing: -0.03em;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* ==========================================================================
+   2. VisionOS / macOS Frosted Glass Depth
+   ========================================================================== */
+.card, .metric-card, .seat-grid-container {
+  border-radius: 22px !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease !important;
+  position: relative;
+}
+
+.card:hover, .metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+:root[data-theme="light"] .card:hover, :root[data-theme="light"] .metric-card:hover {
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Apple Inner Highlight & Border */
+.card::after, .metric-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme="light"] .card::after, :root[data-theme="light"] .metric-card::after {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   3. Native Apple Segmented Control (iOS / macOS Pill Track)
+   ========================================================================== */
+.apple-segmented-track {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 4px;
+  gap: 4px;
+  position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+:root[data-theme="light"] .apple-segmented-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.apple-segmented-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.apple-segmented-btn:hover:not(.active) {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.apple-segmented-btn.active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="light"] .apple-segmented-btn.active {
+  background: #FFFFFF;
+  color: #111114;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* ==========================================================================
+   4. Physical Desk Tile Experience (Apple Workspace Feel)
+   ========================================================================== */
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 14px;
+  justify-items: center;
+}
+
+.seat-tile {
+  width: 78px;
+  height: 82px;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme="light"] .seat-tile {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.seat-tile:active:not(.seat-tile--reserved):not(.seat-tile--occupied):not(.seat-tile--unavailable) {
+  transform: scale(0.93) !important;
+}
+
+/* Status Beacon Dot with Pulse */
+.seat-beacon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.seat-tile--available .seat-beacon {
+  background: #30D158;
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.75);
+}
+
+.seat-tile--available:hover {
+  transform: translateY(-4px) scale(1.03) !important;
+  border-color: rgba(48, 209, 88, 0.6) !important;
+  box-shadow: 0 10px 24px rgba(48, 209, 88, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Selected State: Apple Blue Aura */
+.seat-tile--selected {
+  background: linear-gradient(180deg, rgba(10, 132, 255, 0.22) 0%, rgba(10, 132, 255, 0.1) 100%) !important;
+  border-color: #0A84FF !important;
+  transform: translateY(-4px) scale(1.04) !important;
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.35), 0 12px 28px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.seat-tile--selected .seat-beacon {
+  background: #0A84FF;
+  box-shadow: 0 0 10px #0A84FF;
+}
+
+.seat-tile--reserved {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  border-color: rgba(255, 159, 10, 0.3) !important;
+  background: rgba(255, 159, 10, 0.05) !important;
+}
+.seat-tile--reserved .seat-beacon { background: #FF9F0A; }
+
+.seat-tile--occupied {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  border-color: rgba(255, 69, 58, 0.3) !important;
+  background: rgba(255, 69, 58, 0.05) !important;
+}
+.seat-tile--occupied .seat-beacon { background: #FF453A; }
+
+.seat-tile--unavailable {
+  opacity: 0.35;
+  cursor: not-allowed !important;
+}
+.seat-tile--unavailable .seat-beacon { background: #8E8E93; }
+
+/* Desk Number Typography */
+.seat-tile-label {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.seat-tile-status {
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Desk Power Outlet Glyph */
+.seat-power-glyph {
+  font-size: 10px;
+  color: #FFD60A;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   5. Authentic Apple Wallet Pass (PKPass Simulation)
+   ========================================================================== */
+.apple-wallet-pass {
+  background: linear-gradient(145deg, #1A1A22 0%, #0E0E12 100%);
+  border-radius: 26px;
+  padding: 32px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+:root[data-theme="light"] .apple-wallet-pass {
+  background: linear-gradient(145deg, #22222B 0%, #16161D 100%);
+  color: #FFFFFF;
+}
+
+/* Holographic Shimmer Stripe */
+.apple-wallet-pass::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(10, 132, 255, 0.28) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* Ticket Notches (Cutout Circles) */
+.pass-notch-left, .pass-notch-right {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--color-canvas);
+  border-radius: 50%;
+  top: 62%;
+  z-index: 2;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.pass-notch-left { left: -12px; }
+.pass-notch-right { right: -12px; }
+
+/* Perforated Divider Line */
+.pass-tear-line {
+  border-top: 1.5px dashed rgba(255, 255, 255, 0.15);
+  margin: 24px 0 20px 0;
+  position: relative;
+}
+
+/* Turnstile NFC Wave Animation */
+.nfc-wave-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+}
+
+.nfc-wave-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(10, 132, 255, 0.4);
+  animation: nfcPulse 2.2s infinite ease-out;
+}
+.nfc-wave-circle:nth-child(1) { width: 36px; height: 36px; animation-delay: 0s; }
+.nfc-wave-circle:nth-child(2) { width: 50px; height: 50px; animation-delay: 0.4s; }
+.nfc-wave-circle:nth-child(3) { width: 64px; height: 64px; animation-delay: 0.8s; }
+
+@keyframes nfcPulse {
+  0% { transform: scale(0.7); opacity: 0.9; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* ==========================================================================
+   6. Apple Primary Buttons & Haptics
+   ========================================================================== */
+.btn {
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  transition: transform 120ms ease, box-shadow 180ms ease, background 180ms ease !important;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.96) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #0A84FF 0%, #0071E3 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #2492FF 0%, #0A7AE6 100%) !important;
+  box-shadow: 0 6px 22px rgba(10, 132, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Apple Floating Header */
+.app-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(10, 10, 14, 0.75) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+}
+
+:root[data-theme="light"] .app-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ==========================================================================
+   7. Apple Brand Icon & Form Controls
+   ========================================================================== */
+.brand-mark {
+  border-radius: 11px !important;
+  background: linear-gradient(135deg, #0A84FF 0%, #0051A8 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 3px 10px rgba(10, 132, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+.brand-badge {
+  border-radius: 9999px !important;
+  padding: 2px 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+.form-control {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: var(--color-text-primary) !important;
+  font-family: inherit !important;
+  padding: 10px 14px !important;
+  transition: all 180ms ease !important;
+}
+
+:root[data-theme="light"] .form-control {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.form-control:focus {
+  border-color: #0A84FF !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3.5px rgba(10, 132, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+:root[data-theme="light"] .form-control:focus {
+  background: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   8. Apple Badges & Pill Tags
+   ========================================================================== */
+.badge {
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ==========================================================================
+   9. Apple Table Wrapper & Rows
+   ========================================================================== */
+.table-wrapper {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+:root[data-theme="light"] .table-wrapper {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.table th {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  color: var(--color-text-secondary) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+:root[data-theme="light"] .table th {
+  background: rgba(0, 0, 0, 0.02) !important;
+}
+
+.table td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+:root[data-theme="light"] .table td {
+  border-bottom-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.table tr:hover td {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+:root[data-theme="light"] .table tr:hover td {
+  background: rgba(0, 0, 0, 0.015) !important;
+}
+
+/* ==========================================================================
+   10. macOS Native Scrollbars
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+}
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

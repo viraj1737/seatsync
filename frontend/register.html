@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/premium.css">
+  <link rel="stylesheet" href="css/apple-design.css">
 </head>
 <body ng-controller="AuthController" style="display: flex; flex-direction: column; min-height: 100vh;">
 
@@ -53,8 +53,8 @@
   </header>
 
   <!-- Register Card Form -->
-  <main class="app-main auth-main">
-    <div class="card auth-card" data-spotlight>
+  <main class="app-main" style="display: flex; align-items: center; justify-content: center; padding: var(--space-8) var(--space-4);">
+    <div class="card" style="max-width: 480px; width: 100%; padding: var(--space-8); box-shadow: var(--shadow-lg);">
       
       <!-- Brand & Title -->
       <div style="text-align: center; margin-bottom: var(--space-6);">
@@ -155,6 +155,5 @@
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
   <script src="js/theme.js"></script>
-  <script src="js/premium.js"></script>
 </body>
 </html>

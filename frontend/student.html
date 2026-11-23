@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/premium.css">
+  <link rel="stylesheet" href="css/apple-design.css">
   <style>
     /* Premium Digital Seat Pass Styling */
     .digital-pass {
@@ -175,19 +175,15 @@
 
         <!-- Portal Tabs -->
         <nav>
-          <ul class="nav-links">
-            <li>
-              <button type="button" class="nav-link" ng-class="{'active': activeTab === 'reserve'}" ng-click="switchTab('reserve')">
-                Seat Map &amp; Allotment
-              </button>
-            </li>
-            <li>
-              <button type="button" class="nav-link" ng-class="{'active': activeTab === 'my-bookings'}" ng-click="switchTab('my-bookings')">
-                My Bookings &amp; Digital Pass
-                <span class="badge badge-available" ng-if="activeBooking" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Active</span>
-              </button>
-            </li>
-          </ul>
+          <div class="apple-segmented-track">
+            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'reserve'}" ng-click="switchTab('reserve')">
+              Seat Map &amp; Allotment
+            </button>
+            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'my-bookings'}" ng-click="switchTab('my-bookings')">
+              My Bookings &amp; Digital Pass
+              <span class="badge badge-available" ng-if="activeBooking" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Active</span>
+            </button>
+          </div>
         </nav>
 
         <!-- User Information & Sign Out -->
@@ -253,12 +249,12 @@
             
             <!-- Floor Selection Pills -->
             <div>
-              <label class="form-label">1. Select Library Floor &amp; Reading Wing</label>
-              <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+              <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">1. Select Library Floor &amp; Reading Wing</label>
+              <div class="apple-segmented-track">
                 <button type="button" 
-                        class="btn btn-sm" 
+                        class="apple-segmented-btn" 
                         ng-repeat="floor in floors" 
-                        ng-class="{'btn-primary': selectedFloor._id === floor._id, 'btn-secondary': selectedFloor._id !== floor._id}"
+                        ng-class="{'active': selectedFloor._id === floor._id}"
                         ng-click="selectFloor(floor)">
                   {{ floor.name }} ({{ floor.code }})
                 </button>
@@ -266,19 +262,19 @@
             </div>
 
             <!-- Date & Time Slot Selector -->
-            <div class="filter-grid">
+            <div class="filter-grid" style="align-items: flex-end;">
               <div>
-                <label class="form-label" for="booking-date">2. Reservation Date</label>
+                <label class="form-label" for="booking-date" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">2. Reservation Date</label>
                 <input type="date" id="booking-date" class="form-control" ng-model="selectedDate" ng-change="loadSeats()">
               </div>
 
               <div>
-                <label class="form-label">3. Select Fixed 2-Hour Study Slot</label>
-                <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">3. Select Fixed 2-Hour Study Slot</label>
+                <div class="apple-segmented-track">
                   <button type="button" 
-                          class="btn btn-sm" 
+                          class="apple-segmented-btn" 
                           ng-repeat="slot in slots" 
-                          ng-class="{'btn-primary': selectedSlot === slot.code, 'btn-secondary': selectedSlot !== slot.code}"
+                          ng-class="{'active': selectedSlot === slot.code}"
                           ng-click="selectSlot(slot.code)">
                     {{ slot.label }}
                   </button>
@@ -346,11 +342,10 @@
                    ng-click="chooseSeat(seat)"
                    ng-keydown="handleSeatKey($event, seat)"
                    style="animation-delay: {{ $index * 22 }}ms;">
+                <span class="seat-beacon"></span>
                 <span class="seat-tile-label">{{ seat.seatNumber }}</span>
                 <span class="seat-tile-status">{{ selectedSeat._id === seat._id ? 'Selected' : seat.status }}</span>
-                <svg ng-if="seat.hasPowerOutlet" class="seat-power-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
-                </svg>
+                <span ng-if="seat.hasPowerOutlet" class="seat-power-glyph" title="Universal AC + USB-C Outlet">⚡</span>
               </div>
             </div>
           </div>
@@ -447,60 +442,69 @@
 
         <!-- Active Reservation Highlight (Apple Wallet Pass with RFID Punch) -->
         <div ng-if="activeBooking" style="margin-bottom: var(--space-8);">
-          <div class="digital-pass" style="max-width: 580px; margin: 0 auto;">
+          <div class="apple-wallet-pass digital-pass">
+            <!-- Cutout Notches for Authentic Apple Wallet Pass -->
+            <div class="pass-notch-left"></div>
+            <div class="pass-notch-right"></div>
             
             <div class="pass-header">
-              <div>
-                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #93C5FD; text-transform: uppercase;">UPES Central Library Pass</span>
-                <div style="font-size: 18px; font-weight: 700; margin-top: 2px;">Active Desk Allotment</div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="brand-mark" style="width: 36px; height: 36px; font-size: 16px; border-radius: 10px;">S</div>
+                <div>
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #60A5FA; text-transform: uppercase;">UPES Central Library Pass</span>
+                  <div style="font-size: 19px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.02em;">Desk Allotment PKPass</div>
+                </div>
               </div>
-              <span class="badge badge-available" style="background: rgba(22, 134, 91, 0.25); color: #4ADE80; border-color: rgba(74, 222, 128, 0.4);">
+              <span class="badge" style="background: rgba(48, 209, 88, 0.16); color: #30D158; border: 1px solid rgba(48, 209, 88, 0.35); font-weight: 600; padding: 4px 10px; border-radius: 9999px;">
                 &bull; In-Library Active
               </span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px;">
               <div>
-                <span style="font-size: 12px; color: #9CA3AF;">ALLOTTED DESK</span>
-                <div style="font-size: 52px; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF; line-height: 1;">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55); text-transform: uppercase;">ALLOTTED DESK</span>
+                <div style="font-size: 56px; font-weight: 800; letter-spacing: -0.04em; color: #FFFFFF; line-height: 1; margin-top: 2px;">
                   {{ activeBooking.seatId.seatNumber }}
                 </div>
-                <div style="font-size: 13px; color: #D1D5DB; margin-top: 4px;">
+                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-top: 6px; font-weight: 500;">
                   {{ activeBooking.floorId.name }} &bull; {{ activeBooking.seatId.zone }}
                 </div>
               </div>
 
               <div style="text-align: right;">
-                <span style="font-size: 12px; color: #9CA3AF;">SLOT WINDOW</span>
-                <div style="font-size: 16px; font-weight: 700; color: #FFFFFF;">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55); text-transform: uppercase;">STUDY WINDOW</span>
+                <div style="font-size: 17px; font-weight: 700; color: #FFFFFF; margin-top: 2px;">
                   {{ activeBooking.slotCode }}
                 </div>
-                <div style="font-size: 13px; color: #D1D5DB; margin-top: 4px;">
+                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-top: 4px;">
                   Date: {{ activeBooking.bookingDate }}
                 </div>
               </div>
             </div>
 
             <!-- Student Verification Info -->
-            <div style="background: rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span style="color: #9CA3AF;">Student Name:</span>
-                <strong style="color: #FFFFFF;">{{ currentUser.name }}</strong>
+            <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 16px 20px; margin-bottom: 22px; font-size: 13px; backdrop-filter: blur(12px);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: rgba(255, 255, 255, 0.55);">Candidate:</span>
+                <strong style="color: #FFFFFF; font-weight: 600;">{{ currentUser.name }}</strong>
               </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span style="color: #9CA3AF;">UPES SAP ID:</span>
-                <strong style="color: #FFFFFF; letter-spacing: 0.04em;">{{ currentUser.studentId || '590029022' }}</strong>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: rgba(255, 255, 255, 0.55);">UPES SAP ID:</span>
+                <strong style="color: #FFFFFF; letter-spacing: 0.05em; font-weight: 600;">{{ currentUser.studentId || '590029022' }}</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
-                <span style="color: #9CA3AF;">University Email:</span>
-                <span style="color: #93C5FD; font-family: monospace;">{{ currentUser.email }}</span>
+                <span style="color: rgba(255, 255, 255, 0.55);">University Email:</span>
+                <span style="color: #60A5FA; font-family: -apple-system, monospace; font-size: 12px;">{{ currentUser.email }}</span>
               </div>
             </div>
 
-            <!-- Visual Barcode for Turnstile Scanner -->
-            <div class="pass-barcode">
-              <div class="barcode-lines"></div>
-              <span style="font-family: monospace; font-size: 11px; color: #17191D; letter-spacing: 0.15em;">
+            <!-- Perforated Tear Line -->
+            <div class="pass-tear-line"></div>
+
+            <!-- Visual Barcode for Turnstile Optical Scanner -->
+            <div class="pass-barcode" style="background: #FFFFFF; border-radius: 14px; padding: 18px 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);">
+              <div class="barcode-lines" style="height: 52px;"></div>
+              <span style="font-family: SF Mono, Menlo, monospace; font-size: 12px; color: #111114; font-weight: 700; letter-spacing: 0.18em; margin-top: 6px;">
                 UPES-LIB-{{ activeBooking._id.slice(-8).toUpperCase() }}
               </span>
             </div>
@@ -508,42 +512,49 @@
             <!-- =======================================================
                  UPES EXIT TURNSTILE RFID CARD PUNCH READER COMPONENT
                  ======================================================= -->
-            <div class="turnstile-reader" ng-class="{'turnstile-punching': isPunching}">
+            <div class="turnstile-reader" ng-class="{'turnstile-punching': isPunching}" style="border-radius: 20px; padding: 24px 20px; background: rgba(255, 255, 255, 0.04); border: 1.5px dashed rgba(255, 255, 255, 0.16); margin-top: 24px;">
               
-              <div class="rfid-icon-circle">
-                <svg ng-if="!isPunching" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                  <path d="M6.5 5.5a9 9 0 0 0 0 13"/>
-                  <path d="M10 8a5.2 5.2 0 0 0 0 8"/>
-                  <circle cx="13.8" cy="12" r="1.6" fill="currentColor" stroke="none"/>
-                </svg>
-                <svg ng-if="isPunching" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
-                </svg>
+              <!-- NFC Wave Pulse Container -->
+              <div class="nfc-wave-container">
+                <span class="nfc-wave-circle"></span>
+                <span class="nfc-wave-circle"></span>
+                <span class="nfc-wave-circle"></span>
+                <div class="rfid-icon-circle" style="width: 44px; height: 44px; font-size: 20px; margin-bottom: 0;">
+                  <svg ng-if="!isPunching" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M6.5 5.5a9 9 0 0 0 0 13"/>
+                    <path d="M10 8a5.2 5.2 0 0 0 0 8"/>
+                    <circle cx="13.8" cy="12" r="1.6" fill="currentColor" stroke="none"/>
+                  </svg>
+                  <svg ng-if="isPunching" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
+                  </svg>
+                </div>
               </div>
 
-              <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px;">
-                UPES Library Exit Turnstile (Gate 02)
+              <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; letter-spacing: -0.01em;">
+                Exit Turnstile RFID Punch (Gate 02)
               </div>
 
-              <p style="font-size: 12px; color: #9CA3AF; max-width: 380px; margin: 0 auto 16px auto; line-height: 1.4;">
-                Tap your Smart ID card below when departing the library. The turnstile will unlock and automatically release Desk {{ activeBooking.seatId.seatNumber }} in the database.
+              <p style="font-size: 13px; color: rgba(255, 255, 255, 0.65); max-width: 400px; margin: 0 auto 18px auto; line-height: 1.45;">
+                Punch your UPES Smart Card (SAP <strong>{{ currentUser.studentId || '590029022' }}</strong>) at the exit sensor to release Desk <strong>{{ activeBooking.seatId.seatNumber }}</strong>.
               </p>
 
               <!-- Punch Card Action Button -->
               <button class="btn btn-primary btn-block btn-lg" 
                       ng-click="punchCardExit()" 
                       ng-disabled="isPunching"
-                      style="background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%); border-color: #3B82F6; box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4); font-size: 15px; font-weight: 700;">
-                <span ng-if="!isPunching">Tap / Punch Card at Exit Turnstile &rarr;</span>
-                <span ng-if="isPunching">Punching Card (RFID Reader Active)...</span>
+                      style="font-size: 15px; font-weight: 600; padding: 14px 20px;">
+                <span ng-if="!isPunching">Punch Card &amp; Release Seat &rarr;</span>
+                <span ng-if="isPunching">Verifying Smart Card Punch...</span>
               </button>
 
-              <div ng-if="turnstileStatus" style="margin-top: 10px; font-size: 12px; color: #4ADE80; font-weight: 600;">
-                ✓ {{ turnstileStatus }}
+              <div ng-if="turnstileStatus" style="margin-top: 12px; font-size: 13px; color: #30D158; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>{{ turnstileStatus }}</span>
               </div>
 
-              <div style="margin-top: 12px; font-size: 11px; color: #8A8A96;">
-                Connected to IoT Exit Turnstile Webhook &bull; POST /api/bookings/punch-exit
+              <div style="margin-top: 14px; font-size: 11px; color: rgba(255, 255, 255, 0.4); letter-spacing: 0.02em;">
+                RFID Turnstile Sensor Webhook &bull; POST /api/bookings/punch-exit
               </div>
 
             </div>
@@ -648,6 +659,5 @@
   <script src="js/controllers/student.controller.js"></script>
   <script src="js/jquery-effects.js"></script>
   <script src="js/theme.js"></script>
-  <script src="js/premium.js"></script>
 </body>
 </html>

@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/premium.css">
+  <link rel="stylesheet" href="css/apple-design.css">
 </head>
 <body ng-controller="AdminController" style="display: flex; flex-direction: column; min-height: 100vh;">
 
@@ -38,11 +38,11 @@
         </a>
 
         <nav>
-          <ul class="nav-links">
-            <li><button type="button" class="nav-link" ng-class="{'active': activeTab === 'overview'}" ng-click="activeTab = 'overview'">Overview &amp; D3 Analytics</button></li>
-            <li><button type="button" class="nav-link" ng-class="{'active': activeTab === 'seats'}" ng-click="activeTab = 'seats'">Seat Inventory Control</button></li>
-            <li><button type="button" class="nav-link" ng-class="{'active': activeTab === 'bookings'}" ng-click="activeTab = 'bookings'">Student Bookings</button></li>
-          </ul>
+          <div class="apple-segmented-track">
+            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'overview'}" ng-click="activeTab = 'overview'">Overview &amp; D3 Analytics</button>
+            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'seats'}" ng-click="activeTab = 'seats'">Seat Inventory Control</button>
+            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'bookings'}" ng-click="activeTab = 'bookings'">Student Bookings</button>
+          </div>
         </nav>
 
         <div class="nav-user-actions">
@@ -291,7 +291,6 @@
   <script src="js/jquery-effects.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/theme.js"></script>
-  <script src="js/premium.js"></script>
   <script>
     // Automatically render D3 chart on page load
     setTimeout(function() {
