@@ -98,6 +98,13 @@
   text-decoration: none;
 }
 
+button.nav-link {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-system);
+  cursor: pointer;
+}
+
 .nav-link.active {
   color: var(--color-text-primary);
   background-color: var(--color-surface-subtle);
@@ -336,7 +343,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  animation: rise-in var(--duration-slow) var(--ease-spring) both;
+  transition: box-shadow var(--duration-base) var(--ease-ios), border-color var(--duration-base) var(--ease-ios);
 }
 
 .card-header {
@@ -379,12 +387,24 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  animation: rise-in var(--duration-slow) var(--ease-spring) both;
+  transition: border-color var(--duration-base) var(--ease-ios), box-shadow var(--duration-base) var(--ease-ios), transform var(--duration-base) var(--ease-spring);
 }
+
+.metric-card:nth-child(1) { animation-delay: 60ms; }
+.metric-card:nth-child(2) { animation-delay: 120ms; }
+.metric-card:nth-child(3) { animation-delay: 180ms; }
+.metric-card:nth-child(4) { animation-delay: 240ms; }
 
 .metric-card:hover {
   border-color: var(--color-border-hover);
   box-shadow: var(--shadow-md);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .metric-card:hover {
+    transform: translateY(-3px);
+  }
 }
 
 .metric-label {
@@ -472,6 +492,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-radius: var(--radius-md);
   margin-bottom: var(--space-6);
   align-items: center;
+  animation: rise-in var(--duration-slow) var(--ease-spring) 120ms both;
 }
 
 .legend-item {
@@ -496,6 +517,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-radius: var(--radius-xl);
   padding: var(--space-8);
   box-shadow: var(--shadow-sm);
+  animation: rise-in var(--duration-slow) var(--ease-spring) 160ms both;
 }
 
 .seat-grid {
@@ -521,8 +543,19 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: var(--color-text-primary);
   cursor: pointer;
   user-select: none;
-  transition: all var(--transition-fast);
   position: relative;
+  animation: tile-in var(--duration-slow) var(--ease-spring) both;
+  transition:
+    background-color var(--duration-fast) var(--ease-ios),
+    border-color var(--duration-fast) var(--ease-ios),
+    color var(--duration-fast) var(--ease-ios),
+    box-shadow var(--duration-base) var(--ease-ios),
+    transform var(--duration-base) var(--ease-spring);
+}
+
+.seat-tile:active {
+  transform: scale(0.95);
+  transition-duration: var(--duration-instant);
 }
 
 .seat-tile-label {
@@ -536,6 +569,14 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   text-transform: capitalize;
 }
 
+.seat-power-icon {
+  width: 10px;
+  height: 10px;
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  opacity: 0.75;
+}
+
 /* Seat States */
 .seat-tile--available {
   background: var(--color-surface-subtle);
@@ -546,8 +587,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .seat-tile--available:hover {
   border-color: var(--color-available);
   background: var(--color-available-bg);
-  transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(74, 222, 128, 0.12);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .seat-tile--available:hover {
+    transform: translateY(-3px) scale(1.02);
+  }
 }
 
 .seat-tile--selected {
@@ -556,6 +602,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: var(--color-accent-blue) !important;
   box-shadow: 0 0 0 3px var(--color-focus-ring), 0 8px 20px rgba(91, 155, 255, 0.18) !important;
   transform: translateY(-2px);
+  animation: seat-pop 520ms var(--ease-spring);
 }
 .seat-tile--selected .seat-tile-status { color: var(--color-accent-blue) !important; font-weight: 700; }
 
@@ -580,6 +627,22 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-color: var(--color-unavailable-border);
   color: var(--color-unavailable);
   cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Student Seat Allotment Layout
+   ========================================================================== */
+.seat-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .seat-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==========================================================================
@@ -621,6 +684,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-bottom: none;
 }
 
+.table tbody tr {
+  transition: background-color var(--duration-fast) var(--ease-ios);
+}
+
 .table tbody tr:hover {
   background-color: var(--color-surface-subtle);
 }
@@ -637,6 +704,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   align-items: flex-start;
   gap: var(--space-3);
   border: 1px solid transparent;
+  animation: alert-in 420ms var(--ease-spring) both;
 }
 
 .alert-success {
@@ -688,8 +756,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   width: 100%;
   padding: var(--space-8);
   box-shadow: var(--shadow-modal);
-  transform: translateY(16px) scale(0.98);
-  transition: transform var(--transition-normal);
+  transform: translateY(24px) scale(0.96);
+  transition: transform 560ms var(--ease-spring);
 }
 
 .modal-overlay.is-active .modal-dialog {
@@ -728,4 +796,199 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: var(--color-text-secondary);
   max-width: 400px;
   margin: 0 auto var(--space-6) auto;
+}
+
+/* ==========================================================================
+   Apple-style Spring Motion Keyframes
+   ========================================================================== */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes seat-pop {
+  0%   { transform: translateY(-2px) scale(1); }
+  40%  { transform: translateY(-4px) scale(1.07); }
+  70%  { transform: translateY(-2px) scale(0.99); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-in {
+  from { transform: translateY(22px) scale(0.95); }
+  to   { transform: translateY(0) scale(1); }
+}
+
+/* ==========================================================================
+   Theme Toggle (Light ↔ Black)
+   Default state = black theme (sun icon shown). Light theme = moon icon.
+   ========================================================================== */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex-shrink: 0;
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-ios),
+    border-color var(--duration-fast) var(--ease-ios),
+    color var(--duration-fast) var(--ease-ios),
+    box-shadow var(--duration-base) var(--ease-ios),
+    transform var(--duration-base) var(--ease-spring);
+}
+
+.theme-toggle:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.theme-toggle:active {
+  transform: scale(0.93);
+  transition-duration: var(--duration-instant);
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 17px;
+  height: 17px;
+  transition: opacity var(--duration-fast) var(--ease-ios), transform var(--duration-base) var(--ease-spring);
+}
+
+.theme-toggle-icon--moon {
+  opacity: 0;
+  transform: rotate(-80deg) scale(0.4);
+}
+
+:root[data-theme="light"] .theme-toggle-icon--sun {
+  opacity: 0;
+  transform: rotate(80deg) scale(0.4);
+}
+
+:root[data-theme="light"] .theme-toggle-icon--moon {
+  opacity: 1;
+  transform: none;
+}
+
+/* Short-lived transition window while the theme switches */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 300ms var(--ease-ios),
+    color 300ms var(--ease-ios),
+    border-color 300ms var(--ease-ios),
+    box-shadow 300ms var(--ease-ios),
+    fill 300ms var(--ease-ios),
+    stroke 300ms var(--ease-ios) !important;
+}
+
+/* ==========================================================================
+   Light Theme Component Refinements
+   Only the dark-tuned hardcoded highlights need adjusting; token-driven parts
+   follow automatically.
+   ========================================================================== */
+:root[data-theme="light"] body {
+  background-image:
+    radial-gradient(1100px 520px at 50% -12%, rgba(10, 99, 232, 0.06), transparent 70%),
+    radial-gradient(800px 420px at 50% 110%, rgba(18, 129, 61, 0.035), transparent 60%);
+}
+
+:root[data-theme="light"] ::selection {
+  background: rgba(10, 99, 232, 0.20);
+  color: var(--color-text-primary);
+}
+
+:root[data-theme="light"] .app-header {
+  box-shadow: 0 1px 0 rgba(17, 17, 20, 0.04), 0 6px 20px rgba(17, 17, 20, 0.06);
+}
+
+:root[data-theme="light"] .brand-mark {
+  box-shadow: 0 0 0 1px rgba(17, 17, 20, 0.10), 0 2px 8px rgba(17, 17, 20, 0.12);
+}
+
+:root[data-theme="light"] .nav-link.active {
+  box-shadow: inset 0 0 0 1px rgba(17, 17, 20, 0.05);
+}
+
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .metric-card,
+:root[data-theme="light"] .modal-dialog {
+  background-image: linear-gradient(180deg, rgba(17, 17, 20, 0.025), transparent 140px);
+}
+
+:root[data-theme="light"] .btn-primary {
+  background-image: linear-gradient(180deg, #2A2A32 0%, #111114 100%);
+  box-shadow: 0 1px 2px rgba(17, 17, 20, 0.28), 0 0 0 1px rgba(17, 17, 20, 0.12);
+}
+
+:root[data-theme="light"] .btn-primary:hover:not(:disabled) {
+  background-image: linear-gradient(180deg, #3A3A45 0%, #1B1B21 100%);
+  box-shadow: 0 6px 20px rgba(17, 17, 20, 0.22);
+}
+
+:root[data-theme="light"] .btn-secondary {
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F6F6FA 100%);
+}
+
+:root[data-theme="light"] .form-control,
+:root[data-theme="light"] .form-select {
+  color-scheme: light;
+}
+
+:root[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+:root[data-theme="light"] .seat-tile--available:hover {
+  box-shadow: 0 6px 18px rgba(18, 129, 61, 0.18);
+}
+
+:root[data-theme="light"] .seat-tile--selected {
+  box-shadow: 0 0 0 3px var(--color-focus-ring), 0 8px 20px rgba(10, 99, 232, 0.16) !important;
 }

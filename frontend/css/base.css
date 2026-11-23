@@ -81,6 +81,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.03em;
   line-height: 1.12;
   text-wrap: balance;
+  animation: rise-in var(--duration-slow) var(--ease-spring) 60ms both;
 }
 
 .page-title {

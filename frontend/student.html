@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#08080A">
   <meta name="color-scheme" content="dark">
+  <script>
+    /* Apply the saved theme before first paint to avoid a flash. */
+    (function () {
+      try {
+        if (localStorage.getItem('seatsync-theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) themeColor.setAttribute('content', '#F5F5F7');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <title>Student Portal — SeatSync UPES Library</title>
+  <meta name="description" content="Reserve a library desk at UPES Central Library, manage your bookings and use your digital seat pass at the RFID exit turnstile.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -91,6 +104,58 @@
       background: rgba(74, 222, 128, 0.22);
       border-color: #4ADE80;
     }
+
+    /* Apple Wallet-style spring tilt + specular shine */
+    .digital-pass {
+      transform-style: preserve-3d;
+      transition: box-shadow 400ms var(--ease-ios);
+      will-change: transform;
+    }
+    .digital-pass::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        420px circle at var(--pass-shine-x, 80%) var(--pass-shine-y, 0%),
+        rgba(255, 255, 255, 0.10),
+        transparent 45%
+      );
+      opacity: 0;
+      transition: opacity 400ms var(--ease-ios);
+      pointer-events: none;
+    }
+    .digital-pass.is-tilting::after {
+      opacity: 1;
+    }
+
+    /* Seat map empty-placeholder illustration */
+    .seat-empty-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      margin: 0 auto var(--space-3) auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    /* Reservation filters: date + slot grid */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-4);
+    }
+
+    @media (max-width: 1024px) {
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body ng-controller="StudentController" style="display: flex; flex-direction: column; min-height: 100vh;">
@@ -103,7 +168,7 @@
           <div class="brand-mark">S</div>
           <div>
             <span class="brand-text">SeatSync</span>
-            <span class="brand-badge" style="margin-left: 6px; background: rgba(91, 155, 255, 0.14); color: #9CC2FF; border-color: rgba(91, 155, 255, 0.35);">UPES Dehradun</span>
+            <span class="brand-badge" style="margin-left: 6px; background: var(--color-accent-blue-subtle); color: var(--color-accent-blue); border-color: var(--color-accent-blue-border);">UPES Dehradun</span>
           </div>
         </a>
 
@@ -111,21 +176,30 @@
         <nav>
           <ul class="nav-links">
             <li>
-              <a href="javascript:void(0)" class="nav-link" ng-class="{'active': activeTab === 'reserve'}" ng-click="switchTab('reserve')">
+              <button type="button" class="nav-link" ng-class="{'active': activeTab === 'reserve'}" ng-click="switchTab('reserve')">
                 Seat Map &amp; Allotment
-              </a>
+              </button>
             </li>
             <li>
-              <a href="javascript:void(0)" class="nav-link" ng-class="{'active': activeTab === 'my-bookings'}" ng-click="switchTab('my-bookings')">
+              <button type="button" class="nav-link" ng-class="{'active': activeTab === 'my-bookings'}" ng-click="switchTab('my-bookings')">
                 My Bookings &amp; Digital Pass
                 <span class="badge badge-available" ng-if="activeBooking" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Active</span>
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
 
         <!-- User Information & Sign Out -->
         <div class="nav-user-actions">
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
+            <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
           <div class="user-profile-pill" ng-if="currentUser">
             <span class="badge-dot" style="background-color: var(--color-available);"></span>
             <span><strong>{{ currentUser.name }}</strong> ({{ currentUser.studentId || '590029022' }})</span>
@@ -141,7 +215,7 @@
     <div class="container">
 
       <!-- Status Alerts & Feedback -->
-      <div class="alert alert-{{ statusMessage.type }}" ng-if="statusMessage" style="animation: fadeIn 200ms ease;">
+      <div class="alert alert-{{ statusMessage.type }}" role="status" aria-live="polite" ng-if="statusMessage" style="animation: fadeIn 200ms ease;">
         <span ng-if="statusMessage.type === 'success'">&check;</span>
         <span ng-if="statusMessage.type === 'danger'">&times;</span>
         <span>{{ statusMessage.text }}</span>
@@ -191,7 +265,7 @@
             </div>
 
             <!-- Date & Time Slot Selector -->
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-4);">
+            <div class="filter-grid">
               <div>
                 <label class="form-label" for="booking-date">2. Reservation Date</label>
                 <input type="date" id="booking-date" class="form-control" ng-model="selectedDate" ng-change="loadSeats()">
@@ -240,12 +314,12 @@
         </div>
 
         <!-- Seat Grid & Interactive Allotment Drawer -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);" id="seat-layout-row">
+        <div class="seat-layout" id="seat-layout-row">
           
           <!-- Seat Map Grid -->
           <div class="seat-grid-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-              <h3 class="card-title">{{ selectedFloor.name }} Seating Grid</h3>
+              <h2 class="card-title">{{ selectedFloor.name }} Seating Grid</h2>
               <span class="body-secondary" style="font-size: 13px;" ng-if="!isLoadingSeats">
                 Showing {{ seats.length }} Desks
               </span>
@@ -257,6 +331,10 @@
             <div class="seat-grid">
               <div class="seat-tile" 
                    ng-repeat="seat in seats" 
+                   role="button"
+                   tabindex="{{ seat.status === 'available' ? 0 : -1 }}"
+                   aria-label="Desk {{ seat.seatNumber }}, {{ seat.status }}"
+                   aria-pressed="{{ selectedSeat._id === seat._id }}"
                    ng-class="{
                      'seat-tile--available': seat.status === 'available' && selectedSeat._id !== seat._id,
                      'seat-tile--selected': selectedSeat._id === seat._id,
@@ -264,10 +342,14 @@
                      'seat-tile--occupied': seat.status === 'occupied',
                      'seat-tile--unavailable': seat.status === 'unavailable'
                    }"
-                   ng-click="chooseSeat(seat)">
+                   ng-click="chooseSeat(seat)"
+                   ng-keydown="handleSeatKey($event, seat)"
+                   style="animation-delay: {{ $index * 22 }}ms;">
                 <span class="seat-tile-label">{{ seat.seatNumber }}</span>
                 <span class="seat-tile-status">{{ selectedSeat._id === seat._id ? 'Selected' : seat.status }}</span>
-                <span ng-if="seat.hasPowerOutlet" style="font-size: 10px; color: var(--color-text-secondary); margin-top: 2px;">⚡</span>
+                <svg ng-if="seat.hasPowerOutlet" class="seat-power-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
+                </svg>
               </div>
             </div>
           </div>
@@ -276,7 +358,7 @@
           <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="card-header" style="margin-bottom: var(--space-4);">
-                <h3 class="card-title">Seat Allotment Summary</h3>
+                <h2 class="card-title">Seat Allotment Summary</h2>
                 <span class="badge badge-available" ng-if="selectedSeat">Ready to Allot</span>
                 <span class="badge" style="background: var(--color-surface-subtle); border-color: var(--color-border); color: var(--color-text-secondary);" ng-if="!selectedSeat">No Selection</span>
               </div>
@@ -306,7 +388,7 @@
                   </div>
                   <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                     <span class="body-secondary">Date:</span>
-                    <strong>{{ selectedDate }}</strong>
+                    <strong>{{ selectedDate | date:'yyyy-MM-dd' }}</strong>
                   </div>
                   <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                     <span class="body-secondary">Time Slot:</span>
@@ -321,14 +403,20 @@
                 <button class="btn btn-primary btn-block btn-lg" 
                         ng-click="confirmReservation()" 
                         ng-disabled="isBooking"
-                        style="box-shadow: 0 4px 20px rgba(255,255,255,0.16);">
+                        style="box-shadow: 0 4px 20px var(--color-focus-ring);">
                   <span ng-if="!isBooking">Confirm Seat Allotment &rarr;</span>
                   <span ng-if="isBooking">Allocating Seat in Database...</span>
                 </button>
               </div>
 
               <div ng-if="!selectedSeat" style="text-align: center; padding: var(--space-8) 0;">
-                <div style="font-size: 32px; margin-bottom: 12px;">🪑</div>
+                <div class="seat-empty-icon" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6.5 10V6.75A2.75 2.75 0 0 1 9.25 4h5.5A2.75 2.75 0 0 1 17.5 6.75V10"/>
+                    <path d="M4.5 10.5h15a1 1 0 0 1 1 1V15h-17v-3.5a1 1 0 0 1 1-1Z"/>
+                    <path d="M6 15v4.5M18 15v4.5"/>
+                  </svg>
+                </div>
                 <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">Choose an Available Desk</div>
                 <p class="body-secondary" style="font-size: 13px; max-width: 260px; margin: 0 auto;">
                   Click any green desk tile on the map to review seat allotment details.
@@ -422,8 +510,14 @@
             <div class="turnstile-reader" ng-class="{'turnstile-punching': isPunching}">
               
               <div class="rfid-icon-circle">
-                <span ng-if="!isPunching">🛈</span>
-                <span ng-if="isPunching">⚡</span>
+                <svg ng-if="!isPunching" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <path d="M6.5 5.5a9 9 0 0 0 0 13"/>
+                  <path d="M10 8a5.2 5.2 0 0 0 0 8"/>
+                  <circle cx="13.8" cy="12" r="1.6" fill="currentColor" stroke="none"/>
+                </svg>
+                <svg ng-if="isPunching" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
+                </svg>
               </div>
 
               <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px;">
@@ -459,7 +553,11 @@
         <!-- No Active Reservation State -->
         <div class="empty-state" ng-if="!activeBooking" style="margin-bottom: var(--space-8);">
           <div class="empty-state-icon">
-            <span style="font-size: 24px;">🪑</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6.5 10V6.75A2.75 2.75 0 0 1 9.25 4h5.5A2.75 2.75 0 0 1 17.5 6.75V10"/>
+              <path d="M4.5 10.5h15a1 1 0 0 1 1 1V15h-17v-3.5a1 1 0 0 1 1-1Z"/>
+              <path d="M6 15v4.5M18 15v4.5"/>
+            </svg>
           </div>
           <h3 class="empty-state-title">No Active Seat Reservation</h3>
           <p class="empty-state-text">
@@ -547,5 +645,6 @@
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/student.controller.js"></script>
   <script src="js/jquery-effects.js"></script>
+  <script src="js/theme.js"></script>
 </body>
 </html>

@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#08080A">
   <meta name="color-scheme" content="dark">
+  <script>
+    /* Apply the saved theme before first paint to avoid a flash. */
+    (function () {
+      try {
+        if (localStorage.getItem('seatsync-theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) themeColor.setAttribute('content', '#F5F5F7');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <title>Create Student Account — SeatSync</title>
+  <meta name="description" content="Create your SeatSync student account to reserve study desks at UPES Central Library and track your reservations.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -22,6 +35,15 @@
           <span class="brand-text">SeatSync</span>
         </a>
         <div class="nav-user-actions">
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
+            <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
           <span class="body-secondary" style="font-size: 13px;">Already have an account?</span>
           <a href="/login.html" class="btn btn-secondary btn-sm">Sign In</a>
         </div>
@@ -40,12 +62,12 @@
       </div>
 
       <!-- Alerts -->
-      <div class="alert alert-danger" ng-if="errorMessage">
+      <div class="alert alert-danger" role="alert" ng-if="errorMessage">
         <span>&times;</span>
         <span>{{ errorMessage }}</span>
       </div>
 
-      <div class="alert alert-success" ng-if="successMessage">
+      <div class="alert alert-success" role="status" aria-live="polite" ng-if="successMessage">
         <span>&check;</span>
         <span>{{ successMessage }}</span>
       </div>
@@ -131,5 +153,6 @@
   <script src="js/app.js"></script>
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
+  <script src="js/theme.js"></script>
 </body>
 </html>

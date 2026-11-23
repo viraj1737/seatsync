@@ -100,3 +100,65 @@
   --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
+
+/**
+ * Light Theme Override
+ * Activated by the header theme toggle, which sets <html data-theme="light">.
+ * The OLED black theme above stays the default; this block only swaps tokens so
+ * every component (including D3 charts) automatically follows the active theme.
+ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surface & Canvas Colors */
+  --color-canvas: #F5F5F7;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #EFEFF4;
+  --color-surface-raised: #FFFFFF;
+  --color-surface-overlay: rgba(255, 255, 255, 0.85);
+  --color-backdrop: rgba(12, 14, 20, 0.42);
+
+  /* Typography Colors */
+  --color-text-primary: #111114;
+  --color-text-secondary: #55555F;
+  --color-text-tertiary: #85858F;
+  --color-text-inverted: #FFFFFF;
+
+  /* Interactive & Action Colors */
+  --color-primary-action: #111114;
+  --color-primary-action-hover: #2B2B33;
+  --color-on-primary: #FFFFFF;
+  --color-accent-blue: #0A63E8;
+  --color-accent-blue-hover: #0954C4;
+  --color-accent-blue-subtle: rgba(10, 99, 232, 0.10);
+  --color-accent-blue-border: rgba(10, 99, 232, 0.28);
+
+  /* Seat & Reservation Status Colors */
+  --color-available: #12813D;
+  --color-available-bg: rgba(18, 129, 61, 0.10);
+  --color-available-border: rgba(18, 129, 61, 0.28);
+
+  --color-reserved: #9A5B00;
+  --color-reserved-bg: rgba(217, 130, 0, 0.12);
+  --color-reserved-border: rgba(217, 130, 0, 0.32);
+
+  --color-occupied: #C11B1B;
+  --color-occupied-bg: rgba(193, 27, 27, 0.08);
+  --color-occupied-border: rgba(193, 27, 27, 0.26);
+
+  --color-unavailable: #63636D;
+  --color-unavailable-bg: rgba(99, 99, 109, 0.07);
+  --color-unavailable-border: rgba(99, 99, 109, 0.22);
+
+  /* Borders & Dividers */
+  --color-border: #DEDEE5;
+  --color-border-subtle: #EAEAF0;
+  --color-border-hover: #BCBCC7;
+  --color-focus-ring: rgba(10, 99, 232, 0.22);
+
+  /* Shadows (soft, neutral depth for bright surfaces) */
+  --shadow-sm: 0 1px 2px rgba(17, 17, 20, 0.06), 0 1px 3px rgba(17, 17, 20, 0.05);
+  --shadow-md: 0 6px 18px rgba(17, 17, 20, 0.09);
+  --shadow-lg: 0 14px 36px rgba(17, 17, 20, 0.12);
+  --shadow-modal: 0 24px 56px rgba(17, 17, 20, 0.20);
+}

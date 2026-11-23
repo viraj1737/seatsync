@@ -97,7 +97,8 @@ window.renderOccupancyChart = function () {
       .attr('rx', 6)
       .attr('fill', palette.available)
       .transition()
-      .duration(600)
+      .duration(820)
+      .ease(d3.easeBackOut.overshoot(1.1))
       .attr('y', function (d) { return y(d.availableSeats); })
       .attr('height', function (d) { return height - y(d.availableSeats); });
 
@@ -110,7 +111,8 @@ window.renderOccupancyChart = function () {
       .attr('rx', 6)
       .attr('fill', palette.occupied)
       .transition()
-      .duration(600)
+      .duration(820)
+      .ease(d3.easeBackOut.overshoot(1.1))
       .attr('y', function (d) { return y(d.occupiedSeats); })
       .attr('height', function (d) { return height - y(d.occupiedSeats); });
 

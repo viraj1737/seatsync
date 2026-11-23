@@ -6,7 +6,7 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
   $scope.currentUser = null;
   $scope.floors = [];
   $scope.selectedFloor = null;
-  $scope.selectedDate = new Date().toISOString().slice(0, 10);
+  $scope.selectedDate = new Date();
   $scope.slots = [
     { code: '09:00-11:00', label: '09:00 AM – 11:00 AM', timeLabel: 'Morning Slot' },
     { code: '11:00-13:00', label: '11:00 AM – 01:00 PM', timeLabel: 'Midday Slot' },
@@ -76,12 +76,21 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
     $scope.loadSeats();
   };
 
+  // Format a Date as a local YYYY-MM-DD string for the booking API
+  $scope.formatDate = function (date) {
+    if (!date) return '';
+    var d = new Date(date);
+    var month = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + month + '-' + day;
+  };
+
   // Load seats with computed live statuses
   $scope.loadSeats = function () {
     if (!$scope.selectedFloor) return;
 
     $scope.isLoadingSeats = true;
-    ApiService.getSeats($scope.selectedFloor._id, $scope.selectedDate, $scope.selectedSlot)
+    ApiService.getSeats($scope.selectedFloor._id, $scope.formatDate($scope.selectedDate), $scope.selectedSlot)
       .then(function (response) {
         $scope.seats = response.data.data || [];
         $scope.isLoadingSeats = false;
@@ -108,6 +117,14 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
     $scope.selectedSeat = seat;
   };
 
+  // Keyboard parity for seat tiles (Enter / Space), matching Apple HIG accessibility
+  $scope.handleSeatKey = function (event, seat) {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      $scope.chooseSeat(seat);
+    }
+  };
+
   // Confirm reservation / Seat Allotment
   $scope.confirmReservation = function () {
     if (!$scope.selectedSeat || !$scope.selectedFloor) return;
@@ -116,7 +133,7 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
     const payload = {
       seatId: $scope.selectedSeat._id,
       floorId: $scope.selectedFloor._id,
-      date: $scope.selectedDate,
+      date: $scope.formatDate($scope.selectedDate),
       slot: $scope.selectedSlot
     };
 

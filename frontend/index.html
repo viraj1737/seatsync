@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#08080A">
   <meta name="color-scheme" content="dark">
+  <script>
+    /* Apply the saved theme before first paint to avoid a flash. */
+    (function () {
+      try {
+        if (localStorage.getItem('seatsync-theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) themeColor.setAttribute('content', '#F5F5F7');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <title>SeatSync — Smart Library Seat Availability &amp; Reservation System</title>
+  <meta name="description" content="SeatSync shows real-time library seat availability across UPES floors and zones, with instant desk reservations, digital passes and RFID exit.">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -33,6 +46,15 @@
 
         <!-- Dynamic User Auth State -->
         <div class="nav-user-actions">
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
+            <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
           <div ng-if="currentUser" class="user-profile-pill" style="display: flex; align-items: center; gap: var(--space-2);">
             <span class="badge-dot" style="background-color: var(--color-available);"></span>
             <span>{{ currentUser.name }}</span>
@@ -70,7 +92,7 @@
         </p>
 
         <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-          <a href="/student.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 20px rgba(255,255,255,0.16);">
+          <a href="/student.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 20px var(--color-focus-ring);">
             Go to Student Portal &rarr;
           </a>
           <a href="/login.html" class="btn btn-secondary btn-lg">
@@ -276,5 +298,6 @@
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
   <script src="js/jquery-effects.js"></script>
+  <script src="js/theme.js"></script>
 </body>
 </html>
