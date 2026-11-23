@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/premium.css">
 </head>
 <body ng-controller="AuthController">
 
@@ -77,32 +78,108 @@
     <div class="container">
 
       <!-- Hero Section -->
-      <section id="overview" style="margin-bottom: var(--space-12); text-align: center; max-width: 840px; margin-left: auto; margin-right: auto; padding-top: var(--space-6);">
-        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-full); margin-bottom: var(--space-4); box-shadow: var(--shadow-sm);">
-          <span class="badge-dot" style="background-color: var(--color-available);"></span>
-          <span style="font-size: 12px; font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">UPES Central Library &bull; Smart Reservation System</span>
-        </div>
-        
-        <h1 class="hero-title" style="margin-bottom: var(--space-4); font-size: 42px;">
-          Find your quiet desk.<br>Reserve in seconds. Study with focus.
-        </h1>
-        
-        <p class="body-text body-secondary" style="font-size: 17px; margin-bottom: var(--space-8); line-height: 1.6;">
-          Real-time seat availability across all library floors and silent study zones. Secure reservation checkouts, digital library pass generation, and automated desk release.
-        </p>
+      <section id="overview" class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow reveal" style="--delay: 40ms;">
+            <span class="badge-dot" style="background-color: var(--color-available);"></span>
+            UPES Central Library &bull; Live seat intelligence
+          </div>
 
-        <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-          <a href="/student.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 20px var(--color-focus-ring);">
-            Go to Student Portal &rarr;
-          </a>
-          <a href="/login.html" class="btn btn-secondary btn-lg">
-            Sign In with UPES ID
-          </a>
+          <h1 class="hero-title hero-title--display reveal" style="--delay: 100ms;">
+            Find your seat.<br><span class="gradient-text">Own your focus.</span>
+          </h1>
+
+          <p class="hero-lead reveal" style="--delay: 160ms;">
+            Real-time availability across every floor and silent study zone. Reserve the perfect desk in seconds, keep your digital pass ready, and walk in with confidence.
+          </p>
+
+          <div class="hero-actions reveal" style="--delay: 220ms;">
+            <a href="/student.html" class="btn btn-primary btn-lg">Explore live seats &rarr;</a>
+            <a href="/login.html" class="btn btn-secondary btn-lg">Sign in with UPES ID</a>
+          </div>
+
+          <div class="hero-proof reveal" style="--delay: 280ms;">
+            <span class="hero-proof-item"><strong>32</strong>&nbsp;desks mapped</span>
+            <span class="hero-proof-item"><strong>2</strong>&nbsp;floors, live</span>
+            <span class="hero-proof-item"><strong>409</strong>&nbsp;conflict guard</span>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" style="--delay: 200ms;">
+          <div class="device-frame" data-spotlight>
+            <div class="device-screen">
+              <div class="device-topbar">
+                <span class="device-dot"></span><span class="device-dot"></span><span class="device-dot"></span>
+                <span>seatsync &nbsp;/&nbsp; floor 01</span>
+              </div>
+              <div class="device-content">
+                <div class="device-heading">Tech &amp; Engineering Wing</div>
+                <div class="device-subheading">Live availability &middot; updated just now</div>
+
+                <div class="mock-stats">
+                  <div class="mock-stat">
+                    <span class="mock-stat-label">Available now</span>
+                    <span class="mock-stat-value mock-stat-value--green">28</span>
+                  </div>
+                  <div class="mock-stat">
+                    <span class="mock-stat-label">Occupancy</span>
+                    <span class="mock-stat-value mock-stat-value--blue">12%</span>
+                  </div>
+                </div>
+
+                <div class="mock-seat-grid" aria-hidden="true">
+                  <span class="mock-seat">A1</span>
+                  <span class="mock-seat">A2</span>
+                  <span class="mock-seat mock-seat--reserved">A3</span>
+                  <span class="mock-seat">A4</span>
+                  <span class="mock-seat mock-seat--occupied">A5</span>
+                  <span class="mock-seat">A6</span>
+                  <span class="mock-seat">A7</span>
+                  <span class="mock-seat mock-seat--selected">A8</span>
+                  <span class="mock-seat">A9</span>
+                  <span class="mock-seat mock-seat--reserved">A10</span>
+                  <span class="mock-seat">A11</span>
+                  <span class="mock-seat">A12</span>
+                  <span class="mock-seat">A13</span>
+                  <span class="mock-seat mock-seat--off">A14</span>
+                  <span class="mock-seat">A15</span>
+                  <span class="mock-seat">A16</span>
+                  <span class="mock-seat">A17</span>
+                  <span class="mock-seat">A18</span>
+                </div>
+
+                <div class="device-footer">
+                  <div>
+                    <div class="device-selection-label">Your selection</div>
+                    <div class="device-selection-value">Desk A-08 &middot; Floor 1</div>
+                  </div>
+                  <a href="/student.html" class="btn btn-primary">Reserve &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card floating-pass" aria-hidden="true">
+            <div class="floating-pass-label">Digital seat pass</div>
+            <div class="floating-pass-seat">A-08</div>
+            <div class="floating-pass-meta">Floor 1 &middot; 09:00 &ndash; 11:00</div>
+            <div class="floating-barcode"></div>
+          </div>
+
+          <div class="floating-card floating-live" aria-hidden="true">
+            <span class="badge-dot"></span>
+            <span>Live &middot; seat synced</span>
+          </div>
         </div>
       </section>
 
       <!-- KPI Metrics Overview -->
       <section style="margin-bottom: var(--space-10);">
+        <div class="section-head reveal">
+          <div class="eyebrow"><span class="badge-dot" style="background-color: var(--color-accent-blue);"></span>At a glance</div>
+          <h2>Everything you need to study, simplified.</h2>
+          <p>One clear view of the library — live desks, power access and conflict-free booking built in.</p>
+        </div>
         <div class="metrics-grid">
           <div class="metric-card">
             <span class="metric-label">Total Library Seating</span>
@@ -129,13 +206,14 @@
 
       <!-- Interactive Seat Map Preview -->
       <section id="live-seat-map" style="margin-bottom: var(--space-12);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-3);">
+        <div class="section-head section-head--row reveal">
           <div>
-            <h2 class="section-title">Floor 1 — Tech &amp; Engineering Reading Wing</h2>
-            <p class="body-secondary">Live representation of desk inventory and power availability.</p>
+            <div class="eyebrow"><span class="badge-dot" style="background-color: var(--color-available);"></span>Live floor plan</div>
+            <h2>See every seat. Claim the right one.</h2>
+            <p>Floor 1 &mdash; Tech &amp; Engineering Reading Wing, with real-time desk and power status.</p>
           </div>
           <div style="display: flex; gap: var(--space-2);">
-            <a href="/student.html" class="btn btn-primary btn-sm">Reserve This Desk &rarr;</a>
+            <a href="/student.html" class="btn btn-primary btn-sm">Reserve a desk &rarr;</a>
           </div>
         </div>
 
@@ -223,7 +301,8 @@
       <section id="syllabus" class="card" style="margin-bottom: var(--space-12);">
         <div class="card-header">
           <div>
-            <h2 class="section-title">AWT Syllabus-to-Feature Evidence Map</h2>
+            <div class="eyebrow" style="margin-bottom: var(--space-3);"><span class="badge-dot" style="background-color: var(--color-accent-blue);"></span>Built with the stack</div>
+            <h2 class="section-title" style="font-size: 24px;">AWT Syllabus-to-Feature Evidence Map</h2>
             <p class="body-secondary">Strictly fulfills the Advanced Web Technologies Course Curriculum requirements</p>
           </div>
           <span class="badge badge-available">All 5 Units Covered</span>
@@ -279,7 +358,7 @@
   </main>
 
   <!-- Clean Footer -->
-  <footer style="background: var(--color-surface); border-top: 1px solid var(--color-border); padding: var(--space-8) 0; margin-top: auto;">
+  <footer class="site-footer" style="padding: var(--space-8) 0; margin-top: auto;">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
       <div>
         <div style="font-weight: 600; font-size: 15px; color: var(--color-text-primary); margin-bottom: 2px;">SeatSync Library Portal</div>
@@ -299,5 +378,6 @@
   <script src="js/controllers/auth.controller.js"></script>
   <script src="js/jquery-effects.js"></script>
   <script src="js/theme.js"></script>
+  <script src="js/premium.js"></script>
 </body>
 </html>
