@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="seatSyncApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Student Account — SeatSync</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body ng-controller="AuthController" style="display: flex; flex-direction: column; min-height: 100vh;">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="brand-wrapper">
+          <div class="brand-mark">S</div>
+          <span class="brand-text">SeatSync</span>
+        </a>
+        <div class="nav-user-actions">
+          <span class="body-secondary" style="font-size: 13px;">Already have an account?</span>
+          <a href="/login.html" class="btn btn-secondary btn-sm">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Register Card Form -->
+  <main class="app-main" style="display: flex; align-items: center; justify-content: center; padding: var(--space-8) var(--space-4);">
+    <div class="card" style="max-width: 480px; width: 100%; padding: var(--space-8); box-shadow: var(--shadow-lg);">
+      
+      <!-- Brand & Title -->
+      <div style="text-align: center; margin-bottom: var(--space-6);">
+        <h1 class="page-title" style="font-size: 24px; margin-bottom: var(--space-1);">Create Student Account</h1>
+        <p class="body-secondary">Register to reserve library study desks and manage bookings.</p>
+      </div>
+
+      <!-- Alerts -->
+      <div class="alert alert-danger" ng-if="errorMessage">
+        <span>&times;</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <div class="alert alert-success" ng-if="successMessage">
+        <span>&check;</span>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <!-- Register Form with AngularJS Validation -->
+      <form name="regForm" ng-submit="submitRegister(regForm.$valid)" novalidate>
+        
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Name</label>
+          <input type="text" 
+                 id="reg-name" 
+                 name="name"
+                 class="form-control" 
+                 placeholder="Alex Rivera" 
+                 ng-model="registerData.name" 
+                 required 
+                 minlength="2">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">University Email</label>
+          <input type="email" 
+                 id="reg-email" 
+                 name="email"
+                 class="form-control" 
+                 placeholder="alex@university.edu" 
+                 ng-model="registerData.email" 
+                 required>
+          <span class="form-hint">Used for reservation confirmations.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-studentid">
+            <span>Student ID</span>
+            <span class="form-label-optional">Optional</span>
+          </label>
+          <input type="text" 
+                 id="reg-studentid" 
+                 name="studentId"
+                 class="form-control" 
+                 placeholder="STU-2026-089" 
+                 ng-model="registerData.studentId">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password</label>
+          <input type="password" 
+                 id="reg-password" 
+                 name="password"
+                 class="form-control" 
+                 placeholder="At least 6 characters" 
+                 ng-model="registerData.password" 
+                 required 
+                 minlength="6">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm">Confirm Password</label>
+          <input type="password" 
+                 id="reg-confirm" 
+                 name="confirmPassword"
+                 class="form-control" 
+                 placeholder="Re-enter your password" 
+                 ng-model="registerData.confirmPassword" 
+                 required>
+        </div>
+
+        <button type="submit" 
+                class="btn btn-primary btn-block btn-lg" 
+                style="margin-top: var(--space-4);"
+                ng-disabled="isLoading">
+          <span ng-if="!isLoading">Create Account</span>
+          <span ng-if="isLoading">Creating account...</span>
+        </button>
+
+      </form>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/services/api.service.js"></script>
+  <script src="js/controllers/auth.controller.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+/**
+ * SeatSync Design System Tokens
+ * Strictly conforms to Section 3: Premium visual design system
+ */
+
+:root {
+  /* Surface & Canvas Colors */
+  --color-canvas: #F5F6F8;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #FAFAFB;
+  --color-surface-overlay: rgba(255, 255, 255, 0.92);
+  --color-backdrop: rgba(17, 24, 39, 0.4);
+
+  /* Typography Colors */
+  --color-text-primary: #17191D;
+  --color-text-secondary: #707782;
+  --color-text-tertiary: #9298A1;
+  --color-text-inverted: #FFFFFF;
+
+  /* Interactive & Action Colors */
+  --color-primary-action: #17191D;
+  --color-primary-action-hover: #2E323A;
+  --color-accent-blue: #2563EB;
+  --color-accent-blue-hover: #1D4ED8;
+  --color-accent-blue-subtle: #EFF6FF;
+
+  /* Seat & Reservation Status Colors */
+  --color-available: #16865B;
+  --color-available-bg: #EAF7EE;
+  --color-available-border: #B7E4C7;
+
+  --color-reserved: #C47A12;
+  --color-reserved-bg: #FFF8E8;
+  --color-reserved-border: #FCD9A5;
+
+  --color-occupied: #C94747;
+  --color-occupied-bg: #FDF2F2;
+  --color-occupied-border: #F8B4B4;
+
+  --color-unavailable: #9298A1;
+  --color-unavailable-bg: #F3F4F6;
+  --color-unavailable-border: #E5E7EB;
+
+  /* Borders & Dividers */
+  --color-border: #E6E8EC;
+  --color-border-subtle: #F0F1F3;
+  --color-border-hover: #D0D4DC;
+  --color-focus-ring: rgba(37, 99, 235, 0.25);
+
+  /* Radius Tokens */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Shadows (Subtle, Apple-inspired depth) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout Widths */
+  --content-max-width: 1200px;
+  --header-height: 64px;
+
+  /* Typography Stack */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}

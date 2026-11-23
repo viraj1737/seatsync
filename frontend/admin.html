@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="seatSyncApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations — SeatSync UPES</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body ng-controller="AdminController" style="display: flex; flex-direction: column; min-height: 100vh;">
+
+  <!-- Admin Header Shell -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/admin.html" class="brand-wrapper">
+          <div class="brand-mark" style="background: #17191D;">S</div>
+          <span class="brand-text">SeatSync</span>
+          <span class="brand-badge" style="background: var(--color-reserved-bg); color: var(--color-reserved); border-color: var(--color-reserved-border);">Library Admin</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#" class="nav-link" ng-class="{'active': activeTab === 'overview'}" ng-click="activeTab = 'overview'">Overview &amp; D3 Analytics</a></li>
+            <li><a href="#" class="nav-link" ng-class="{'active': activeTab === 'seats'}" ng-click="activeTab = 'seats'">Seat Inventory Control</a></li>
+            <li><a href="#" class="nav-link" ng-class="{'active': activeTab === 'bookings'}" ng-click="activeTab = 'bookings'">Student Bookings</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-user-actions">
+          <div class="user-profile-pill" ng-if="currentUser">
+            <span class="badge-dot" style="background-color: var(--color-reserved);"></span>
+            <span>{{ currentUser.name }}</span>
+            <span class="badge badge-reserved" style="font-size: 10px; padding: 2px 6px;">ADMIN</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" ng-click="signOut()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Main Workspace -->
+  <main class="app-main">
+    <div class="container">
+
+      <!-- Admin Greeting & Summary Metrics -->
+      <section style="margin-bottom: var(--space-8);">
+        <div class="card" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <span class="label-meta" style="color: var(--color-reserved); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">UPES Staff Operations</span>
+              <h1 class="page-title" style="margin-top: 4px; font-size: 26px;">Library Seat Administration Console</h1>
+              <p class="body-secondary" style="margin-top: 4px;">
+                Real-time seat override, student reservation records, and occupancy monitoring.
+              </p>
+            </div>
+            <div style="display: flex; gap: var(--space-2);">
+              <a href="/student.html" target="_blank" class="btn btn-secondary">Open Student View &nearr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Library Desks</span>
+            <span class="metric-value">{{ summary.totalSeats || 32 }}</span>
+            <span class="metric-subtext">Across {{ summary.totalFloors || 2 }} Floors</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Active Student Bookings</span>
+            <span class="metric-value" style="color: var(--color-available);">{{ summary.activeBookings || 0 }}</span>
+            <span class="metric-subtext">Real-time confirmed slots</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Registered Students</span>
+            <span class="metric-value">{{ summary.totalStudents || 1 }}</span>
+            <span class="metric-subtext">Including viraj.29022@stu.upes.ac.in</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Current Library Occupancy</span>
+            <span class="metric-value" style="color: var(--color-accent-blue);">{{ summary.occupancyRate || 0 }}%</span>
+            <span class="metric-subtext">Dynamic capacity indicator</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: OVERVIEW & D3.JS SVG ANALYTICS -->
+      <div ng-show="activeTab === 'overview'">
+        <div class="card" style="margin-bottom: var(--space-8);">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Live Occupancy Analytics (D3.js SVG Visualisation)</h2>
+              <p class="body-secondary" style="font-size: 13px;">Unit V syllabus demonstration: dynamic SVG chart grouped by floor and zone</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.renderOccupancyChart()">
+              &circlearrowright; Refresh Chart
+            </button>
+          </div>
+
+          <!-- D3.js SVG Chart Container -->
+          <div id="d3-occupancy-chart" style="width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;">
+            <!-- Rendered by d3.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: SEAT INVENTORY & PHYSICAL STATUS OVERRIDE -->
+      <div ng-show="activeTab === 'seats'">
+        <div class="card" style="margin-bottom: var(--space-8);">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Physical Seat Inventory &amp; Overrides</h2>
+              <p class="body-secondary" style="font-size: 13px;">Manage physical desk operational states (Available, Occupied by Staff, Maintenance)</p>
+            </div>
+            
+            <!-- Floor Filter -->
+            <div style="display: flex; gap: var(--space-2);">
+              <button class="btn btn-sm" 
+                      ng-repeat="floor in floors" 
+                      ng-class="{'btn-primary': selectedFloor._id === floor._id, 'btn-secondary': selectedFloor._id !== floor._id}"
+                      ng-click="selectFloor(floor)">
+                {{ floor.code }}
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Desk Number</th>
+                  <th>Floor</th>
+                  <th>Zone</th>
+                  <th>Power Outlet</th>
+                  <th>Current State</th>
+                  <th>Physical Status Override</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="seat in seats">
+                  <td><strong>Desk {{ seat.seatNumber }}</strong></td>
+                  <td>{{ selectedFloor.name }}</td>
+                  <td>{{ seat.zone }}</td>
+                  <td>{{ seat.hasPowerOutlet ? '⚡ Universal Socket' : 'None' }}</td>
+                  <td>
+                    <span class="badge" ng-class="{
+                      'badge-available': seat.status === 'available',
+                      'badge-reserved': seat.status === 'reserved',
+                      'badge-occupied': seat.status === 'occupied',
+                      'badge-unavailable': seat.status === 'unavailable'
+                    }">
+                      <span class="badge-dot"></span> {{ seat.status | uppercase }}
+                    </span>
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 6px;">
+                      <button class="btn btn-secondary btn-sm" 
+                              style="font-size: 11px; padding: 4px 8px;"
+                              ng-click="updatePhysicalStatus(seat, 'available')">
+                        Available
+                      </button>
+                      <button class="btn btn-secondary btn-sm" 
+                              style="font-size: 11px; padding: 4px 8px;"
+                              ng-click="updatePhysicalStatus(seat, 'occupied')">
+                        Occupied
+                      </button>
+                      <button class="btn btn-secondary btn-sm" 
+                              style="font-size: 11px; padding: 4px 8px;"
+                              ng-click="updatePhysicalStatus(seat, 'unavailable')">
+                        Maintenance
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: STUDENT BOOKINGS LIST -->
+      <div ng-show="activeTab === 'bookings'">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">All Student Library Reservations</h2>
+              <p class="body-secondary" style="font-size: 13px;">Inspect and manage student bookings across all reading wings</p>
+            </div>
+            <span class="badge badge-available">{{ allBookings.length }} Active &amp; Past Bookings</span>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Email &amp; SAP ID</th>
+                  <th>Seat</th>
+                  <th>Floor</th>
+                  <th>Date &amp; Slot</th>
+                  <th>Status</th>
+                  <th>Admin Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="b in allBookings">
+                  <td><strong>{{ b.userId.name }}</strong></td>
+                  <td>
+                    <div>{{ b.userId.email }}</div>
+                    <span class="body-secondary" style="font-size: 11px;">SAP: {{ b.userId.studentId || '500106482' }}</span>
+                  </td>
+                  <td><span class="badge badge-available">Desk {{ b.seatId.seatNumber }}</span></td>
+                  <td>{{ b.floorId.code }}</td>
+                  <td>{{ b.bookingDate }} &bull; {{ b.slotCode }}</td>
+                  <td>
+                    <span class="badge" ng-class="{'badge-available': b.status === 'confirmed', 'badge-unavailable': b.status === 'cancelled'}">
+                      <span class="badge-dot"></span> {{ b.status | uppercase }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" 
+                            ng-if="b.status === 'confirmed'" 
+                            ng-click="cancelStudentBooking(b)">
+                      Release Seat
+                    </button>
+                    <span ng-if="b.status !== 'confirmed'" class="body-secondary" style="font-size: 12px;">Released</span>
+                  </td>
+                </tr>
+                <tr ng-if="allBookings.length === 0">
+                  <td colspan="7" style="text-align: center; padding: 24px; color: var(--color-text-secondary);">
+                    No student bookings recorded yet.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Clean Footer -->
+  <footer style="background: var(--color-surface); border-top: 1px solid var(--color-border); padding: var(--space-6) 0; margin-top: auto;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+      <div style="font-size: 13px; color: var(--color-text-secondary);">
+        SeatSync &bull; UPES Central Library Staff Console &bull; Advanced Web Technologies
+      </div>
+      <div style="font-size: 13px; color: var(--color-text-secondary);">
+        Admin Role: <strong style="color: var(--color-reserved);">Verified Administrator</strong>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/services/api.service.js"></script>
+  <script src="js/controllers/admin.controller.js"></script>
+  <script src="js/jquery-effects.js"></script>
+  <script src="js/charts.js"></script>
+  <script>
+    // Automatically render D3 chart on page load
+    setTimeout(function() {
+      if (typeof window.renderOccupancyChart === 'function') {
+        window.renderOccupancyChart();
+      }
+    }, 500);
+  </script>
+</body>
+</html>
