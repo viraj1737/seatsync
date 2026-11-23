@@ -28,6 +28,16 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
   $scope.statusMessage = null; // { type: 'success'|'danger'|'info', text: '...' }
   $scope.activeTab = 'reserve'; // 'reserve' | 'my-bookings'
 
+  // Dedicated tab switcher function to cleanly update parent scope across child scopes (ng-if/ng-repeat)
+  $scope.switchTab = function (tabName) {
+    $scope.activeTab = tabName;
+    if (tabName === 'reserve') {
+      $scope.loadSeats();
+    } else if (tabName === 'my-bookings') {
+      $scope.loadMyBookings();
+    }
+  };
+
   // Initialize student session & data
   $scope.init = function () {
     ApiService.getMe()
