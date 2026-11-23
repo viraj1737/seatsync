@@ -3,63 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08080A">
+  <meta name="theme-color" content="#0B0B0C">
   <meta name="color-scheme" content="dark">
   <script>
-    /* Apply the saved theme before first paint to avoid a flash. */
     (function () {
       try {
         if (localStorage.getItem('seatsync-theme') === 'light') {
           document.documentElement.setAttribute('data-theme', 'light');
           var themeColor = document.querySelector('meta[name="theme-color"]');
-          if (themeColor) themeColor.setAttribute('content', '#F5F5F7');
+          if (themeColor) themeColor.setAttribute('content', '#F4F4F5');
         }
       } catch (error) {}
     })();
   </script>
   <title>Create Student Account — SeatSync</title>
   <meta name="description" content="Create your SeatSync student account to reserve study desks at UPES Central Library and track your reservations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/apple-design.css">
+  <link rel="stylesheet" href="css/modern-ui.css">
 </head>
 <body ng-controller="AuthController" style="display: flex; flex-direction: column; min-height: 100vh;">
 
-  <!-- Header -->
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="app-header">
-    <div class="container">
-      <div class="header-inner">
-        <a href="/" class="brand-wrapper">
-          <div class="brand-mark">S</div>
+    <div class="header-inner">
+      <a href="/" class="brand-wrapper" aria-label="SeatSync home">
+        <div class="brand-mark" aria-hidden="true">S</div>
+        <div class="brand-meta">
           <span class="brand-text">SeatSync</span>
-        </a>
-        <div class="nav-user-actions">
-          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
-            <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
-            </svg>
-            <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </button>
-          <span class="body-secondary" style="font-size: 13px;">Already have an account?</span>
-          <a href="/login.html" class="btn btn-secondary btn-sm">Sign In</a>
+          <span class="brand-subtext">UPES Library</span>
         </div>
+      </a>
+      <div class="nav-user-actions">
+        <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Switch visual theme" title="Toggle theme">
+          <svg class="theme-toggle-icon theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+          <svg class="theme-toggle-icon theme-toggle-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <span class="body-secondary" style="font-size: 13px;">Have an account?</span>
+        <a href="/login.html" class="btn btn-secondary btn-sm">Sign in</a>
       </div>
     </div>
   </header>
 
   <!-- Register Card Form -->
-  <main class="app-main" style="display: flex; align-items: center; justify-content: center; padding: var(--space-8) var(--space-4);">
-    <div class="card" style="max-width: 480px; width: 100%; padding: var(--space-8); box-shadow: var(--shadow-lg);">
+  <main id="main" class="app-main" style="display: flex; align-items: center; justify-content: center; padding: var(--space-8) var(--space-4);">
+    <div class="card" style="max-width: 480px; width: 100%; padding: var(--space-8);">
       
       <!-- Brand & Title -->
       <div style="text-align: center; margin-bottom: var(--space-6);">
-        <h1 class="page-title" style="font-size: 24px; margin-bottom: var(--space-1);">Create Student Account</h1>
-        <p class="body-secondary">Register to reserve library study desks and manage bookings.</p>
+        <h1 class="page-title" style="font-size: 24px; margin-bottom: var(--space-1);">Create your student account</h1>
+        <p class="body-secondary">Reserve library desks and keep track of your bookings.</p>
       </div>
 
       <!-- Alerts -->
@@ -77,25 +75,26 @@
       <form name="regForm" ng-submit="submitRegister(regForm.$valid)" novalidate>
         
         <div class="form-group">
-          <label class="form-label" for="reg-name">Full Name</label>
-          <input type="text" 
-                 id="reg-name" 
+          <label class="form-label" for="reg-name">Full name</label>
+          <input type="text"
+                 id="reg-name"
                  name="name"
-                 class="form-control" 
-                 placeholder="Alex Rivera" 
+                 class="form-control"
+                 placeholder="Your full name…"
                  ng-model="registerData.name" 
                  required 
                  minlength="2">
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reg-email">University Email</label>
-          <input type="email" 
-                 id="reg-email" 
+          <label class="form-label" for="reg-email">University email</label>
+          <input type="email"
+                 id="reg-email"
                  name="email"
-                 class="form-control" 
-                 placeholder="alex@university.edu" 
-                 ng-model="registerData.email" 
+                 class="form-control"
+                 placeholder="name@stu.upes.ac.in…"
+                 ng-model="registerData.email"
+                 spellcheck="false"
                  required>
           <span class="form-hint">Used for reservation confirmations.</span>
         </div>
@@ -108,8 +107,9 @@
           <input type="text" 
                  id="reg-studentid" 
                  name="studentId"
-                 class="form-control" 
-                 placeholder="STU-2026-089" 
+                 class="form-control"
+                 placeholder="590029022"
+                 autocomplete="off"
                  ng-model="registerData.studentId">
         </div>
 
@@ -119,19 +119,19 @@
                  id="reg-password" 
                  name="password"
                  class="form-control" 
-                 placeholder="At least 6 characters" 
+                 placeholder="At least 6 characters…" 
                  ng-model="registerData.password" 
                  required 
                  minlength="6">
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reg-confirm">Confirm Password</label>
+          <label class="form-label" for="reg-confirm">Confirm password</label>
           <input type="password" 
                  id="reg-confirm" 
                  name="confirmPassword"
                  class="form-control" 
-                 placeholder="Re-enter your password" 
+                 placeholder="Re-enter your password…" 
                  ng-model="registerData.confirmPassword" 
                  required>
         </div>
@@ -140,8 +140,8 @@
                 class="btn btn-primary btn-block btn-lg" 
                 style="margin-top: var(--space-4);"
                 ng-disabled="isLoading">
-          <span ng-if="!isLoading">Create Account</span>
-          <span ng-if="isLoading">Creating account...</span>
+          <span ng-if="!isLoading">Create account</span>
+          <span ng-if="isLoading">Creating account…</span>
         </button>
 
       </form>
@@ -149,11 +149,81 @@
     </div>
   </main>
 
+  <!-- Enterprise Multi-Column Footer (Industry Standard) -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        
+        <!-- Col 1: Brand & Status -->
+        <div>
+          <div class="brand-wrapper" style="margin-bottom: 12px;">
+            <div class="brand-mark" aria-hidden="true">S</div>
+            <span class="brand-text">SeatSync</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px 0; max-width: 280px;">
+            Automated seat allotment and RFID exit turnstile management system for the UPES Central Library.
+          </p>
+          <div class="system-status-indicator">
+            <span class="pulse-dot"></span>
+            <span>All systems operational &bull; Bidholi Campus</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Library Wings -->
+        <div>
+          <div class="footer-col-title">Library Wings</div>
+          <ul class="footer-links">
+            <li><a href="/student.html">Floor 1 &mdash; Tech &amp; Engineering</a></li>
+            <li><a href="/student.html">Floor 2 &mdash; Silent Research Zone</a></li>
+            <li><a href="/student.html">Quiet Commons</a></li>
+            <li><a href="/student.html">Exit Turnstile Gate 02</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Guidelines & Policy -->
+        <div>
+          <div class="footer-col-title">Policies &amp; Access</div>
+          <ul class="footer-links">
+            <li><a href="#rules">2-Hour Study Slot Rules</a></li>
+            <li><a href="#rfid">RFID Punch Exit Protocol</a></li>
+            <li><a href="#concurrency">Zero Double-Booking Guard</a></li>
+            <li><a href="mailto:library@upes.ac.in">Library Support Desk</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Engineering & Project Credits -->
+        <div>
+          <div class="footer-col-title">Coursework &amp; Candidate</div>
+          <ul class="footer-links" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+            <li>Course: <strong style="color: var(--text-primary);">Advanced Web Technologies</strong></li>
+            <li>Candidate: <strong style="color: var(--text-primary);">Viraj Kumar</strong></li>
+            <li>SAP ID: <span class="mono-num" style="color: var(--text-primary);">590029022</span></li>
+            <li>Email: <a href="mailto:viraj.29022@stu.upes.ac.in" style="color: var(--text-secondary);">viraj.29022@stu.upes.ac.in</a></li>
+            <li>GitHub: <a href="https://github.com/viraj1737/seatsync" target="_blank" rel="noopener">viraj1737/seatsync &nearr;</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Sub-footer / Legal Bar -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 UPES Central Library Desk Reservation System. Academic Coursework Submission.
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <span>Node.js / Express / AngularJS / MongoDB</span>
+          <span>HTTP 409 Concurrency Protected</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <!-- Scripts -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
+  <script src="js/tabs.js"></script>
   <script src="js/theme.js"></script>
 </body>
 </html>

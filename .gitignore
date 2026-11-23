@@ -3,3 +3,6 @@ node_modules/
 .DS_Store
 *.log
 npm-debug.log*
+.taste-skill/
+frontend/.taste-skill/
+

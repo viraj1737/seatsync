@@ -159,3 +159,12 @@ window.renderOccupancyChart = function () {
     console.error('[SeatSync D3] Error loading analytics:', error);
   });
 };
+
+document.addEventListener('DOMContentLoaded', function () {
+  var button = document.getElementById('refresh-chart-btn');
+  if (button) {
+    button.addEventListener('click', function () {
+      window.renderOccupancyChart();
+    });
+  }
+});

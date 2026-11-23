@@ -3,56 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08080A">
+  <meta name="theme-color" content="#0B0B0C">
   <meta name="color-scheme" content="dark">
   <script>
-    /* Apply the saved theme before first paint to avoid a flash. */
     (function () {
       try {
         if (localStorage.getItem('seatsync-theme') === 'light') {
           document.documentElement.setAttribute('data-theme', 'light');
           var themeColor = document.querySelector('meta[name="theme-color"]');
-          if (themeColor) themeColor.setAttribute('content', '#F5F5F7');
+          if (themeColor) themeColor.setAttribute('content', '#F4F4F5');
         }
       } catch (error) {}
     })();
   </script>
   <title>Student Portal — SeatSync UPES Library</title>
   <meta name="description" content="Reserve a library desk at UPES Central Library, manage your bookings and use your digital seat pass at the RFID exit turnstile.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/apple-design.css">
+  <link rel="stylesheet" href="css/modern-ui.css">
   <style>
     /* Premium Digital Seat Pass Styling */
     .digital-pass {
-      background: linear-gradient(135deg, #1C1C24 0%, #101014 100%);
-      color: #FFFFFF;
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      background: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .digital-pass::before {
-      content: "";
-      position: absolute;
-      top: -60px;
-      right: -60px;
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, rgba(91, 155, 255, 0.22) 0%, transparent 70%);
-      pointer-events: none;
+      border: 1px solid var(--color-border);
     }
     .pass-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-      padding-bottom: 20px;
-      margin-bottom: 24px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      padding-bottom: var(--space-5);
+      margin-bottom: var(--space-6);
     }
     .pass-barcode {
       background: #F5F5F7;
@@ -73,61 +64,34 @@
 
     /* RFID Turnstile Card Punch Reader Styling */
     .turnstile-reader {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1.5px dashed rgba(255, 255, 255, 0.18);
-      border-radius: 20px;
-      padding: 24px;
+      background: var(--color-surface-subtle);
+      border: 1px dashed var(--color-border-hover);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
       text-align: center;
-      margin-top: 24px;
+      margin-top: var(--space-6);
       position: relative;
-      transition: all var(--transition-normal);
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
     }
     .turnstile-reader:hover {
-      border-color: rgba(91, 155, 255, 0.6);
-      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--color-available);
     }
     .rfid-icon-circle {
       width: 56px;
       height: 56px;
-      border-radius: 50%;
-      background: rgba(91, 155, 255, 0.18);
-      border: 2px solid var(--color-accent-blue);
-      color: #FFFFFF;
+      border-radius: var(--radius-full);
+      background: var(--color-available-bg);
+      border: 1px solid var(--color-available);
+      color: var(--color-available);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      margin-bottom: 12px;
-      transition: transform 300ms ease;
+      margin-bottom: var(--space-3);
+      transition: transform var(--transition-fast);
     }
     .turnstile-punching .rfid-icon-circle {
-      transform: scale(1.15);
-      background: rgba(74, 222, 128, 0.22);
-      border-color: #4ADE80;
-    }
-
-    /* Apple Wallet-style spring tilt + specular shine */
-    .digital-pass {
-      transform-style: preserve-3d;
-      transition: box-shadow 400ms var(--ease-ios);
-      will-change: transform;
-    }
-    .digital-pass::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(
-        420px circle at var(--pass-shine-x, 80%) var(--pass-shine-y, 0%),
-        rgba(255, 255, 255, 0.10),
-        transparent 45%
-      );
-      opacity: 0;
-      transition: opacity 400ms var(--ease-ios);
-      pointer-events: none;
-    }
-    .digital-pass.is-tilting::after {
-      opacity: 1;
+      transform: scale(1.08);
     }
 
     /* Seat map empty-placeholder illustration */
@@ -142,7 +106,6 @@
       color: var(--color-text-secondary);
       background: var(--color-surface-subtle);
       border: 1px solid var(--color-border);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
     /* Reservation filters: date + slot grid */
@@ -161,58 +124,68 @@
 </head>
 <body ng-controller="StudentController" style="display: flex; flex-direction: column; min-height: 100vh;">
 
-  <!-- Student Navigation Bar -->
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="app-header">
-    <div class="container">
-      <div class="header-inner">
-        <a href="/student.html" class="brand-wrapper">
-          <div class="brand-mark">S</div>
-          <div>
-            <span class="brand-text">SeatSync</span>
-            <span class="brand-badge" style="margin-left: 6px; background: var(--color-accent-blue-subtle); color: var(--color-accent-blue); border-color: var(--color-accent-blue-border);">UPES Dehradun</span>
-          </div>
-        </a>
-
-        <!-- Portal Tabs -->
-        <nav>
-          <div class="apple-segmented-track">
-            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'reserve'}" ng-click="switchTab('reserve')">
-              Seat Map &amp; Allotment
-            </button>
-            <button type="button" class="apple-segmented-btn" ng-class="{'active': activeTab === 'my-bookings'}" ng-click="switchTab('my-bookings')">
-              My Bookings &amp; Digital Pass
-              <span class="badge badge-available" ng-if="activeBooking" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Active</span>
-            </button>
-          </div>
-        </nav>
-
-        <!-- User Information & Sign Out -->
-        <div class="nav-user-actions">
-          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
-            <svg class="theme-toggle-icon theme-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
-            </svg>
-            <svg class="theme-toggle-icon theme-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </button>
-          <div class="user-profile-pill" ng-if="currentUser">
-            <span class="badge-dot" style="background-color: var(--color-available);"></span>
-            <span><strong>{{ currentUser.name }}</strong> ({{ currentUser.studentId || '590029022' }})</span>
-          </div>
-          <button class="btn btn-secondary btn-sm" ng-click="signOut()">Sign Out</button>
+    <div class="header-inner">
+      <a href="/student.html" class="brand-wrapper" aria-label="SeatSync student portal">
+        <div class="brand-mark" aria-hidden="true">S</div>
+        <div class="brand-meta">
+          <span class="brand-text">SeatSync</span>
+          <span class="brand-subtext">UPES Library</span>
         </div>
+      </a>
+
+      <nav aria-label="Portal sections">
+        <div class="tabs-list" role="tablist">
+          <button type="button" 
+                  class="tabs-trigger" 
+                  role="tab" 
+                  id="tab-reserve" 
+                  data-tab-value="reserve"
+                  aria-controls="panel-reserve" 
+                  aria-selected="{{ activeTab === 'reserve' }}" 
+                  ng-class="{'active': activeTab === 'reserve'}" 
+                  ng-click="switchTab('reserve')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <span>Seat Map &amp; Allotment</span>
+          </button>
+          <button type="button" 
+                  class="tabs-trigger" 
+                  role="tab" 
+                  id="tab-bookings" 
+                  data-tab-value="my-bookings"
+                  aria-controls="panel-bookings" 
+                  aria-selected="{{ activeTab === 'my-bookings' }}" 
+                  ng-class="{'active': activeTab === 'my-bookings'}" 
+                  ng-click="switchTab('my-bookings')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9Z"/><path d="m9 16 2 2 4-4"/></svg>
+            <span>My Bookings &amp; Digital Pass</span>
+            <span class="tabs-badge" ng-if="activeBooking">1 Active</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="nav-user-actions">
+        <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Switch visual theme" title="Toggle theme">
+          <svg class="theme-toggle-icon theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+          <svg class="theme-toggle-icon theme-toggle-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <div class="user-account-badge" ng-if="currentUser">
+          <span class="user-avatar-circle" aria-hidden="true">VK</span>
+          <span class="user-account-name">{{ currentUser.name || 'Viraj Kumar' }}</span>
+          <span class="role-tag">Student</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" ng-click="signOut()" style="color: var(--text-secondary);">Sign out</button>
       </div>
     </div>
   </header>
 
   <!-- Main Student Container -->
-  <main class="app-main">
+  <main id="main" class="app-main">
     <div class="container">
 
       <!-- Status Alerts & Feedback -->
-      <div class="alert alert-{{ statusMessage.type }}" role="status" aria-live="polite" ng-if="statusMessage" style="animation: fadeIn 200ms ease;">
+      <div class="alert alert-{{ statusMessage.type }}" role="status" aria-live="polite" ng-if="statusMessage">
         <span ng-if="statusMessage.type === 'success'">&check;</span>
         <span ng-if="statusMessage.type === 'danger'">&times;</span>
         <span>{{ statusMessage.text }}</span>
@@ -221,23 +194,23 @@
       <!-- ==============================================================
            TAB 1: FIND & RESERVE SEAT (SEAT ALLOTMENT FLOW)
            ============================================================== -->
-      <div ng-show="activeTab === 'reserve'">
+      <div id="panel-reserve" role="tabpanel" aria-labelledby="tab-reserve" tabindex="0" ng-show="activeTab === 'reserve'">
 
         <!-- Greeting Bar -->
         <div class="card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
             <div>
-              <span class="label-meta" style="color: var(--color-accent-blue); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">UPES Central Library &bull; Smart Allotment</span>
+              <span class="label-meta">UPES Central Library desk allotment</span>
               <h1 class="page-title" style="margin-top: 4px; font-size: 26px;">
                 Welcome, {{ currentUser.name || 'Viraj Kumar' }}
               </h1>
               <p class="body-secondary" style="margin-top: 4px;">
-                Student ID: <strong style="color: var(--color-text-primary);">{{ currentUser.studentId || '590029022' }}</strong> &bull; Email: <strong style="color: var(--color-text-primary);">{{ currentUser.email || 'viraj.29022@stu.upes.ac.in' }}</strong>
+                Student ID <strong class="mono" style="color: var(--color-text-primary);">{{ currentUser.studentId || '590029022' }}</strong>. {{ currentUser.email || 'viraj.29022@stu.upes.ac.in' }}
               </p>
             </div>
             <div ng-if="activeBooking">
               <button type="button" class="btn btn-secondary" ng-click="switchTab('my-bookings')">
-                View Active Library Pass &rarr;
+                View my pass
               </button>
             </div>
           </div>
@@ -249,10 +222,10 @@
             
             <!-- Floor Selection Pills -->
             <div>
-              <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">1. Select Library Floor &amp; Reading Wing</label>
-              <div class="apple-segmented-track">
+              <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">1. Choose a floor</label>
+              <div class="tabs-list" role="tablist">
                 <button type="button" 
-                        class="apple-segmented-btn" 
+                        class="tabs-trigger" 
                         ng-repeat="floor in floors" 
                         ng-class="{'active': selectedFloor._id === floor._id}"
                         ng-click="selectFloor(floor)">
@@ -264,18 +237,19 @@
             <!-- Date & Time Slot Selector -->
             <div class="filter-grid" style="align-items: flex-end;">
               <div>
-                <label class="form-label" for="booking-date" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">2. Reservation Date</label>
+                <label class="form-label" for="booking-date" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">2. Reservation date</label>
                 <input type="date" id="booking-date" class="form-control" ng-model="selectedDate" ng-change="loadSeats()">
               </div>
 
               <div>
-                <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">3. Select Fixed 2-Hour Study Slot</label>
-                <div class="apple-segmented-track">
+                <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">3. Choose a two-hour slot</label>
+                <div class="tabs-list" role="tablist" style="flex-wrap: wrap; height: auto;">
                   <button type="button" 
-                          class="apple-segmented-btn" 
+                          class="tabs-trigger" 
                           ng-repeat="slot in slots" 
                           ng-class="{'active': selectedSlot === slot.code}"
-                          ng-click="selectSlot(slot.code)">
+                          ng-click="selectSlot(slot.code)"
+                          style="height: 30px;">
                     {{ slot.label }}
                   </button>
                 </div>
@@ -287,22 +261,22 @@
 
         <!-- Accessible Legend Bar -->
         <div class="seat-legend">
-          <span style="font-size: 13px; font-weight: 600; color: var(--color-text-primary); margin-right: var(--space-2);">Status Legend:</span>
+          <span class="label-meta" style="font-weight: 600;">Desk status</span>
           <div class="legend-item">
             <span class="legend-swatch" style="background: var(--color-surface-subtle); border-color: var(--color-available-border);"></span>
-            <span>Available (Click to Select)</span>
+            <span>Available</span>
           </div>
           <div class="legend-item">
             <span class="legend-swatch" style="background: var(--color-reserved-bg); border-color: var(--color-reserved-border);"></span>
-            <span>Reserved (Booked)</span>
+            <span>Reserved</span>
           </div>
           <div class="legend-item">
             <span class="legend-swatch" style="background: var(--color-occupied-bg); border-color: var(--color-occupied-border);"></span>
-            <span>Occupied (Staff Block)</span>
+            <span>Occupied</span>
           </div>
           <div class="legend-item">
             <span class="legend-swatch" style="background: var(--color-unavailable-bg); border-color: var(--color-unavailable-border);"></span>
-            <span>Unavailable (Maintenance)</span>
+            <span>Maintenance</span>
           </div>
           <div class="legend-item">
             <span class="legend-swatch" style="background: var(--color-accent-blue-subtle); border-color: var(--color-accent-blue);"></span>
@@ -316,12 +290,12 @@
           <!-- Seat Map Grid -->
           <div class="seat-grid-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-              <h2 class="card-title">{{ selectedFloor.name }} Seating Grid</h2>
+              <h2 class="card-title">{{ selectedFloor.name }} desks</h2>
               <span class="body-secondary" style="font-size: 13px;" ng-if="!isLoadingSeats">
-                Showing {{ seats.length }} Desks
+                {{ seats.length }} desks
               </span>
               <span class="body-secondary" style="font-size: 13px;" ng-if="isLoadingSeats">
-                Updating live availability...
+                Updating availability…
               </span>
             </div>
 
@@ -341,11 +315,11 @@
                    }"
                    ng-click="chooseSeat(seat)"
                    ng-keydown="handleSeatKey($event, seat)"
-                   style="animation-delay: {{ $index * 22 }}ms;">
-                <span class="seat-beacon"></span>
+                   style="animation-delay: {{ $index * 15 }}ms;">
+                <span class="seat-status-dot" aria-hidden="true"></span>
                 <span class="seat-tile-label">{{ seat.seatNumber }}</span>
                 <span class="seat-tile-status">{{ selectedSeat._id === seat._id ? 'Selected' : seat.status }}</span>
-                <span ng-if="seat.hasPowerOutlet" class="seat-power-glyph" title="Universal AC + USB-C Outlet">⚡</span>
+                <span ng-if="seat.hasPowerOutlet" class="seat-power-indicator" title="2x AC + USB-C">⚡ AC</span>
               </div>
             </div>
           </div>
@@ -354,7 +328,7 @@
           <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="card-header" style="margin-bottom: var(--space-4);">
-                <h2 class="card-title">Seat Allotment Summary</h2>
+                <h2 class="card-title">Your reservation</h2>
                 <span class="badge badge-available" ng-if="selectedSeat">Ready to Allot</span>
                 <span class="badge" style="background: var(--color-surface-subtle); border-color: var(--color-border); color: var(--color-text-secondary);" ng-if="!selectedSeat">No Selection</span>
               </div>
@@ -365,7 +339,7 @@
                     Desk {{ selectedSeat.seatNumber }}
                   </div>
                   <div class="body-secondary" style="font-size: 13px;">
-                    {{ selectedFloor.name }} &bull; {{ selectedSeat.zone }}
+                    {{ selectedFloor.name }}, {{ selectedSeat.zone }}
                   </div>
                 </div>
 
@@ -400,8 +374,8 @@
                         ng-click="confirmReservation()" 
                         ng-disabled="isBooking"
                         style="box-shadow: 0 4px 20px var(--color-focus-ring);">
-                  <span ng-if="!isBooking">Confirm Seat Allotment &rarr;</span>
-                  <span ng-if="isBooking">Allocating Seat in Database...</span>
+                  <span ng-if="!isBooking">Reserve this desk</span>
+                  <span ng-if="isBooking">Saving reservation…</span>
                 </button>
               </div>
 
@@ -433,130 +407,87 @@
       <!-- ==============================================================
            TAB 2: MY BOOKINGS & DIGITAL LIBRARY PASS (RFID TURNSTILE EXIT)
            ============================================================== -->
-      <div ng-show="activeTab === 'my-bookings'">
+      <div id="panel-bookings" role="tabpanel" aria-labelledby="tab-bookings" tabindex="0" ng-show="activeTab === 'my-bookings'">
         
         <div style="margin-bottom: var(--space-6);">
-          <h2 class="section-title">My Library Reservations &amp; RFID Exit Turnstile</h2>
+          <h2 class="section-title">My reservations and exit pass</h2>
           <p class="body-secondary">Punch your UPES Smart Card at the exit turnstile to automatically release your seat upon departure.</p>
         </div>
 
-        <!-- Active Reservation Highlight (Apple Wallet Pass with RFID Punch) -->
+        <!-- Active reservation pass -->
         <div ng-if="activeBooking" style="margin-bottom: var(--space-8);">
-          <div class="apple-wallet-pass digital-pass">
-            <!-- Cutout Notches for Authentic Apple Wallet Pass -->
-            <div class="pass-notch-left"></div>
-            <div class="pass-notch-right"></div>
+          <div class="digital-credential-card">
             
-            <div class="pass-header">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div class="brand-mark" style="width: 36px; height: 36px; font-size: 16px; border-radius: 10px;">S</div>
-                <div>
-                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #60A5FA; text-transform: uppercase;">UPES Central Library Pass</span>
-                  <div style="font-size: 19px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.02em;">Desk Allotment PKPass</div>
-                </div>
-              </div>
-              <span class="badge" style="background: rgba(48, 209, 88, 0.16); color: #30D158; border: 1px solid rgba(48, 209, 88, 0.35); font-weight: 600; padding: 4px 10px; border-radius: 9999px;">
-                &bull; In-Library Active
-              </span>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px;">
+            <div class="credential-header">
               <div>
-                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55); text-transform: uppercase;">ALLOTTED DESK</span>
-                <div style="font-size: 56px; font-weight: 800; letter-spacing: -0.04em; color: #FFFFFF; line-height: 1; margin-top: 2px;">
-                  {{ activeBooking.seatId.seatNumber }}
-                </div>
-                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-top: 6px; font-weight: 500;">
-                  {{ activeBooking.floorId.name }} &bull; {{ activeBooking.seatId.zone }}
+                <span class="credential-title">UPES Central Library &bull; Digital Desk Credential</span>
+                <div class="credential-main-val">Desk {{ activeBooking.seatId.seatNumber }}</div>
+                <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                  {{ activeBooking.floorId.name }}, {{ activeBooking.seatId.zone }}
                 </div>
               </div>
-
-              <div style="text-align: right;">
-                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55); text-transform: uppercase;">STUDY WINDOW</span>
-                <div style="font-size: 17px; font-weight: 700; color: #FFFFFF; margin-top: 2px;">
-                  {{ activeBooking.slotCode }}
-                </div>
-                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-top: 4px;">
-                  Date: {{ activeBooking.bookingDate }}
-                </div>
-              </div>
-            </div>
-
-            <!-- Student Verification Info -->
-            <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 16px 20px; margin-bottom: 22px; font-size: 13px; backdrop-filter: blur(12px);">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <span style="color: rgba(255, 255, 255, 0.55);">Candidate:</span>
-                <strong style="color: #FFFFFF; font-weight: 600;">{{ currentUser.name }}</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <span style="color: rgba(255, 255, 255, 0.55);">UPES SAP ID:</span>
-                <strong style="color: #FFFFFF; letter-spacing: 0.05em; font-weight: 600;">{{ currentUser.studentId || '590029022' }}</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span style="color: rgba(255, 255, 255, 0.55);">University Email:</span>
-                <span style="color: #60A5FA; font-family: -apple-system, monospace; font-size: 12px;">{{ currentUser.email }}</span>
-              </div>
-            </div>
-
-            <!-- Perforated Tear Line -->
-            <div class="pass-tear-line"></div>
-
-            <!-- Visual Barcode for Turnstile Optical Scanner -->
-            <div class="pass-barcode" style="background: #FFFFFF; border-radius: 14px; padding: 18px 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);">
-              <div class="barcode-lines" style="height: 52px;"></div>
-              <span style="font-family: SF Mono, Menlo, monospace; font-size: 12px; color: #111114; font-weight: 700; letter-spacing: 0.18em; margin-top: 6px;">
-                UPES-LIB-{{ activeBooking._id.slice(-8).toUpperCase() }}
+              <span class="role-tag" style="background-color: var(--status-available-subtle); color: var(--status-available); border-color: var(--status-available-border); padding: 4px 8px;">
+                ● Active In Library
               </span>
             </div>
 
-            <!-- =======================================================
-                 UPES EXIT TURNSTILE RFID CARD PUNCH READER COMPONENT
-                 ======================================================= -->
-            <div class="turnstile-reader" ng-class="{'turnstile-punching': isPunching}" style="border-radius: 20px; padding: 24px 20px; background: rgba(255, 255, 255, 0.04); border: 1.5px dashed rgba(255, 255, 255, 0.16); margin-top: 24px;">
-              
-              <!-- NFC Wave Pulse Container -->
-              <div class="nfc-wave-container">
-                <span class="nfc-wave-circle"></span>
-                <span class="nfc-wave-circle"></span>
-                <span class="nfc-wave-circle"></span>
-                <div class="rfid-icon-circle" style="width: 44px; height: 44px; font-size: 20px; margin-bottom: 0;">
-                  <svg ng-if="!isPunching" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-                    <path d="M6.5 5.5a9 9 0 0 0 0 13"/>
-                    <path d="M10 8a5.2 5.2 0 0 0 0 8"/>
-                    <circle cx="13.8" cy="12" r="1.6" fill="currentColor" stroke="none"/>
-                  </svg>
-                  <svg ng-if="isPunching" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M13 2 4.8 13.2h5.1L9.2 22l8.2-11.2h-5.1L13 2Z" fill="currentColor"/>
-                  </svg>
-                </div>
+            <!-- Credential Info Grid -->
+            <div class="credential-details-grid">
+              <div>
+                <div class="credential-item-label">Student Name</div>
+                <div class="credential-item-value">{{ currentUser.name }}</div>
+              </div>
+              <div>
+                <div class="credential-item-label">UPES SAP ID</div>
+                <div class="credential-item-value mono-num">{{ currentUser.studentId || '590029022' }}</div>
+              </div>
+              <div>
+                <div class="credential-item-label">Study Window</div>
+                <div class="credential-item-value mono-num">{{ activeBooking.slotCode }}</div>
+              </div>
+              <div>
+                <div class="credential-item-label">Allotment Date</div>
+                <div class="credential-item-value mono-num">{{ activeBooking.bookingDate }}</div>
+              </div>
+            </div>
+
+            <!-- Optical Barcode Section -->
+            <div style="background: #FFFFFF; border-radius: 8px; padding: 14px 18px; text-align: center; margin-bottom: 20px;">
+              <div style="height: 42px; background: repeating-linear-gradient(90deg, #18181b, #18181b 3px, #FFFFFF 3px, #FFFFFF 6px, #18181b 6px, #18181b 9px, #FFFFFF 9px, #FFFFFF 13px); border-radius: 4px;"></div>
+              <div style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #18181b; letter-spacing: 0.15em; margin-top: 6px;">
+                UPES-LIB-{{ activeBooking._id.slice(-8).toUpperCase() }}
+              </div>
+            </div>
+
+            <!-- IoT RFID Turnstile Exit Terminal -->
+            <div class="turnstile-iot-panel">
+              <div class="turnstile-beacon">
+                <span class="pulse-dot"></span>
+                <span>Gate 02 RFID Exit Sensor &bull; Online</span>
               </div>
 
-              <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; letter-spacing: -0.01em;">
-                Exit Turnstile RFID Punch (Gate 02)
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">
+                Contactless Card Exit Punch
               </div>
-
-              <p style="font-size: 13px; color: rgba(255, 255, 255, 0.65); max-width: 400px; margin: 0 auto 18px auto; line-height: 1.45;">
-                Punch your UPES Smart Card (SAP <strong>{{ currentUser.studentId || '590029022' }}</strong>) at the exit sensor to release Desk <strong>{{ activeBooking.seatId.seatNumber }}</strong>.
+              <p style="font-size: 12px; color: var(--text-secondary); max-width: 400px; margin: 0 auto 16px auto; line-height: 1.4;">
+                Tap your student smart card (SAP <strong>{{ currentUser.studentId || '590029022' }}</strong>) to unlock the turnstile barrier and automatically release Desk <strong>{{ activeBooking.seatId.seatNumber }}</strong>.
               </p>
 
-              <!-- Punch Card Action Button -->
-              <button class="btn btn-primary btn-block btn-lg" 
+              <button type="button" 
+                      class="btn btn-primary btn-block btn-lg" 
                       ng-click="punchCardExit()" 
-                      ng-disabled="isPunching"
-                      style="font-size: 15px; font-weight: 600; padding: 14px 20px;">
-                <span ng-if="!isPunching">Punch Card &amp; Release Seat &rarr;</span>
-                <span ng-if="isPunching">Verifying Smart Card Punch...</span>
+                      ng-disabled="isPunching">
+                <span ng-if="!isPunching">Tap Smart Card at Exit Turnstile &rarr;</span>
+                <span ng-if="isPunching">Reading RFID Smart Card...</span>
               </button>
 
-              <div ng-if="turnstileStatus" style="margin-top: 12px; font-size: 13px; color: #30D158; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>{{ turnstileStatus }}</span>
+              <div ng-if="turnstileStatus" style="margin-top: 10px; font-size: 12px; color: var(--status-available); font-weight: 600;">
+                ✓ {{ turnstileStatus }}
               </div>
 
-              <div style="margin-top: 14px; font-size: 11px; color: rgba(255, 255, 255, 0.4); letter-spacing: 0.02em;">
-                RFID Turnstile Sensor Webhook &bull; POST /api/bookings/punch-exit
+              <div style="margin-top: 10px; font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono);">
+                POST /api/bookings/punch-exit &bull; Webhook ID #RFID-GATE-02
               </div>
-
             </div>
 
           </div>
@@ -571,19 +502,19 @@
               <path d="M6 15v4.5M18 15v4.5"/>
             </svg>
           </div>
-          <h3 class="empty-state-title">No Active Seat Reservation</h3>
+          <h3 class="empty-state-title">No active reservation</h3>
           <p class="empty-state-text">
-            You do not currently have a seat allotted. Find an available desk in the reading wing to reserve your spot.
+            You don’t have a desk reserved. Choose one in the reading wing to get a pass.
           </p>
           <button type="button" class="btn btn-primary btn-lg" ng-click="switchTab('reserve')">
-            Find an Available Desk &rarr;
+            Find a desk
           </button>
         </div>
 
         <!-- Reservation History Table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">All Reservation History</h3>
+            <h3 class="card-title">Reservation history</h3>
             <span class="badge" style="background: var(--color-surface-subtle); border-color: var(--color-border); color: var(--color-text-secondary);">
               {{ myBookings.length }} Records
             </span>
@@ -608,7 +539,7 @@
                   </td>
                   <td><strong>Desk {{ booking.seatId.seatNumber }}</strong></td>
                   <td>{{ booking.floorId.name }}</td>
-                  <td>{{ booking.bookingDate }} &bull; {{ booking.slotCode }}</td>
+                  <td>{{ booking.bookingDate }}, {{ booking.slotCode }}</td>
                   <td>
                     <span class="badge" ng-class="{'badge-available': booking.status === 'confirmed', 'badge-unavailable': booking.status === 'cancelled'}">
                       <span class="badge-dot"></span> {{ booking.status | uppercase }}
@@ -638,14 +569,71 @@
     </div>
   </main>
 
-  <!-- Clean Footer -->
-  <footer style="background: var(--color-surface); border-top: 1px solid var(--color-border); padding: var(--space-6) 0; margin-top: auto;">
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
-      <div style="font-size: 13px; color: var(--color-text-secondary);">
-        SeatSync &bull; UPES Central Library Desk Reservation System
+  <!-- Enterprise Multi-Column Footer (Industry Standard) -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        
+        <!-- Col 1: Brand & Status -->
+        <div>
+          <div class="brand-wrapper" style="margin-bottom: 12px;">
+            <div class="brand-mark" aria-hidden="true">S</div>
+            <span class="brand-text">SeatSync</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px 0; max-width: 280px;">
+            Automated seat allotment and RFID exit turnstile management system for the UPES Central Library.
+          </p>
+          <div class="system-status-indicator">
+            <span class="pulse-dot"></span>
+            <span>All systems operational &bull; Bidholi Campus</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Library Wings -->
+        <div>
+          <div class="footer-col-title">Library Wings</div>
+          <ul class="footer-links">
+            <li><a href="/student.html">Floor 1 &mdash; Tech &amp; Engineering</a></li>
+            <li><a href="/student.html">Floor 2 &mdash; Silent Research Zone</a></li>
+            <li><a href="/student.html">Quiet Commons</a></li>
+            <li><a href="/student.html">Exit Turnstile Gate 02</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Guidelines & Policy -->
+        <div>
+          <div class="footer-col-title">Policies &amp; Access</div>
+          <ul class="footer-links">
+            <li><a href="#rules">2-Hour Study Slot Rules</a></li>
+            <li><a href="#rfid">RFID Punch Exit Protocol</a></li>
+            <li><a href="#concurrency">Zero Double-Booking Guard</a></li>
+            <li><a href="mailto:library@upes.ac.in">Library Support Desk</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Engineering & Project Credits -->
+        <div>
+          <div class="footer-col-title">Coursework &amp; Candidate</div>
+          <ul class="footer-links" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+            <li>Course: <strong style="color: var(--text-primary);">Advanced Web Technologies</strong></li>
+            <li>Candidate: <strong style="color: var(--text-primary);">Viraj Kumar</strong></li>
+            <li>SAP ID: <span class="mono-num" style="color: var(--text-primary);">590029022</span></li>
+            <li>Email: <a href="mailto:viraj.29022@stu.upes.ac.in" style="color: var(--text-secondary);">viraj.29022@stu.upes.ac.in</a></li>
+            <li>GitHub: <a href="https://github.com/viraj1737/seatsync" target="_blank" rel="noopener">viraj1737/seatsync &nearr;</a></li>
+          </ul>
+        </div>
+
       </div>
-      <div style="font-size: 13px; color: var(--color-text-secondary);">
-        Candidate: <strong style="color: var(--color-text-primary);">Viraj Kumar</strong> (<span style="color: var(--color-accent-blue);">viraj.29022@stu.upes.ac.in</span> &bull; SAP: 590029022)
+
+      <!-- Sub-footer / Legal Bar -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 UPES Central Library Desk Reservation System. Academic Coursework Submission.
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <span>Node.js / Express / AngularJS / MongoDB</span>
+          <span>HTTP 409 Concurrency Protected</span>
+        </div>
       </div>
     </div>
   </footer>
@@ -658,6 +646,7 @@
   <script src="js/directives/seat.directive.js"></script>
   <script src="js/controllers/student.controller.js"></script>
   <script src="js/jquery-effects.js"></script>
+  <script src="js/tabs.js"></script>
   <script src="js/theme.js"></script>
 </body>
 </html>

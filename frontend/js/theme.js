@@ -57,7 +57,7 @@
     var colorScheme = document.querySelector('meta[name="color-scheme"]');
 
     if (themeColor) {
-      themeColor.setAttribute('content', theme === 'light' ? '#F5F5F7' : '#08080A');
+      themeColor.setAttribute('content', theme === 'light' ? '#F4F4F5' : '#0B0B0C');
     }
     if (colorScheme) {
       colorScheme.setAttribute('content', theme === 'light' ? 'light' : 'dark');
