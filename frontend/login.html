@@ -50,31 +50,33 @@
         <span>{{ successMessage }}</span>
       </div>
 
-      <!-- Login Form with AngularJS Validation -->
-      <form name="loginForm" ng-submit="submitLogin(loginForm.$valid)" novalidate>
+      <!-- Login Form with Robust Submission -->
+      <form name="loginForm" ng-submit="submitLogin()" novalidate>
         
         <div class="form-group">
           <label class="form-label" for="login-email">UPES Student Email</label>
-          <input type="email" 
+          <input type="text" 
                  id="login-email" 
                  name="email"
                  class="form-control" 
                  placeholder="viraj.29022@stu.upes.ac.in" 
                  ng-model="loginData.email" 
+                 autocomplete="username"
                  required>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="login-password">
             <span>Password</span>
-            <span class="body-secondary" style="font-size: 12px;">Min. 6 chars</span>
+            <span class="body-secondary" style="font-size: 12px;">(Default: Password123)</span>
           </label>
           <input type="password" 
                  id="login-password" 
                  name="password"
                  class="form-control" 
-                 placeholder="••••••••" 
+                 placeholder="Enter password" 
                  ng-model="loginData.password" 
+                 autocomplete="current-password"
                  required>
         </div>
 
@@ -88,15 +90,15 @@
 
       </form>
 
-      <!-- One-Click Testing Shortcuts -->
+      <!-- One-Click Quick Access Shortcuts -->
       <div style="margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-border-subtle); text-align: center;">
         <span class="label-meta" style="display: block; margin-bottom: var(--space-3); font-weight: 600;">One-Click Quick Access:</span>
         <div style="display: flex; flex-direction: column; gap: var(--space-2);">
-          <button type="button" class="btn btn-secondary btn-sm" ng-click="loginData.email='viraj.29022@stu.upes.ac.in'; loginData.password='Password123'; submitLogin(true)" style="background: var(--color-accent-blue-subtle); border-color: var(--color-accent-blue); color: var(--color-accent-blue); font-weight: 600;">
-            Sign In as Viraj Kumar (UPES Student) &rarr;
+          <button type="button" class="btn btn-secondary btn-sm" ng-click="fillAndSubmitViraj()" style="background: var(--color-accent-blue-subtle); border-color: var(--color-accent-blue); color: var(--color-accent-blue); font-weight: 600;">
+            One-Click Sign In as Viraj Kumar (UPES Student) &rarr;
           </button>
-          <button type="button" class="btn btn-secondary btn-sm" ng-click="loginData.email='admin@seatsync.edu'; loginData.password='Admin1234'; submitLogin(true)">
-            Sign In as Library Administrator &rarr;
+          <button type="button" class="btn btn-secondary btn-sm" ng-click="fillAndSubmitAdmin()">
+            One-Click Sign In as Library Administrator &rarr;
           </button>
         </div>
       </div>

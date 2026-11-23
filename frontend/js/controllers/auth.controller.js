@@ -4,14 +4,14 @@
  */
 angular.module('seatSyncApp').controller('AuthController', ['$scope', '$window', 'ApiService', function ($scope, $window, ApiService) {
   $scope.loginData = {
-    email: '',
+    email: 'viraj.29022@stu.upes.ac.in',
     password: ''
   };
 
   $scope.registerData = {
-    name: '',
-    email: '',
-    studentId: '',
+    name: 'Viraj Kumar',
+    email: 'viraj.29022@stu.upes.ac.in',
+    studentId: '500106482',
     password: '',
     confirmPassword: ''
   };
@@ -21,35 +21,57 @@ angular.module('seatSyncApp').controller('AuthController', ['$scope', '$window',
   $scope.errorMessage = '';
   $scope.successMessage = '';
 
-  // Quick helper to prefill demo accounts for fast testing
-  $scope.fillDemoStudent = function () {
-    $scope.loginData.email = 'student@seatsync.edu';
-    $scope.loginData.password = 'Student1234';
-    $scope.errorMessage = '';
+  // Quick helper: One-click sign in as Viraj Kumar
+  $scope.fillAndSubmitViraj = function () {
+    $scope.loginData.email = 'viraj.29022@stu.upes.ac.in';
+    $scope.loginData.password = 'Password123';
+    var emailEl = document.getElementById('login-email');
+    var passEl = document.getElementById('login-password');
+    if (emailEl) emailEl.value = 'viraj.29022@stu.upes.ac.in';
+    if (passEl) passEl.value = 'Password123';
+    $scope.submitLogin();
   };
 
-  $scope.fillDemoAdmin = function () {
+  // Quick helper: One-click sign in as Admin
+  $scope.fillAndSubmitAdmin = function () {
     $scope.loginData.email = 'admin@seatsync.edu';
     $scope.loginData.password = 'Admin1234';
-    $scope.errorMessage = '';
+    var emailEl = document.getElementById('login-email');
+    var passEl = document.getElementById('login-password');
+    if (emailEl) emailEl.value = 'admin@seatsync.edu';
+    if (passEl) passEl.value = 'Admin1234';
+    $scope.submitLogin();
   };
 
-  // Sign In action
-  $scope.submitLogin = function (isValid) {
-    if (!isValid) {
+  // Sign In action - robust against browser autofill
+  $scope.submitLogin = function () {
+    // Read from ng-model or DOM value (solves browser autofill without input event)
+    var emailEl = document.getElementById('login-email');
+    var passEl = document.getElementById('login-password');
+
+    var email = ($scope.loginData && $scope.loginData.email) || (emailEl ? emailEl.value : '');
+    var password = ($scope.loginData && $scope.loginData.password) || (passEl ? passEl.value : '');
+
+    email = (email || '').trim();
+    password = (password || '').trim();
+
+    if (!email || !password) {
       $scope.errorMessage = 'Please enter both your email and password.';
       return;
     }
+
+    $scope.loginData.email = email;
+    $scope.loginData.password = password;
 
     $scope.isLoading = true;
     $scope.errorMessage = '';
     $scope.successMessage = '';
 
-    ApiService.login($scope.loginData)
+    ApiService.login({ email: email, password: password })
       .then(function (response) {
         $scope.isLoading = false;
         $scope.currentUser = response.data.data;
-        $scope.successMessage = 'Sign in successful! Redirecting...';
+        $scope.successMessage = 'Sign in successful! Redirecting to student portal...';
 
         setTimeout(function () {
           if ($scope.currentUser.role === 'admin') {
@@ -57,7 +79,7 @@ angular.module('seatSyncApp').controller('AuthController', ['$scope', '$window',
           } else {
             $window.location.href = '/student.html';
           }
-        }, 600);
+        }, 500);
       })
       .catch(function (error) {
         $scope.isLoading = false;
