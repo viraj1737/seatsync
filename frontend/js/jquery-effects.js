@@ -25,12 +25,12 @@ $(document).ready(function () {
     }
 
     var toastHtml = `
-      <div id="seatsync-toast" style="position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: none; min-width: 300px; max-width: 420px; background: rgba(23, 25, 29, 0.95); backdrop-filter: blur(12px); color: #FFFFFF; border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 16px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+      <div id="seatsync-toast" style="position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: none; min-width: 300px; max-width: 420px; background: var(--color-surface-overlay); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--color-text-primary); border: 1px solid var(--color-border); border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow-lg);">
         <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <div style="width: 24px; height: 24px; border-radius: 50%; background: #16865B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0;">✓</div>
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--color-available); color: #08080A; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0;">✓</div>
           <div style="flex: 1;">
             <div style="font-weight: 600; font-size: 14px; margin-bottom: 2px;">${title}</div>
-            <div style="font-size: 13px; color: #D0D4DC; line-height: 1.4;">${message}</div>
+            <div style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.4;">${message}</div>
           </div>
         </div>
       </div>

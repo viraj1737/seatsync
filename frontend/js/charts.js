@@ -6,6 +6,20 @@ window.renderOccupancyChart = function () {
   var container = d3.select('#d3-occupancy-chart');
   if (container.empty()) return;
 
+  // Pull live colours from the black-theme design tokens so the chart stays in sync
+  function readToken(name, fallback) {
+    var value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return value || fallback;
+  }
+
+  var palette = {
+    grid: readToken('--color-border', '#26262E'),
+    axis: readToken('--color-text-primary', '#F5F5F7'),
+    muted: readToken('--color-text-secondary', '#A3A3AC'),
+    available: readToken('--color-available', '#4ADE80'),
+    occupied: readToken('--color-occupied', '#F87171')
+  };
+
   // Clear previous SVG contents
   container.html('');
 
@@ -45,10 +59,10 @@ window.renderOccupancyChart = function () {
       .nice()
       .rangeRound([height, 0]);
 
-    // Color Palette matching SeatSync Apple-inspired tokens
+    // Color Palette matching SeatSync black-theme tokens
     var color = d3.scaleOrdinal()
       .domain(['Available', 'Occupied'])
-      .range(['#16865B', '#C94747']);
+      .range([palette.available, palette.occupied]);
 
     // Sub-bars: Available vs Occupied
     var x1 = d3.scaleBand()
@@ -64,7 +78,7 @@ window.renderOccupancyChart = function () {
         .tickFormat('')
       )
       .selectAll('line')
-      .style('stroke', '#E6E8EC')
+      .style('stroke', palette.grid)
       .style('stroke-dasharray', '3,3');
 
     // Draw grouped bars
@@ -81,7 +95,7 @@ window.renderOccupancyChart = function () {
       .attr('width', x1.bandwidth())
       .attr('height', 0)
       .attr('rx', 6)
-      .attr('fill', '#16865B')
+      .attr('fill', palette.available)
       .transition()
       .duration(600)
       .attr('y', function (d) { return y(d.availableSeats); })
@@ -94,7 +108,7 @@ window.renderOccupancyChart = function () {
       .attr('width', x1.bandwidth())
       .attr('height', 0)
       .attr('rx', 6)
-      .attr('fill', '#C94747')
+      .attr('fill', palette.occupied)
       .transition()
       .duration(600)
       .attr('y', function (d) { return y(d.occupiedSeats); })
@@ -107,7 +121,7 @@ window.renderOccupancyChart = function () {
       .attr('text-anchor', 'middle')
       .style('font-size', '11px')
       .style('font-weight', '600')
-      .style('fill', '#16865B')
+      .style('fill', palette.available)
       .text(function (d) { return d.availableSeats; });
 
     floorGroups.append('text')
@@ -116,7 +130,7 @@ window.renderOccupancyChart = function () {
       .attr('text-anchor', 'middle')
       .style('font-size', '11px')
       .style('font-weight', '600')
-      .style('fill', '#C94747')
+      .style('fill', palette.occupied)
       .text(function (d) { return d.occupiedSeats; });
 
     // X Axis
@@ -126,14 +140,18 @@ window.renderOccupancyChart = function () {
       .selectAll('text')
       .style('font-size', '12px')
       .style('font-weight', '600')
-      .style('fill', '#17191D');
+      .style('fill', palette.axis);
 
     // Y Axis
     svg.append('g')
       .call(d3.axisLeft(y).ticks(5))
       .selectAll('text')
       .style('font-size', '11px')
-      .style('fill', '#707782');
+      .style('fill', palette.muted);
+
+    // Axis strokes tuned for the dark canvas
+    svg.selectAll('.domain, .tick line')
+      .style('stroke', palette.grid);
 
   }).catch(function (error) {
     console.error('[SeatSync D3] Error loading analytics:', error);

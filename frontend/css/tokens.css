@@ -1,51 +1,57 @@
 /**
- * SeatSync Design System Tokens
- * Strictly conforms to Section 3: Premium visual design system
+ * SeatSync Design System Tokens — Black Theme
+ * OLED-friendly near-black canvas, elevated dark surfaces, and vivid status accents.
+ * All colours are contrast-checked against their intended surfaces for WCAG AA.
  */
 
 :root {
+  color-scheme: dark;
+
   /* Surface & Canvas Colors */
-  --color-canvas: #F5F6F8;
-  --color-surface: #FFFFFF;
-  --color-surface-subtle: #FAFAFB;
-  --color-surface-overlay: rgba(255, 255, 255, 0.92);
-  --color-backdrop: rgba(17, 24, 39, 0.4);
+  --color-canvas: #08080A;
+  --color-surface: #121216;
+  --color-surface-subtle: #1A1A21;
+  --color-surface-raised: #1E1E26;
+  --color-surface-overlay: rgba(10, 10, 13, 0.82);
+  --color-backdrop: rgba(0, 0, 0, 0.72);
 
   /* Typography Colors */
-  --color-text-primary: #17191D;
-  --color-text-secondary: #707782;
-  --color-text-tertiary: #9298A1;
+  --color-text-primary: #F5F5F7;
+  --color-text-secondary: #A3A3AC;
+  --color-text-tertiary: #7E7E89;
   --color-text-inverted: #FFFFFF;
 
   /* Interactive & Action Colors */
-  --color-primary-action: #17191D;
-  --color-primary-action-hover: #2E323A;
-  --color-accent-blue: #2563EB;
-  --color-accent-blue-hover: #1D4ED8;
-  --color-accent-blue-subtle: #EFF6FF;
+  --color-primary-action: #F5F5F7;
+  --color-primary-action-hover: #FFFFFF;
+  --color-on-primary: #08080A;
+  --color-accent-blue: #5B9BFF;
+  --color-accent-blue-hover: #82B4FF;
+  --color-accent-blue-subtle: rgba(91, 155, 255, 0.14);
+  --color-accent-blue-border: rgba(91, 155, 255, 0.38);
 
   /* Seat & Reservation Status Colors */
-  --color-available: #16865B;
-  --color-available-bg: #EAF7EE;
-  --color-available-border: #B7E4C7;
+  --color-available: #4ADE80;
+  --color-available-bg: rgba(74, 222, 128, 0.10);
+  --color-available-border: rgba(74, 222, 128, 0.32);
 
-  --color-reserved: #C47A12;
-  --color-reserved-bg: #FFF8E8;
-  --color-reserved-border: #FCD9A5;
+  --color-reserved: #FBBF24;
+  --color-reserved-bg: rgba(251, 191, 36, 0.10);
+  --color-reserved-border: rgba(251, 191, 36, 0.32);
 
-  --color-occupied: #C94747;
-  --color-occupied-bg: #FDF2F2;
-  --color-occupied-border: #F8B4B4;
+  --color-occupied: #F87171;
+  --color-occupied-bg: rgba(248, 113, 113, 0.10);
+  --color-occupied-border: rgba(248, 113, 113, 0.32);
 
-  --color-unavailable: #9298A1;
-  --color-unavailable-bg: #F3F4F6;
-  --color-unavailable-border: #E5E7EB;
+  --color-unavailable: #9A9AA2;
+  --color-unavailable-bg: rgba(142, 142, 150, 0.08);
+  --color-unavailable-border: rgba(142, 142, 150, 0.24);
 
   /* Borders & Dividers */
-  --color-border: #E6E8EC;
-  --color-border-subtle: #F0F1F3;
-  --color-border-hover: #D0D4DC;
-  --color-focus-ring: rgba(37, 99, 235, 0.25);
+  --color-border: #26262E;
+  --color-border-subtle: #1D1D23;
+  --color-border-hover: #3A3A45;
+  --color-focus-ring: rgba(91, 155, 255, 0.32);
 
   /* Radius Tokens */
   --radius-sm: 8px;
@@ -65,16 +71,26 @@
   --space-10: 40px;
   --space-12: 48px;
 
-  /* Shadows (Subtle, Apple-inspired depth) */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
-  --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+  /* Shadows (Deep, soft depth for dark surfaces) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.60);
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.72);
 
-  /* Transitions */
-  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Transitions — Apple spring & iOS easing system */
+  --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1);
+  --ease-spring-soft: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849 31.5%, 0.937 38.1%, 0.968 41.8%, 0.991 45.7%, 1.006 50.1%, 1.015 55%, 1.017 63.9%, 1.001 85.9%, 1);
+  --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-ios-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+
+  --duration-instant: 120ms;
+  --duration-fast: 240ms;
+  --duration-base: 380ms;
+  --duration-slow: 560ms;
+
+  --transition-fast: var(--duration-fast) var(--ease-ios);
+  --transition-normal: var(--duration-base) var(--ease-ios);
+  --transition-slow: var(--duration-slow) var(--ease-spring);
 
   /* Layout Widths */
   --content-max-width: 1200px;

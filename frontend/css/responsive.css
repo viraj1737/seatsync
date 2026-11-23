@@ -9,6 +9,21 @@
 @media (max-width: 1024px) {
   :root {
     --content-max-width: 100%;
+    --header-height: auto;
+  }
+
+  .app-header {
+    height: auto;
+    padding: var(--space-3) 0;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    row-gap: var(--space-3);
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
   }
 
   .container {

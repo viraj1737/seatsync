@@ -11,9 +11,10 @@
   top: 0;
   z-index: 100;
   background-color: var(--color-surface-overlay);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 24px rgba(0, 0, 0, 0.35);
   height: var(--header-height);
   display: flex;
   align-items: center;
@@ -39,19 +40,23 @@
   height: 34px;
   border-radius: var(--radius-sm);
   background: var(--color-primary-action);
-  color: var(--color-text-inverted);
+  color: var(--color-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 15px;
   letter-spacing: -0.02em;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 10px rgba(255, 255, 255, 0.10);
+  transition: transform var(--duration-slow) var(--ease-spring);
+  will-change: transform;
 }
 
 .brand-text {
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .brand-badge {
@@ -64,6 +69,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 .nav-links {
@@ -82,7 +88,8 @@
   font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-ios), background-color var(--duration-fast) var(--ease-ios), transform var(--duration-base) var(--ease-spring);
 }
 
 .nav-link:hover {
@@ -94,6 +101,7 @@
 .nav-link.active {
   color: var(--color-text-primary);
   background-color: var(--color-surface-subtle);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   font-weight: 600;
 }
 
@@ -114,6 +122,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -134,11 +143,19 @@
   cursor: pointer;
   text-decoration: none;
   user-select: none;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform 80ms ease, box-shadow var(--transition-fast);
+  white-space: nowrap;
+  will-change: transform;
+  transition:
+    background-color var(--duration-fast) var(--ease-ios),
+    border-color var(--duration-fast) var(--ease-ios),
+    color var(--duration-fast) var(--ease-ios),
+    box-shadow var(--duration-base) var(--ease-ios),
+    transform var(--duration-base) var(--ease-spring);
 }
 
 .btn:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: scale(0.96);
+  transition-duration: var(--duration-instant);
 }
 
 .btn:disabled {
@@ -149,16 +166,26 @@
 
 .btn-primary {
   background-color: var(--color-primary-action);
-  color: var(--color-text-inverted);
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #E9E9EF 100%);
+  color: var(--color-on-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--color-primary-action-hover);
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F3F8 100%);
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.14);
   text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
 }
 
 .btn-secondary {
   background-color: var(--color-surface);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
   color: var(--color-text-primary);
   border-color: var(--color-border);
   box-shadow: var(--shadow-sm);
@@ -181,12 +208,12 @@
 }
 
 .btn-danger {
-  background-color: var(--color-occupied);
+  background-color: #E5484D;
   color: var(--color-text-inverted);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #B53636;
+  background-color: #F2555A;
   text-decoration: none;
 }
 
@@ -248,25 +275,42 @@
   font-family: var(--font-system);
   font-size: 15px;
   color: var(--color-text-primary);
-  background-color: var(--color-surface);
+  background-color: var(--color-surface-subtle);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  color-scheme: dark;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .form-control::placeholder {
   color: var(--color-text-tertiary);
 }
 
+.form-control:hover, .form-select:hover {
+  border-color: var(--color-border-hover);
+}
+
 .form-control:focus, .form-select:focus {
   outline: none;
+  background-color: var(--color-surface-raised);
   border-color: var(--color-accent-blue);
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
+/* Native date picker icon tuned for dark chrome */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.72);
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 .form-control.is-invalid, .form-select.is-invalid {
   border-color: var(--color-occupied);
-  box-shadow: 0 0 0 3px rgba(201, 71, 71, 0.15);
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18);
 }
 
 .form-error {
@@ -287,6 +331,7 @@
    ========================================================================== */
 .card {
   background-color: var(--color-surface);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 120px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
@@ -326,13 +371,20 @@
 }
 
 .metric-card {
-  background: var(--color-surface);
+  background-color: var(--color-surface);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 100px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.metric-card:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .metric-label {
@@ -486,7 +538,7 @@
 
 /* Seat States */
 .seat-tile--available {
-  background: var(--color-surface);
+  background: var(--color-surface-subtle);
   border-color: var(--color-available-border);
   color: var(--color-text-primary);
 }
@@ -495,14 +547,14 @@
   border-color: var(--color-available);
   background: var(--color-available-bg);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 6px 18px rgba(74, 222, 128, 0.12);
 }
 
 .seat-tile--selected {
   background: var(--color-accent-blue-subtle) !important;
   border-color: var(--color-accent-blue) !important;
   color: var(--color-accent-blue) !important;
-  box-shadow: 0 0 0 3px var(--color-focus-ring) !important;
+  box-shadow: 0 0 0 3px var(--color-focus-ring), 0 8px 20px rgba(91, 155, 255, 0.18) !important;
   transform: translateY(-2px);
 }
 .seat-tile--selected .seat-tile-status { color: var(--color-accent-blue) !important; font-weight: 700; }
@@ -512,7 +564,7 @@
   border-color: var(--color-reserved-border);
   color: var(--color-reserved);
   cursor: not-allowed;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .seat-tile--occupied {
@@ -520,7 +572,7 @@
   border-color: var(--color-occupied-border);
   color: var(--color-occupied);
   cursor: not-allowed;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .seat-tile--unavailable {
@@ -528,7 +580,6 @@
   border-color: var(--color-unavailable-border);
   color: var(--color-unavailable);
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 /* ==========================================================================
@@ -603,7 +654,7 @@
 .alert-info {
   background-color: var(--color-accent-blue-subtle);
   color: var(--color-accent-blue);
-  border-color: #BFDBFE;
+  border-color: var(--color-accent-blue-border);
 }
 
 /* Modal Overlay */
@@ -629,7 +680,8 @@
 }
 
 .modal-dialog {
-  background: var(--color-surface);
+  background-color: var(--color-surface);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 140px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   max-width: 500px;
