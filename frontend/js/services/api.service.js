@@ -33,7 +33,7 @@ angular.module('seatSyncApp').service('ApiService', ['$http', function ($http) {
     });
   };
 
-  // Bookings
+  // Bookings & RFID Punch Exit
   this.createBooking = function (bookingData) {
     return $http.post(baseUrl + '/bookings', bookingData);
   };
@@ -44,6 +44,11 @@ angular.module('seatSyncApp').service('ApiService', ['$http', function ($http) {
 
   this.cancelBooking = function (bookingId) {
     return $http.patch(baseUrl + '/bookings/' + bookingId + '/cancel', {});
+  };
+
+  // Turnstile RFID Smart Card Punch Exit
+  this.punchExit = function (studentId, barcode) {
+    return $http.post(baseUrl + '/bookings/punch-exit', { studentId: studentId, barcode: barcode });
   };
 
   // Admin Operations

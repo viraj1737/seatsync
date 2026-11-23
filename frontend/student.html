@@ -54,6 +54,41 @@
       background: repeating-linear-gradient(90deg, #17191D, #17191D 3px, #FFFFFF 3px, #FFFFFF 6px, #17191D 6px, #17191D 8px, #FFFFFF 8px, #FFFFFF 12px);
       border-radius: 4px;
     }
+
+    /* RFID Turnstile Card Punch Reader Styling */
+    .turnstile-reader {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px dashed rgba(255, 255, 255, 0.22);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+      position: relative;
+      transition: all var(--transition-normal);
+    }
+    .turnstile-reader:hover {
+      border-color: rgba(37, 99, 235, 0.6);
+      background: rgba(255, 255, 255, 0.09);
+    }
+    .rfid-icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.2);
+      border: 2px solid var(--color-accent-blue);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 12px;
+      transition: transform 300ms ease;
+    }
+    .turnstile-punching .rfid-icon-circle {
+      transform: scale(1.15);
+      background: rgba(22, 134, 91, 0.3);
+      border-color: #4ADE80;
+    }
   </style>
 </head>
 <body ng-controller="StudentController" style="display: flex; flex-direction: column; min-height: 100vh;">
@@ -310,33 +345,33 @@
       </div>
 
       <!-- ==============================================================
-           TAB 2: MY BOOKINGS & DIGITAL LIBRARY PASS (EXIT DESK FLOW)
+           TAB 2: MY BOOKINGS & DIGITAL LIBRARY PASS (RFID TURNSTILE EXIT)
            ============================================================== -->
       <div ng-show="activeTab === 'my-bookings'">
         
         <div style="margin-bottom: var(--space-6);">
-          <h2 class="section-title">My Library Reservations &amp; Exit Desk</h2>
-          <p class="body-secondary">Manage your active seat allotment and release the desk when exiting the library.</p>
+          <h2 class="section-title">My Library Reservations &amp; RFID Exit Turnstile</h2>
+          <p class="body-secondary">Punch your UPES Smart Card at the exit turnstile to automatically release your seat upon departure.</p>
         </div>
 
-        <!-- Active Reservation Highlight (Apple Wallet Pass) -->
+        <!-- Active Reservation Highlight (Apple Wallet Pass with RFID Punch) -->
         <div ng-if="activeBooking" style="margin-bottom: var(--space-8);">
-          <div class="digital-pass" style="max-width: 560px; margin: 0 auto;">
+          <div class="digital-pass" style="max-width: 580px; margin: 0 auto;">
             
             <div class="pass-header">
               <div>
                 <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #93C5FD; text-transform: uppercase;">UPES Central Library Pass</span>
-                <div style="font-size: 18px; font-weight: 700; margin-top: 2px;">Active Seat Allotment</div>
+                <div style="font-size: 18px; font-weight: 700; margin-top: 2px;">Active Desk Allotment</div>
               </div>
               <span class="badge badge-available" style="background: rgba(22, 134, 91, 0.25); color: #4ADE80; border-color: rgba(74, 222, 128, 0.4);">
-                &bull; Verified Active
+                &bull; In-Library Active
               </span>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
               <div>
-                <span style="font-size: 12px; color: #9CA3AF;">ALLOTTED SEAT</span>
-                <div style="font-size: 48px; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF; line-height: 1;">
+                <span style="font-size: 12px; color: #9CA3AF;">ALLOTTED DESK</span>
+                <div style="font-size: 52px; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF; line-height: 1;">
                   {{ activeBooking.seatId.seatNumber }}
                 </div>
                 <div style="font-size: 13px; color: #D1D5DB; margin-top: 4px;">
@@ -363,7 +398,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span style="color: #9CA3AF;">UPES SAP ID:</span>
-                <strong style="color: #FFFFFF;">{{ currentUser.studentId || '590029022' }}</strong>
+                <strong style="color: #FFFFFF; letter-spacing: 0.04em;">{{ currentUser.studentId || '590029022' }}</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: #9CA3AF;">University Email:</span>
@@ -371,7 +406,7 @@
               </div>
             </div>
 
-            <!-- Visual Barcode for Library Turnstile -->
+            <!-- Visual Barcode for Turnstile Scanner -->
             <div class="pass-barcode">
               <div class="barcode-lines"></div>
               <span style="font-family: monospace; font-size: 11px; color: #17191D; letter-spacing: 0.15em;">
@@ -379,16 +414,41 @@
               </span>
             </div>
 
-            <!-- Prominent Exit & Release Seat Button -->
-            <div style="text-align: center; margin-top: 24px;">
-              <button class="btn btn-danger btn-block btn-lg" 
-                      ng-click="exitAndReleaseSeat(activeBooking)"
-                      style="background-color: #DC2626; border-color: #B91C1C; font-weight: 700; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);">
-                Exit Library &amp; Release Seat &rarr;
-              </button>
-              <div style="font-size: 12px; color: #9CA3AF; margin-top: 8px;">
-                Clicking releases your seat immediately so another student can study.
+            <!-- =======================================================
+                 UPES EXIT TURNSTILE RFID CARD PUNCH READER COMPONENT
+                 ======================================================= -->
+            <div class="turnstile-reader" ng-class="{'turnstile-punching': isPunching}">
+              
+              <div class="rfid-icon-circle">
+                <span ng-if="!isPunching">🛈</span>
+                <span ng-if="isPunching">⚡</span>
               </div>
+
+              <div style="font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px;">
+                UPES Library Exit Turnstile (Gate 02)
+              </div>
+
+              <p style="font-size: 12px; color: #9CA3AF; max-width: 380px; margin: 0 auto 16px auto; line-height: 1.4;">
+                Tap your Smart ID card below when departing the library. The turnstile will unlock and automatically release Desk {{ activeBooking.seatId.seatNumber }} in the database.
+              </p>
+
+              <!-- Punch Card Action Button -->
+              <button class="btn btn-primary btn-block btn-lg" 
+                      ng-click="punchCardExit()" 
+                      ng-disabled="isPunching"
+                      style="background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%); border-color: #3B82F6; box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4); font-size: 15px; font-weight: 700;">
+                <span ng-if="!isPunching">Tap / Punch Card at Exit Turnstile &rarr;</span>
+                <span ng-if="isPunching">Punching Card (RFID Reader Active)...</span>
+              </button>
+
+              <div ng-if="turnstileStatus" style="margin-top: 10px; font-size: 12px; color: #4ADE80; font-weight: 600;">
+                ✓ {{ turnstileStatus }}
+              </div>
+
+              <div style="margin-top: 12px; font-size: 11px; color: #6B7280;">
+                Connected to IoT Exit Turnstile Webhook &bull; POST /api/bookings/punch-exit
+              </div>
+
             </div>
 
           </div>
@@ -426,7 +486,7 @@
                   <th>Floor</th>
                   <th>Date &amp; Slot</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th>Exit Record</th>
                 </tr>
               </thead>
               <tbody>
@@ -443,13 +503,11 @@
                     </span>
                   </td>
                   <td>
-                    <button class="btn btn-danger btn-sm" 
-                            ng-if="booking.status === 'confirmed'" 
-                            ng-click="exitAndReleaseSeat(booking)">
-                      Exit / Release
-                    </button>
-                    <span ng-if="booking.status !== 'confirmed'" class="body-secondary" style="font-size: 12px;">
-                      Released
+                    <span ng-if="booking.status === 'confirmed'" class="badge badge-available">
+                      In-Library (Active)
+                    </span>
+                    <span ng-if="booking.status === 'cancelled'" class="body-secondary" style="font-size: 12px; color: var(--color-available);">
+                      ✓ Card Punched at Turnstile
                     </span>
                   </td>
                 </tr>
@@ -475,7 +533,7 @@
         SeatSync &bull; UPES Central Library Desk Reservation System
       </div>
       <div style="font-size: 13px; color: var(--color-text-secondary);">
-        Candidate: <strong style="color: var(--color-text-primary);">Viraj Kumar</strong> (<span style="color: var(--color-accent-blue);">viraj.29022@stu.upes.ac.in</span>)
+        Candidate: <strong style="color: var(--color-text-primary);">Viraj Kumar</strong> (<span style="color: var(--color-accent-blue);">viraj.29022@stu.upes.ac.in</span> &bull; SAP: 590029022)
       </div>
     </div>
   </footer>

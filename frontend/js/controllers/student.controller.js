@@ -1,6 +1,6 @@
 /**
  * SeatSync Student Portal Controller
- * Drives real-time seat browsing, slot selection, seat allotment, and exit release
+ * Drives real-time seat browsing, slot selection, seat allotment, and RFID turnstile exit
  */
 angular.module('seatSyncApp').controller('StudentController', ['$scope', '$window', 'ApiService', function ($scope, $window, ApiService) {
   $scope.currentUser = null;
@@ -23,6 +23,8 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
 
   $scope.isLoadingSeats = false;
   $scope.isBooking = false;
+  $scope.isPunching = false;
+  $scope.turnstileStatus = null; // feedback after punch
   $scope.statusMessage = null; // { type: 'success'|'danger'|'info', text: '...' }
   $scope.activeTab = 'reserve'; // 'reserve' | 'my-bookings'
 
@@ -35,7 +37,6 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
         $scope.loadMyBookings();
       })
       .catch(function () {
-        // Not authenticated
         $window.location.href = '/login.html';
       });
   };
@@ -75,7 +76,7 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
         $scope.seats = response.data.data || [];
         $scope.isLoadingSeats = false;
       })
-      .catch(function (error) {
+      .catch(function () {
         $scope.isLoadingSeats = false;
         $scope.showMessage('danger', 'Failed to retrieve library seating map.');
       });
@@ -85,11 +86,11 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
   $scope.chooseSeat = function (seat) {
     if (seat.status !== 'available') {
       if (seat.status === 'reserved') {
-        $scope.showMessage('danger', `Seat ${seat.seatNumber} is already reserved for this slot.`);
+        $scope.showMessage('danger', `Desk ${seat.seatNumber} is already reserved for this slot.`);
       } else if (seat.status === 'occupied') {
-        $scope.showMessage('danger', `Seat ${seat.seatNumber} is physically occupied by library staff.`);
+        $scope.showMessage('danger', `Desk ${seat.seatNumber} is physically occupied by library staff.`);
       } else {
-        $scope.showMessage('danger', `Seat ${seat.seatNumber} is temporarily out of service.`);
+        $scope.showMessage('danger', `Desk ${seat.seatNumber} is temporarily out of service.`);
       }
       return;
     }
@@ -115,7 +116,6 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
         $scope.selectedSeat = null;
         $scope.showMessage('success', response.data.message || 'Seat reserved successfully!');
         
-        // Trigger jQuery toast notification if available
         if (typeof window.showSeatSyncToast === 'function') {
           window.showSeatSyncToast('Seat Allotted Successfully!', response.data.message);
         }
@@ -135,30 +135,54 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
   $scope.loadMyBookings = function () {
     ApiService.getMyBookings().then(function (response) {
       $scope.myBookings = response.data.data || [];
-      // Identify active reservation
       $scope.activeBooking = $scope.myBookings.find(b => b.status === 'confirmed') || null;
     });
   };
 
-  // Exit / Cancel Reservation
-  $scope.exitAndReleaseSeat = function (booking) {
-    if (!confirm('Are you sure you want to release your reserved seat? This will allow other students to use it.')) {
-      return;
-    }
+  // RFID Turnstile Card Punch Exit (Simulates touching UPES ID Card to Turnstile Scanner)
+  $scope.punchCardExit = function () {
+    $scope.isPunching = true;
+    $scope.turnstileStatus = 'Scanning Smart Card...';
 
-    ApiService.cancelBooking(booking._id)
-      .then(function (response) {
-        $scope.showMessage('success', response.data.message || 'Seat released successfully.');
-        if (typeof window.showSeatSyncToast === 'function') {
-          window.showSeatSyncToast('Seat Released', 'Your desk has been made available for other students.');
-        }
-        $scope.loadSeats();
-        $scope.loadMyBookings();
-      })
-      .catch(function (error) {
-        const msg = (error.data && error.data.message) ? error.data.message : 'Failed to release seat.';
-        $scope.showMessage('danger', msg);
-      });
+    setTimeout(function () {
+      const studentId = ($scope.currentUser && $scope.currentUser.studentId) || '590029022';
+      
+      ApiService.punchExit(studentId)
+        .then(function (response) {
+          $scope.isPunching = false;
+          $scope.turnstileStatus = 'Card Punched! Gate Unlocked & Desk Released.';
+          $scope.showMessage('success', response.data.message);
+          
+          if (typeof window.showSeatSyncToast === 'function') {
+            window.showSeatSyncToast('RFID Card Punched', 'Turnstile Gate 02 Opened • Seat Released!');
+          }
+
+          $scope.loadSeats();
+          $scope.loadMyBookings();
+
+          setTimeout(function () {
+            $scope.$apply(function () {
+              $scope.turnstileStatus = null;
+            });
+          }, 5000);
+        })
+        .catch(function (error) {
+          $scope.isPunching = false;
+          $scope.turnstileStatus = null;
+          const msg = (error.data && error.data.message) ? error.data.message : 'Turnstile card punch failed.';
+          $scope.showMessage('danger', msg);
+        });
+    }, 700); // realistic sensor scan feedback
+  };
+
+  // Fallback manual cancel if needed
+  $scope.manualCancel = function (booking) {
+    if (!confirm('Release this seat?')) return;
+    ApiService.cancelBooking(booking._id).then(function () {
+      $scope.showMessage('success', 'Seat released successfully.');
+      $scope.loadSeats();
+      $scope.loadMyBookings();
+    });
   };
 
   $scope.showMessage = function (type, text) {

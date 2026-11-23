@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Seat = require('../models/Seat');
 const Floor = require('../models/Floor');
+const User = require('../models/User');
 const { parseSlotTimestamps, checkSeatConflict, checkUserConflict } = require('../utils/bookingRules');
 
 /**
@@ -43,7 +44,7 @@ const createBooking = async (req, res) => {
       });
     }
 
-    // 2. Prevent user double booking in the same slot (One active booking per student per slot)
+    // 2. Prevent user double booking in the same slot
     const userConflict = await checkUserConflict(userId, slotInfo.startAt, slotInfo.endAt);
     if (userConflict) {
       return res.status(409).json({
@@ -146,8 +147,73 @@ const cancelBooking = async (req, res) => {
   }
 };
 
+/**
+ * RFID Smart Card Punch Exit Gate Endpoint
+ * POST /api/bookings/punch-exit
+ * Simulates physical turnstile RFID punch: tapping student card automatically releases the allotted seat!
+ */
+const punchExit = async (req, res) => {
+  try {
+    const studentId = req.body.studentId || (req.user ? req.user.studentId : null);
+    const barcode = req.body.barcode;
+
+    let user = null;
+    if (studentId) {
+      user = await User.findOne({ studentId });
+    } else if (req.user) {
+      user = await User.findById(req.user.id);
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'RFID Card not recognized by exit turnstile scanner.'
+      });
+    }
+
+    // Find student's active confirmed booking
+    const booking = await Booking.findOne({
+      userId: user._id,
+      status: 'confirmed'
+    }).populate('seatId floorId');
+
+    if (!booking) {
+      return res.status(400).json({
+        success: false,
+        message: `Card scanned for ${user.name} (SAP: ${user.studentId}), but no active seat reservation was found.`
+      });
+    }
+
+    // Automatically release seat and record exit timestamp
+    booking.status = 'cancelled';
+    booking.cancelledAt = new Date();
+    await booking.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Card Punched! Turnstile gate opened. Desk ${booking.seatId ? booking.seatId.seatNumber : ''} has been automatically released.`,
+      data: {
+        bookingId: booking._id,
+        seatNumber: booking.seatId ? booking.seatId.seatNumber : 'Desk',
+        floor: booking.floorId ? booking.floorId.name : 'Floor 1',
+        studentName: user.name,
+        studentId: user.studentId,
+        turnstileGate: 'Exit Turnstile Gate 02 (South Wing)',
+        punchTime: new Date().toLocaleTimeString()
+      }
+    });
+  } catch (error) {
+    console.error('[SeatSync Turnstile] RFID Punch error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Turnstile processing error. Please retry card punch.'
+    });
+  }
+};
+
 module.exports = {
   createBooking,
   getMyBookings,
-  cancelBooking
+  cancelBooking,
+  punchExit
 };
