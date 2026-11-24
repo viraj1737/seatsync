@@ -135,6 +135,7 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
 
   // Select a seat on the grid
   $scope.chooseSeat = function (seat) {
+    $scope.bookingError = null;
     if (seat.status !== 'available') {
       if (seat.status === 'reserved') {
         $scope.showMessage('danger', `Desk ${seat.seatNumber} is already reserved for this slot.`);
@@ -162,6 +163,7 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
     if (!$scope.selectedSeat || !$scope.selectedFloor) return;
 
     $scope.isBooking = true;
+    $scope.bookingError = null;
     const payload = {
       seatId: $scope.selectedSeat._id,
       floorId: $scope.selectedFloor._id,
@@ -173,10 +175,11 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
       .then(function (response) {
         $scope.isBooking = false;
         $scope.selectedSeat = null;
+        $scope.bookingError = null;
         $scope.showMessage('success', response.data.message || 'Seat reserved successfully!');
         
         if (typeof window.showSeatSyncToast === 'function') {
-          window.showSeatSyncToast('Seat Allotted Successfully!', response.data.message);
+          window.showSeatSyncToast('Seat Allotted Successfully!', response.data.message, false);
         }
 
         $scope.loadSeats();
@@ -186,7 +189,11 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
       .catch(function (error) {
         $scope.isBooking = false;
         const msg = (error.data && error.data.message) ? error.data.message : 'Reservation failed.';
+        $scope.bookingError = msg;
         $scope.showMessage('danger', msg);
+        if (typeof window.showSeatSyncToast === 'function') {
+          window.showSeatSyncToast('Reservation Notice', msg, true);
+        }
       });
   };
 
@@ -251,6 +258,9 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
 
   $scope.showMessage = function (type, text) {
     $scope.statusMessage = { type: type, text: text };
+    if (typeof window.showSeatSyncToast === 'function') {
+      window.showSeatSyncToast(type === 'danger' ? 'Notice' : (type === 'success' ? 'Confirmed' : 'SeatSync Info'), text, type === 'danger');
+    }
     setTimeout(function () {
       $scope.$apply(function () {
         $scope.statusMessage = null;

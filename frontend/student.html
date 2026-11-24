@@ -472,7 +472,7 @@
 
             </div>
 
-            <!-- 3. Bottom Interactive Ribbon (Legend & Instant Lock) -->
+            <!-- 3. Bottom Floor Legend (Clean & Simple) -->
             <div class="living-library-footer">
               <div class="footer-legend-items">
                 <span class="legend-badge-item">
@@ -493,15 +493,9 @@
                 </span>
               </div>
 
-              <div class="footer-actions-group">
-                <button type="button" 
-                        class="btn-lock-seat-live" 
-                        ng-disabled="!selectedSeat || isBooking"
-                        ng-click="confirmReservation()">
-                  <span ng-if="!selectedSeat">Select a Desk to Sit &rarr;</span>
-                  <span ng-if="selectedSeat && !isBooking">Lock Desk {{ selectedSeat.seatNumber }} &amp; Issue Pass &rarr;</span>
-                  <span ng-if="isBooking">Locking Workstation...</span>
-                </button>
+              <div class="footer-simple-hint">
+                <span ng-if="!selectedSeat">Click an available desk to sit &bull; Lock reservation in right panel</span>
+                <span ng-if="selectedSeat" style="color: var(--arch-beige); font-weight: 600;">Desk {{ selectedSeat.seatNumber }} selected &bull; Ready to lock in right panel &rarr;</span>
               </div>
             </div>
 
@@ -608,6 +602,18 @@
                 <div class="ticket-detail-row">
                   <span class="label">Reservation Date:</span>
                   <span class="value" style="font-family: var(--font-mono);">{{ selectedDate | date:'yyyy-MM-dd' }}</span>
+                </div>
+              </div>
+
+              <!-- Inline Booking Notice / Conflict Alert -->
+              <div class="pass-inline-conflict-alert" ng-if="bookingError" style="margin-bottom: 12px; padding: 10px 14px; border-radius: 8px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171; font-size: 12px; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px;">
+                <span style="font-size: 14px; flex-shrink: 0;">⚠️</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600;">Reservation Notice</div>
+                  <div>{{ bookingError }}</div>
+                  <div style="margin-top: 6px;" ng-if="activeBooking">
+                    <button type="button" class="btn-micro-action" ng-click="switchTab('my-bookings')" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); padding: 3px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">View Active Pass &rarr;</button>
+                  </div>
                 </div>
               </div>
 

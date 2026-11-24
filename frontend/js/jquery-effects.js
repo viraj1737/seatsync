@@ -18,16 +18,21 @@ $(document).ready(function () {
   });
 
   // 2. Global Floating Toast Notification System (jQuery animated)
-  window.showSeatSyncToast = function (title, message) {
+  window.showSeatSyncToast = function (title, message, isError) {
     var $existingToast = $('#seatsync-toast');
     if ($existingToast.length) {
       $existingToast.remove();
     }
 
+    var iconBg = isError ? 'rgba(239, 68, 68, 0.2)' : 'var(--color-available)';
+    var iconColor = isError ? '#ef4444' : '#08080A';
+    var iconSymbol = isError ? '!' : '✓';
+    var borderStyle = isError ? '1px solid rgba(239, 68, 68, 0.45)' : '1px solid var(--color-border)';
+
     var toastHtml = `
-      <div id="seatsync-toast" style="position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: none; min-width: 300px; max-width: 420px; background: var(--color-surface-overlay); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--color-text-primary); border: 1px solid var(--color-border); border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow-lg); transform-origin: bottom right; animation: toast-in 520ms var(--ease-spring);">
+      <div id="seatsync-toast" style="position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: none; min-width: 320px; max-width: 440px; background: var(--color-surface-overlay); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--color-text-primary); border: ${borderStyle}; border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow-lg); transform-origin: bottom right; animation: toast-in 520ms var(--ease-spring);">
         <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--color-available); color: #08080A; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0;">✓</div>
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: ${iconBg}; color: ${iconColor}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0;">${iconSymbol}</div>
           <div style="flex: 1;">
             <div style="font-weight: 600; font-size: 14px; margin-bottom: 2px;">${title}</div>
             <div style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.4;">${message}</div>
@@ -40,7 +45,7 @@ $(document).ready(function () {
     var $toast = $('#seatsync-toast');
 
     // jQuery Slide and Fade In
-    $toast.fadeIn(220).delay(3800).fadeOut(300, function () {
+    $toast.fadeIn(220).delay(4500).fadeOut(300, function () {
       $(this).remove();
     });
   };
