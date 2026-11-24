@@ -28,6 +28,38 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
   $scope.statusMessage = null; // { type: 'success'|'danger'|'info', text: '...' }
   $scope.activeTab = 'reserve'; // 'reserve' | 'my-bookings'
 
+  // 2D Virtual Campus Interactive Map Controls (TuteDude / Gather.town style)
+  $scope.mapZoom = 80;
+  $scope.isMuted = true;
+  $scope.isCameraOn = false;
+  $scope.isDND = false;
+
+  $scope.zoomIn = function () {
+    if ($scope.mapZoom < 140) $scope.mapZoom += 10;
+  };
+  $scope.zoomOut = function () {
+    if ($scope.mapZoom > 50) $scope.mapZoom -= 10;
+  };
+  $scope.resetZoom = function () {
+    $scope.mapZoom = 80;
+  };
+
+  $scope.toggleMic = function () {
+    $scope.isMuted = !$scope.isMuted;
+    $scope.showMessage('info', $scope.isMuted ? 'Microphone muted (Silent Library Policy).' : 'Microphone unmuted.');
+  };
+  $scope.toggleCamera = function () {
+    $scope.isCameraOn = !$scope.isCameraOn;
+    $scope.showMessage('info', $scope.isCameraOn ? 'Study Cam enabled.' : 'Study Cam disabled.');
+  };
+  $scope.toggleDND = function () {
+    $scope.isDND = !$scope.isDND;
+    $scope.showMessage('info', $scope.isDND ? 'Silent Study Mode (DND) active.' : 'Silent Study Mode disabled.');
+  };
+  $scope.showCampusGuide = function () {
+    $scope.showMessage('info', 'Click any vacant wooden desk in the Central Reading Hall to seat Viraj Kumar and lock your reservation!');
+  };
+
   // Dedicated tab switcher function to cleanly update parent scope across child scopes (ng-if/ng-repeat)
   $scope.switchTab = function (tabName) {
     $scope.activeTab = tabName;

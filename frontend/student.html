@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="css/modern-ui.css">
   <link rel="stylesheet" href="css/vercel-reference.css">
   <link rel="stylesheet" href="css/architectural-ui.css">
+  <link rel="stylesheet" href="css/virtual-campus.css">
   <style>
     /* Seat map empty-placeholder illustration */
     .seat-empty-icon {
@@ -215,114 +216,289 @@
         <!-- Studio Split Layout: Architectural Floor Canvas + Tactile Desk Inspector -->
         <div class="studio-grid">
 
-          <!-- Left Column: Architectural Library Blueprint -->
-          <div class="floor-canvas">
+          <!-- Left Column: 2D Virtual Campus Library Floor Map -->
+          <div class="floor-canvas virtual-campus-canvas-wrap">
             
-            <!-- Room Header & Architectural Metadata -->
-            <div class="canvas-header-bar">
-              <div class="canvas-room-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h10"/></svg>
-                <span>{{ selectedFloor.name }} &bull; Reading &amp; Research Hall</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="canvas-compass-badge">&uarr; North Facade</span>
-                <span class="canvas-compass-badge" ng-if="!isLoadingSeats">{{ seats.length }} Desks Configured</span>
-                <span class="canvas-compass-badge" ng-if="isLoadingSeats">Scanning Layout...</span>
-              </div>
-            </div>
+            <div class="virtual-campus-section">
 
-            <!-- Architectural Window Wall (Natural Daylight Facade) -->
-            <div class="architectural-window-wall">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span>🪟 Natural Daylight Facade &bull; Floor-to-Ceiling Valley View</span>
-              </div>
-              <div class="window-wall-glass-lines" aria-hidden="true">
-                <div class="window-glass-pane"></div>
-                <div class="window-glass-pane"></div>
-                <div class="window-glass-pane"></div>
-                <div class="window-glass-pane"></div>
-                <div class="window-glass-pane"></div>
-              </div>
-            </div>
-
-            <!-- Realistic Physical Desks Grid -->
-            <div class="physical-desk-grid">
-              <div class="physical-desk-module" 
-                   ng-repeat="seat in seats" 
-                   role="button"
-                   tabindex="{{ seat.status === 'available' ? 0 : -1 }}"
-                   aria-label="Desk {{ seat.seatNumber }}, {{ seat.status }}"
-                   aria-pressed="{{ selectedSeat._id === seat._id }}"
-                   ng-class="{
-                     'desk--available': seat.status === 'available' && selectedSeat._id !== seat._id,
-                     'desk--selected': selectedSeat._id === seat._id,
-                     'desk--reserved': seat.status === 'reserved',
-                     'desk--occupied': seat.status === 'occupied',
-                     'desk--unavailable': seat.status === 'unavailable'
-                   }"
-                   ng-click="chooseSeat(seat)"
-                   ng-keydown="handleSeatKey($event, seat)">
-
-                <!-- Physical Desk Top Surface -->
-                <div class="desk-surface">
-                  <!-- Acoustic Privacy Felt Divider -->
-                  <div class="desk-partition-divider"></div>
-
-                  <!-- Header: Desk Code + Delicate Status Pill -->
-                  <div class="desk-header-row">
-                    <span class="desk-stencil-number">{{ seat.seatNumber }}</span>
-                    <span class="desk-status-pill">
-                      <span class="desk-status-dot-sm"></span>
-                      <span>{{ selectedSeat._id === seat._id ? 'Selected' : (seat.status === 'available' ? 'Free' : seat.status) }}</span>
-                    </span>
+              <!-- Floating Student Avatar HUD (Top Center) -->
+              <div class="campus-avatar-hud">
+                <div class="avatar-hud-card">
+                  <div class="avatar-hud-controls">
+                    <button type="button" class="hud-mini-btn" ng-class="{'btn-active': !isMuted}" ng-click="toggleMic()" title="{{ isMuted ? 'Unmute' : 'Mute' }}" aria-label="Toggle mic">
+                      <svg ng-if="isMuted" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/></svg>
+                      <svg ng-if="!isMuted" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </button>
+                    <button type="button" class="hud-mini-btn" ng-class="{'btn-active': isCameraOn}" ng-click="toggleCamera()" title="{{ isCameraOn ? 'Turn off camera' : 'Turn on camera' }}" aria-label="Toggle camera">
+                      <svg ng-if="!isCameraOn" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 5 3V5l-5 3"/><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21l-3.34-3.34"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
+                      <svg ng-if="isCameraOn" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="14" x="1" y="5" rx="2"/></svg>
+                    </button>
                   </div>
 
-                  <!-- Footer: Zone + Power Specs -->
-                  <div class="desk-footer-row">
-                    <span class="desk-zone-name" title="{{ seat.zone }}">{{ seat.zone ? seat.zone : 'Study' }}</span>
-                    <span ng-if="seat.hasPowerOutlet" class="desk-power-socket" title="Universal AC + USB-C PD">
-                      ⚡ AC
-                    </span>
+                  <!-- 2.5D Illustrated Avatar Graphic (Viraj Kumar) -->
+                  <div class="avatar-portrait-wrap">
+                    <svg class="avatar-portrait-svg" viewBox="0 0 100 100" width="76" height="76">
+                      <circle cx="50" cy="50" r="46" fill="#e8eaed" />
+                      <path d="M26 88 Q50 72 74 88 L74 98 L26 98 Z" fill="#2d7d52" />
+                      <path d="M42 78 L50 86 L58 78 Z" fill="#ffffff" />
+                      <rect x="44" y="65" width="12" height="12" rx="3" fill="#f5cbb1" />
+                      <ellipse cx="50" cy="48" rx="26" ry="24" fill="#ffd8c0" />
+                      <path d="M24 44 Q23 20 50 18 Q77 20 76 44 Q70 28 50 26 Q30 28 24 44 Z" fill="#231f20" />
+                      <path d="M23 42 Q20 52 26 50 Q28 42 24 38 Z" fill="#231f20" />
+                      <path d="M77 42 Q80 52 74 50 Q72 42 76 38 Z" fill="#231f20" />
+                      <circle cx="41" cy="48" r="3.2" fill="#231f20" />
+                      <circle cx="59" cy="48" r="3.2" fill="#231f20" />
+                      <circle cx="42" cy="47" r="1" fill="#ffffff" />
+                      <circle cx="60" cy="47" r="1" fill="#ffffff" />
+                      <path d="M36 42 Q41 40 45 42" stroke="#231f20" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                      <path d="M55 42 Q59 40 64 42" stroke="#231f20" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                      <path d="M44 56 Q50 61 56 56" stroke="#c06040" stroke-width="2" stroke-linecap="round" fill="none" />
+                      <circle cx="35" cy="54" r="3.5" fill="rgba(255, 120, 100, 0.25)" />
+                      <circle cx="65" cy="54" r="3.5" fill="rgba(255, 120, 100, 0.25)" />
+                    </svg>
+                  </div>
+
+                  <!-- Student Name Tag -->
+                  <div class="avatar-hud-name-pill">
+                    <span>{{ currentUser.name || 'Viraj kumar' }}</span>
                   </div>
                 </div>
-
-                <!-- Ergonomic Physical Study Chair (Tucked Under Desk) -->
-                <div class="ergonomic-chair-silhouette" aria-hidden="true" title="Ergonomic Study Chair"></div>
-
-              </div>
-            </div>
-
-            <!-- Architectural Walking Aisle -->
-            <div class="architectural-walking-aisle">
-              <span class="aisle-dotted-line"></span>
-              <span>Aisle 01 &bull; Silent Study Corridor &bull; Gate 02 Access</span>
-              <span class="aisle-dotted-line"></span>
-            </div>
-
-            <!-- Integrated Footprint Legend -->
-            <div class="canvas-bottom-legend">
-              <div class="legend-pills-row">
-                <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: var(--arch-beige); box-shadow: 0 0 6px var(--arch-beige);"></span>
-                  <span>Available</span>
-                </div>
-                <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: var(--status-selected); box-shadow: 0 0 6px var(--status-selected-glow);"></span>
-                  <span>Selected</span>
-                </div>
-                <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: var(--status-reserved);"></span>
-                  <span>Reserved</span>
-                </div>
-                <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: var(--status-occupied);"></span>
-                  <span>Occupied</span>
-                </div>
               </div>
 
-              <div style="font-family: var(--font-mono); font-size: 11px; color: var(--arch-sand-dim);">
-                🔒 Concurrency Lock Guard: Atomic Check Active
+              <!-- Top Right Zoom Controls -->
+              <div class="campus-zoom-hud">
+                <button type="button" class="zoom-btn" ng-click="zoomOut()" title="Zoom Out" aria-label="Zoom Out">&minus;</button>
+                <span class="zoom-level-text">{{ mapZoom }}%</span>
+                <button type="button" class="zoom-btn" ng-click="zoomIn()" title="Zoom In" aria-label="Zoom In">&plus;</button>
+                <button type="button" class="zoom-btn zoom-reset" ng-click="resetZoom()" title="Reset Zoom">⛶</button>
               </div>
+
+              <!-- The Scalable Interactive 2D Virtual Campus Map -->
+              <div class="campus-viewport-container">
+                <div class="campus-map-scaler" style="transform: scale({{ mapZoom / 100 }});">
+                  
+                  <!-- Spatial 2D Library Ground Frame -->
+                  <div class="virtual-campus-ground">
+                    
+                    <!-- Perimeter Tree Garden Border -->
+                    <div class="campus-tree-hedge-perimeter" aria-hidden="true">
+                      <div class="tree-row top-trees">
+                        <span class="foliage-tree" ng-repeat="t in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]"></span>
+                      </div>
+                      <div class="tree-col left-trees">
+                        <span class="foliage-tree" ng-repeat="t in [1,2,3,4,5,6,7,8,9,10,11]"></span>
+                      </div>
+                      <div class="tree-col right-trees">
+                        <span class="foliage-tree" ng-repeat="t in [1,2,3,4,5,6,7,8,9,10,11]"></span>
+                      </div>
+                      <div class="tree-row bottom-trees">
+                        <span class="foliage-tree" ng-repeat="t in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]"></span>
+                      </div>
+                    </div>
+
+                    <!-- The Library Architectural Building Shell -->
+                    <div class="campus-building-shell">
+                      
+                      <!-- West Wing: 4 Discussion Rooms / Focus Pods -->
+                      <div class="campus-west-wing">
+                        <div class="study-room-box room-top-1">
+                          <span class="room-title-tag">AI Research Lab</span>
+                          <div class="room-interior-furniture">
+                            <div class="mini-table"></div>
+                            <div class="npc-avatar avatar-1" title="Aarav (Studying)">
+                              <span class="npc-head"></span>
+                              <span class="npc-name">Aarav</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="study-room-box room-top-2">
+                          <span class="room-title-tag">Group Pod 01</span>
+                          <div class="room-interior-furniture">
+                            <div class="mini-table"></div>
+                            <div class="npc-avatar avatar-2" title="Neha (Reading)">
+                              <span class="npc-head"></span>
+                              <span class="npc-name">Neha</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="study-room-box room-bottom-1">
+                          <span class="room-title-tag">Quiet Focus Pod</span>
+                          <div class="room-interior-furniture">
+                            <div class="mini-table"></div>
+                            <div class="npc-avatar avatar-3" title="Rohan (Coding)">
+                              <span class="npc-head"></span>
+                              <span class="npc-name">Rohan</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="study-room-box room-bottom-2">
+                          <span class="room-title-tag">Discussion B</span>
+                          <div class="room-interior-furniture">
+                            <div class="mini-table"></div>
+                            <div class="npc-avatar avatar-4" title="Isha (Project)">
+                              <span class="npc-head"></span>
+                              <span class="npc-name">Isha</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Central Walkway: Natural Golden Oak Plank Promenade -->
+                      <div class="campus-wood-promenade">
+                        <div class="promenade-plant-pod top-plant">
+                          <span class="potted-monstera">🪴</span>
+                        </div>
+                        <div class="promenade-label">
+                          <span>Central Promenade &bull; Gate 02 Entry</span>
+                        </div>
+                        <div class="promenade-librarian-desk">
+                          <span class="librarian-chair"></span>
+                          <span class="librarian-desk-top">Desk &bull; Help</span>
+                        </div>
+                        <div class="promenade-plant-pod bottom-plant">
+                          <span class="potted-monstera">🪴</span>
+                        </div>
+                      </div>
+
+                      <!-- Central Grand Reading & Research Hall (The 16 Active Desks) -->
+                      <div class="campus-central-hall">
+                        <div class="hall-header-stencil">
+                          <span>{{ selectedFloor.name }} &bull; Main Reading &amp; Research Hall</span>
+                          <span ng-if="!isLoadingSeats">{{ seats.length }} Desks Configured</span>
+                          <span ng-if="isLoadingSeats">Scanning Seats...</span>
+                        </div>
+
+                        <!-- 16 Workstations in 4 Columns (Matching Reference Image) -->
+                        <div class="hall-workstations-matrix">
+                          <div class="virtual-desk-module" 
+                               ng-repeat="seat in seats"
+                               role="button"
+                               tabindex="{{ seat.status === 'available' ? 0 : -1 }}"
+                               aria-label="Desk {{ seat.seatNumber }}, {{ seat.status }}"
+                               ng-class="{
+                                 'desk-is-available': seat.status === 'available' && selectedSeat._id !== seat._id,
+                                 'desk-is-selected': selectedSeat._id === seat._id,
+                                 'desk-is-reserved': seat.status === 'reserved',
+                                 'desk-is-occupied': seat.status === 'occupied',
+                                 'desk-is-unavailable': seat.status === 'unavailable'
+                               }"
+                               ng-click="chooseSeat(seat)"
+                               ng-keydown="handleSeatKey($event, seat)">
+
+                            <!-- Top Ergonomic Chair + Seated Avatar -->
+                            <div class="top-down-chair chair-top">
+                              <!-- Seated Avatar when Selected by Viraj -->
+                              <div class="seated-avatar viraj-seated" ng-if="selectedSeat._id === seat._id">
+                                <span class="seated-avatar-head"></span>
+                                <span class="seated-avatar-label">Viraj (You)</span>
+                              </div>
+                              <!-- Seated Avatar when Occupied by Scholar -->
+                              <div class="seated-avatar other-seated" ng-if="seat.status === 'occupied' && selectedSeat._id !== seat._id">
+                                <span class="seated-avatar-head"></span>
+                                <span class="seated-avatar-label">Scholar</span>
+                              </div>
+                            </div>
+
+                            <!-- Wooden Workstation Desktop Surface -->
+                            <div class="virtual-desk-surface">
+                              <div class="desk-mini-laptop" ng-class="{'laptop-active': selectedSeat._id === seat._id}"></div>
+                              <span class="desk-code-badge">{{ seat.seatNumber }}</span>
+                              <span ng-if="seat.hasPowerOutlet" class="desk-power-mini" title="Universal AC + USB-C">⚡</span>
+                            </div>
+
+                            <!-- Bottom Ergonomic Chair -->
+                            <div class="top-down-chair chair-bottom"></div>
+
+                            <!-- Status Micro-Pill -->
+                            <div class="desk-floating-tag">
+                              <span class="status-pulse-dot"></span>
+                              <span>{{ selectedSeat._id === seat._id ? 'Selected' : (seat.status === 'available' ? 'Free' : seat.status) }}</span>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <!-- Natural Light Glazing Facade -->
+                        <div class="architectural-window-wall" style="margin-bottom: 0; padding: 4px 10px; font-size: 10px;">
+                          <span>🪟 North Daylight Facade &bull; Floor-to-Ceiling Valley View</span>
+                          <div class="window-wall-glass-lines" aria-hidden="true">
+                            <div class="window-glass-pane"></div>
+                            <div class="window-glass-pane"></div>
+                            <div class="window-glass-pane"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- East Wing: Presentation Stage & Periodical Auditorium -->
+                      <div class="campus-east-wing">
+                        <div class="auditorium-hall">
+                          <div class="auditorium-stage">
+                            <span>🎙️ Stage &bull; Podium</span>
+                            <span>📽️ Screen</span>
+                          </div>
+                          <div class="auditorium-seating-grid">
+                            <div class="seat-row" ng-repeat="r in [1,2,3,4,5,6]">
+                              <span class="lecture-chair" ng-repeat="c in [1,2,3,4,5,6,7,8]"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="periodicals-study-corner">
+                          <div class="periodical-carrel" ng-repeat="carrel in ['Archive A', 'Archive B', 'Periodicals', 'Microfilm']">
+                            <span class="carrel-label">{{ carrel }}</span>
+                            <div class="carrel-desk"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Virtual Campus Control Dock (Matching Purple Reference Bar) -->
+              <div class="campus-bottom-dock">
+                <div class="dock-left-actions">
+                  <button type="button" class="dock-btn-guide" ng-click="showCampusGuide()">
+                    <span class="dock-play-icon">▶</span>
+                    <span>How to use campus?</span>
+                  </button>
+                </div>
+
+                <div class="dock-center-controls">
+                  <button type="button" class="dock-icon-btn" ng-class="{'dock-btn-off': isMuted}" ng-click="toggleMic()" title="{{ isMuted ? 'Unmute' : 'Mute' }}">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    <span>{{ isMuted ? 'Unmute' : 'Mute' }}</span>
+                  </button>
+
+                  <button type="button" class="dock-icon-btn" ng-class="{'dock-btn-off': !isCameraOn}" ng-click="toggleCamera()" title="Toggle Camera">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="14" x="1" y="5" rx="2"/></svg>
+                    <span>Camera</span>
+                  </button>
+
+                  <button type="button" class="dock-icon-btn" ng-click="switchTab('my-bookings')" title="View Active Seat Pass">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                    <span>Seat Pass</span>
+                  </button>
+                </div>
+
+                <div class="dock-right-actions">
+                  <!-- Primary Action CTA -->
+                  <button type="button" 
+                          class="dock-primary-cta" 
+                          ng-disabled="!selectedSeat || isBooking"
+                          ng-click="confirmReservation()">
+                    <span ng-if="!selectedSeat">Select a Desk on Map</span>
+                    <span ng-if="selectedSeat && !isBooking">Lock Desk {{ selectedSeat.seatNumber }} &rarr;</span>
+                    <span ng-if="isBooking">Locking Workstation...</span>
+                  </button>
+
+                  <button type="button" class="dock-icon-btn" ng-class="{'dock-btn-active': isDND}" ng-click="toggleDND()" title="Silent Study Mode">
+                    <span>{{ isDND ? '🔕 DND On' : '🔔 DND' }}</span>
+                  </button>
+                </div>
+              </div>
+
             </div>
 
           </div>
