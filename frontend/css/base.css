@@ -46,11 +46,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-title {
-  font-size: clamp(40px, 5vw, 60px);
+  font-size: clamp(44px, 6vw, 72px);
   font-weight: 500;
   letter-spacing: var(--display-tracking-xl);
-  line-height: 1.04;
-  max-width: 15ch;
+  line-height: 1.02;
+  max-width: 18ch;
 }
 
 .page-title {

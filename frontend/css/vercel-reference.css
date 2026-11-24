@@ -1,0 +1,324 @@
+/**
+ * SeatSync — Vercel reference layer
+ * Loaded last. Converts the existing component classes to Vercel's monochrome
+ * system: pure black canvas, #EDEDED ink, Geist, 6px controls, hairline borders.
+ */
+
+:root {
+  --v-canvas: #000000;
+  --v-surface: #0a0a0a;
+  --v-surface-2: #111111;
+  --v-surface-3: #171717;
+  --v-ink: #ededed;
+  --v-muted: #a1a1a1;
+  --v-border: #1f1f1f;
+  --v-border-hover: #333333;
+  --v-primary: #ededed;
+  --v-on-primary: #0a0a0a;
+  --v-accent: #0070f3;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --bg-canvas: var(--v-canvas);
+  --bg-surface-1: var(--v-surface);
+  --bg-surface-2: var(--v-surface-2);
+  --bg-surface-3: var(--v-surface-3);
+  --bg-overlay: rgba(0, 0, 0, 0.92);
+  --text-primary: var(--v-ink);
+  --text-secondary: var(--v-muted);
+  --text-tertiary: #6e6e6e;
+  --text-inverted: var(--v-on-primary);
+  --color-primary: var(--v-primary);
+  --color-primary-hover: #ffffff;
+  --color-primary-subtle: rgba(237, 237, 237, 0.1);
+  --color-primary-border: rgba(237, 237, 237, 0.24);
+  --border-subtle: var(--v-border);
+  --border-default: var(--v-border);
+  --border-hover: var(--v-border-hover);
+  --border-focus: var(--v-accent);
+  --status-available: #1fcc6f;
+  --status-available-subtle: rgba(31, 204, 111, 0.11);
+  --status-available-border: rgba(31, 204, 111, 0.36);
+  --status-reserved: #f5c451;
+  --status-reserved-subtle: rgba(245, 196, 81, 0.11);
+  --status-reserved-border: rgba(245, 196, 81, 0.34);
+  --status-occupied: #e5484d;
+  --status-occupied-subtle: rgba(229, 72, 77, 0.11);
+  --status-occupied-border: rgba(229, 72, 77, 0.36);
+}
+
+:root[data-theme="light"] {
+  --v-canvas: #ffffff;
+  --v-surface: #fafafa;
+  --v-surface-2: #f4f4f4;
+  --v-surface-3: #ededed;
+  --v-ink: #0a0a0a;
+  --v-muted: #555555;
+  --v-border: #eaeaea;
+  --v-border-hover: #c9c9c9;
+  --v-primary: #0a0a0a;
+  --v-on-primary: #ffffff;
+  --v-accent: #0060df;
+
+  --bg-canvas: var(--v-canvas);
+  --bg-surface-1: var(--v-surface);
+  --bg-surface-2: var(--v-surface-2);
+  --bg-surface-3: var(--v-surface-3);
+  --bg-overlay: rgba(255, 255, 255, 0.94);
+  --text-primary: var(--v-ink);
+  --text-secondary: var(--v-muted);
+  --text-tertiary: #777777;
+  --text-inverted: #ffffff;
+  --color-primary: var(--v-primary);
+  --color-primary-hover: #222222;
+  --color-primary-subtle: rgba(10, 10, 10, 0.06);
+  --color-primary-border: rgba(10, 10, 10, 0.16);
+  --border-subtle: var(--v-border);
+  --border-default: var(--v-border);
+  --border-hover: var(--v-border-hover);
+  --border-focus: var(--v-accent);
+  --status-available: #087a3d;
+  --status-available-subtle: rgba(8, 122, 61, 0.08);
+  --status-available-border: rgba(8, 122, 61, 0.28);
+  --status-reserved: #8a5f00;
+  --status-reserved-subtle: rgba(245, 196, 81, 0.2);
+  --status-reserved-border: rgba(180, 125, 10, 0.3);
+  --status-occupied: #c4272e;
+  --status-occupied-subtle: rgba(196, 39, 46, 0.07);
+  --status-occupied-border: rgba(196, 39, 46, 0.28);
+}
+
+body {
+  background-color: var(--v-canvas) !important;
+  background-image: none !important;
+  color: var(--v-ink) !important;
+  font-family: var(--font-sans) !important;
+  letter-spacing: -0.015em !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--v-ink) !important;
+  font-family: var(--font-sans) !important;
+  letter-spacing: -0.035em !important;
+}
+
+.app-header {
+  height: 64px !important;
+  background-color: var(--bg-overlay) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid var(--v-border) !important;
+}
+
+.header-inner { max-width: 1200px; padding-inline: 24px; }
+
+.brand-mark {
+  background: var(--v-primary) !important;
+  color: var(--v-on-primary) !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+.brand-text { font-size: 16px !important; letter-spacing: -0.03em !important; }
+.brand-subtext {
+  font-family: var(--font-mono) !important;
+  color: var(--text-secondary) !important;
+  background: var(--v-surface-2) !important;
+  border-color: var(--v-border) !important;
+}
+
+.nav-link.active { border-bottom-color: var(--v-ink) !important; }
+
+/* Segmented controls: Vercel dashboard style */
+.tabs-list {
+  height: 36px !important;
+  padding: 3px !important;
+  gap: 2px !important;
+  background: var(--v-surface) !important;
+  border: 1px solid var(--v-border) !important;
+  border-radius: 6px !important;
+}
+
+.tabs-trigger {
+  height: 28px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--text-secondary) !important;
+  border-radius: 4px !important;
+  transition: background-color 140ms ease, color 140ms ease !important;
+}
+
+.tabs-trigger:hover { color: var(--v-ink) !important; }
+.tabs-trigger.active,
+.tabs-trigger[aria-selected="true"] {
+  background: var(--v-primary) !important;
+  color: var(--v-on-primary) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.tabs-badge {
+  background: var(--color-primary-subtle) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--v-border) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.theme-toggle-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 6px !important;
+  border-color: var(--v-border) !important;
+}
+
+.user-account-badge {
+  background: transparent !important;
+  border-color: var(--v-border) !important;
+  border-radius: 6px !important;
+  padding: 4px 8px 4px 6px !important;
+}
+
+.user-avatar-circle {
+  background: var(--v-surface-3) !important;
+  border: 1px solid var(--v-border) !important;
+  color: var(--v-ink) !important;
+}
+
+.user-account-name { font-size: 12px !important; }
+.role-tag {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+/* Monochrome buttons — Vercel's primary/secondary pair */
+.btn {
+  height: 40px !important;
+  padding: 0 16px !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, transform 140ms ease !important;
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.btn-sm { height: 34px !important; padding: 0 12px !important; }
+.btn-lg { height: 46px !important; padding: 0 20px !important; font-size: 14px !important; }
+
+.btn-primary, .btn-default {
+  background-color: var(--v-primary) !important;
+  color: var(--v-on-primary) !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+}
+.btn-primary:hover:not(:disabled) { background-color: var(--color-primary-hover) !important; }
+
+.btn-secondary, .btn-outline {
+  background-color: transparent !important;
+  color: var(--v-ink) !important;
+  border: 1px solid var(--v-border-hover) !important;
+}
+.btn-secondary:hover:not(:disabled) { background-color: var(--v-surface-2) !important; }
+
+.card {
+  background-color: var(--v-surface) !important;
+  border: 1px solid var(--v-border) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+.card:hover { transform: none !important; box-shadow: none !important; }
+.card-header { border-bottom-color: var(--v-border) !important; }
+.card-title { letter-spacing: -0.02em !important; }
+
+.metric-card {
+  background-color: var(--v-surface) !important;
+  border-color: var(--v-border) !important;
+  border-radius: 0 !important;
+}
+.metrics-grid { border-color: var(--v-border) !important; gap: 1px !important; }
+.metric-value { font-family: var(--font-mono) !important; letter-spacing: -0.05em !important; }
+.metric-subtext { color: var(--text-tertiary) !important; }
+
+.table-wrapper, .seat-legend, .seat-grid-container {
+  background-color: var(--v-surface) !important;
+  border-color: var(--v-border) !important;
+}
+.table th { color: var(--text-secondary) !important; background: var(--v-surface-2) !important; }
+.table td { border-bottom-color: var(--v-border) !important; }
+
+.seat-tile {
+  border-radius: 6px !important;
+  background: var(--v-surface-2) !important;
+  border-color: var(--v-border) !important;
+  box-shadow: none !important;
+}
+.seat-tile--selected { background: var(--v-surface-3) !important; border-color: var(--v-primary) !important; box-shadow: inset 0 0 0 1px var(--v-primary) !important; }
+
+.empty-state { border-color: var(--v-border) !important; background: transparent !important; }
+.empty-state-icon { background: var(--v-surface-2) !important; border-color: var(--v-border) !important; }
+
+.form-control, .form-select {
+  background-color: var(--v-surface) !important;
+  border-color: var(--v-border-hover) !important;
+  border-radius: 6px !important;
+  font-family: var(--font-sans) !important;
+}
+.form-control:focus { border-color: var(--v-accent) !important; box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2) !important; }
+
+.site-footer { border-top-color: var(--v-border) !important; background: var(--v-surface) !important; }
+.footer-col a:hover { color: var(--v-ink) !important; }
+
+:focus-visible { outline-color: var(--v-accent) !important; }
+
+/* Vercel-style hero composition */
+.hero-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr) minmax(0, 0.75fr);
+  align-items: center;
+  gap: 32px;
+  min-height: 64vh;
+  padding-block: 40px;
+}
+.hero-title { font-size: clamp(44px, 6vw, 72px) !important; line-height: 1.02 !important; max-width: 18ch; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.hero-mark-wrap { position: relative; display: grid; place-items: center; min-height: 320px; }
+.hero-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  max-width: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 62%);
+  pointer-events: none;
+}
+:root[data-theme="light"] .hero-glow { background: radial-gradient(circle, rgba(10, 10, 10, 0.07), transparent 62%); }
+.hero-mark {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 54px);
+  grid-template-rows: repeat(3, 54px);
+  gap: 10px;
+}
+.hero-mark span {
+  display: block;
+  border: 1px solid var(--v-border-hover);
+  border-radius: 4px;
+  background: var(--v-surface);
+}
+.hero-mark span.is-active { background: var(--v-primary); border-color: var(--v-primary); }
+.hero-points { display: grid; gap: 20px; font-size: 17px; line-height: 1.35; color: var(--v-ink); letter-spacing: -0.02em; }
+
+@media (max-width: 900px) {
+  .hero-section { grid-template-columns: 1fr; min-height: 0; gap: 40px; padding-block: 48px; }
+  .hero-mark-wrap { min-height: 240px; }
+  .hero-mark { grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); }
+  .hero-points { font-size: 15px; }
+  .hero-actions .btn { flex: 1 1 200px; }
+}

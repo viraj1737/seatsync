@@ -42,3 +42,21 @@ inside one system instead of drifting back into generic template styling.
 The previous build used frosted glass, 22 px radii on everything, all-caps eyebrows,
 middle-dot meta strings, a white gradient primary button, blue glows, a tilt effect on the
 pass, and a per-card fade-in. Those are the default generated-page look; all are removed.
+
+## Reference pass: Vercel
+
+The current visual layer is a direct translation of **vercel.com** (inspected in a real
+browser: pure `#000000` canvas, `#EDEDED` ink, `GeistSans` at 64 px in the hero,
+monochrome `#EDEDED` primary button with `#0A0A0A` label, hairline `#1F1F1F` borders,
+6 px control radius, white active indicator, one centred geometric focal point).
+
+`css/vercel-reference.css` is loaded last so it wins over the older Linear reference
+layer while keeping its component class names intact. Desk status keeps semantic green /
+amber / red; everything else is monochrome, with Vercel blue `#0070F3` only for focus and
+links. The landing hero is the Vercel three-part composition: statement, desk-grid mark
+with a restrained radial glow, and a three-line proof list.
+
+The `shadcn` skill was also loaded. Its project is React/Tailwind-based, so its component
+CLI cannot run against this AngularJS codebase; its principles are applied instead —
+semantic tokens instead of raw colours, one component system, `TabsList`/`TabsTrigger`
+composition, `data-icon` style icons, and no custom styling overrides of component colours.

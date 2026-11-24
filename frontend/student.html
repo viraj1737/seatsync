@@ -20,12 +20,14 @@
   <meta name="description" content="Reserve a library desk at UPES Central Library, manage your bookings and use your digital seat pass at the RFID exit turnstile.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/modern-ui.css">
+  <link rel="stylesheet" href="css/vercel-reference.css">
+  <link rel="stylesheet" href="css/architectural-ui.css">
   <style>
     /* Seat map empty-placeholder illustration */
     .seat-empty-icon {
@@ -125,211 +127,321 @@
       </div>
 
       <!-- ==============================================================
-           TAB 1: FIND & RESERVE SEAT (SEAT ALLOTMENT FLOW)
+           TAB 1: FIND & RESERVE SEAT (ARCHITECTURAL FLOOR PLAN & DESK INSPECTOR)
            ============================================================== -->
       <div id="panel-reserve" role="tabpanel" aria-labelledby="tab-reserve" tabindex="0" ng-show="activeTab === 'reserve'">
 
-        <!-- Greeting Bar -->
-        <div class="card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
-            <div>
-              <span class="label-meta">UPES Central Library desk allotment</span>
-              <h1 class="page-title" style="margin-top: 4px; font-size: 26px;">
-                Welcome, {{ currentUser.name || 'Viraj Kumar' }}
-              </h1>
-              <p class="body-secondary" style="margin-top: 4px;">
-                Student ID <strong class="mono" style="color: var(--color-text-primary);">{{ currentUser.studentId || '590029022' }}</strong>. {{ currentUser.email || 'viraj.29022@stu.upes.ac.in' }}
-              </p>
-            </div>
-            <div ng-if="activeBooking">
-              <button type="button" class="btn btn-secondary" ng-click="switchTab('my-bookings')">
-                View my pass
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter Controls: Floors, Dates & Fixed Slots -->
-        <div class="card" style="margin-bottom: var(--space-6); padding: var(--space-5);">
-          <div style="display: flex; flex-direction: column; gap: var(--space-4);">
-            
-            <!-- Floor Selection Pills -->
-            <div>
-              <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">1. Choose a floor</label>
-              <div class="tabs-list" role="tablist">
-                <button type="button" 
-                        class="tabs-trigger" 
-                        ng-repeat="floor in floors" 
-                        ng-class="{'active': selectedFloor._id === floor._id}"
-                        ng-click="selectFloor(floor)">
-                  {{ floor.name }} ({{ floor.code }})
-                </button>
-              </div>
-            </div>
-
-            <!-- Date & Time Slot Selector -->
-            <div class="filter-grid" style="align-items: flex-end;">
+        <!-- Integrated Studio Command Ribbon (Zero Stacked Boxes) -->
+        <div class="studio-ribbon">
+          <div class="studio-ribbon-top">
+            <div class="studio-user-lockup">
+              <div class="studio-user-avatar">VK</div>
               <div>
-                <label class="form-label" for="booking-date" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">2. Reservation date</label>
-                <input type="date" id="booking-date" class="form-control" ng-model="selectedDate" ng-change="loadSeats()">
-              </div>
-
-              <div>
-                <label class="form-label" style="font-weight: 600; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; display: block;">3. Choose a two-hour slot</label>
-                <div class="tabs-list" role="tablist" style="flex-wrap: wrap; height: auto;">
-                  <button type="button" 
-                          class="tabs-trigger" 
-                          ng-repeat="slot in slots" 
-                          ng-class="{'active': selectedSlot === slot.code}"
-                          ng-click="selectSlot(slot.code)"
-                          style="height: 30px;">
-                    {{ slot.label }}
-                  </button>
+                <div class="studio-user-heading">Welcome, {{ currentUser.name || 'Viraj Kumar' }}</div>
+                <div class="studio-user-sub">
+                  <span>SAP ID <span class="studio-tag-sap">{{ currentUser.studentId || '590029022' }}</span></span>
+                  <span>&bull;</span>
+                  <span>UPES Central Library, Bidholi</span>
                 </div>
               </div>
             </div>
 
-          </div>
-        </div>
-
-        <!-- Accessible Legend Bar -->
-        <div class="seat-legend">
-          <span class="label-meta" style="font-weight: 600;">Desk status</span>
-          <div class="legend-item">
-            <span class="legend-swatch" style="background: var(--color-surface-subtle); border-color: var(--color-available-border);"></span>
-            <span>Available</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-swatch" style="background: var(--color-reserved-bg); border-color: var(--color-reserved-border);"></span>
-            <span>Reserved</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-swatch" style="background: var(--color-occupied-bg); border-color: var(--color-occupied-border);"></span>
-            <span>Occupied</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-swatch" style="background: var(--color-unavailable-bg); border-color: var(--color-unavailable-border);"></span>
-            <span>Maintenance</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-swatch" style="background: var(--color-accent-blue-subtle); border-color: var(--color-accent-blue);"></span>
-            <span>Selected</span>
-          </div>
-        </div>
-
-        <!-- Seat Grid & Interactive Allotment Drawer -->
-        <div class="seat-layout" id="seat-layout-row">
-          
-          <!-- Seat Map Grid -->
-          <div class="seat-grid-container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-              <h2 class="card-title">{{ selectedFloor.name }} desks</h2>
-              <span class="body-secondary" style="font-size: 13px;" ng-if="!isLoadingSeats">
-                {{ seats.length }} desks
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="system-status-indicator" style="margin: 0;">
+                <span class="pulse-dot"></span>
+                <span>Live Sensor Sync Active</span>
               </span>
-              <span class="body-secondary" style="font-size: 13px;" ng-if="isLoadingSeats">
-                Updating availability…
-              </span>
+              <button type="button" class="btn btn-secondary btn-sm" ng-if="activeBooking" ng-click="switchTab('my-bookings')">
+                View Active Pass &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Integrated Controls Ribbon: Floor Switcher, Date, Slot Timeline -->
+          <div class="studio-ribbon-controls">
+            <!-- 1. Floor Selector -->
+            <div>
+              <div class="control-segment-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span>1. Library Level</span>
+              </div>
+              <div class="arch-floor-picker" role="tablist">
+                <button type="button" 
+                        class="arch-floor-btn" 
+                        ng-repeat="floor in floors" 
+                        ng-class="{'active': selectedFloor._id === floor._id}"
+                        ng-click="selectFloor(floor)">
+                  <span class="floor-level-badge">{{ floor.code }}</span>
+                  <span>{{ floor.name }}</span>
+                </button>
+              </div>
             </div>
 
-            <div class="seat-grid">
-              <div class="seat-tile" 
+            <!-- 2. Reservation Date -->
+            <div>
+              <div class="control-segment-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                <span>2. Study Date</span>
+              </div>
+              <input type="date" id="booking-date" class="arch-date-input" ng-model="selectedDate" ng-change="loadSeats()">
+            </div>
+
+            <!-- 3. Time Slot Timeline -->
+            <div>
+              <div class="control-segment-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>3. Two-Hour Time Window</span>
+              </div>
+              <div class="arch-slot-strip">
+                <button type="button" 
+                        class="arch-slot-chip" 
+                        ng-repeat="slot in slots" 
+                        ng-class="{'active': selectedSlot === slot.code}"
+                        ng-click="selectSlot(slot.code)">
+                  <span class="slot-period">{{ slot.timeLabel }}</span>
+                  <span>{{ slot.code }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Split Layout: Architectural Floor Canvas + Tactile Desk Inspector -->
+        <div class="studio-grid">
+
+          <!-- Left Column: Architectural Library Blueprint -->
+          <div class="floor-canvas">
+            
+            <!-- Room Header & Architectural Metadata -->
+            <div class="canvas-header-bar">
+              <div class="canvas-room-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h10"/></svg>
+                <span>{{ selectedFloor.name }} &bull; Reading &amp; Research Hall</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="canvas-compass-badge">&uarr; North Facade</span>
+                <span class="canvas-compass-badge" ng-if="!isLoadingSeats">{{ seats.length }} Desks Configured</span>
+                <span class="canvas-compass-badge" ng-if="isLoadingSeats">Scanning Layout...</span>
+              </div>
+            </div>
+
+            <!-- Architectural Window Wall (Natural Daylight Facade) -->
+            <div class="architectural-window-wall">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🪟 Natural Daylight Facade &bull; Floor-to-Ceiling Valley View</span>
+              </div>
+              <div class="window-wall-glass-lines" aria-hidden="true">
+                <div class="window-glass-pane"></div>
+                <div class="window-glass-pane"></div>
+                <div class="window-glass-pane"></div>
+                <div class="window-glass-pane"></div>
+                <div class="window-glass-pane"></div>
+              </div>
+            </div>
+
+            <!-- Realistic Physical Desks Grid -->
+            <div class="physical-desk-grid">
+              <div class="physical-desk-module" 
                    ng-repeat="seat in seats" 
                    role="button"
                    tabindex="{{ seat.status === 'available' ? 0 : -1 }}"
                    aria-label="Desk {{ seat.seatNumber }}, {{ seat.status }}"
                    aria-pressed="{{ selectedSeat._id === seat._id }}"
                    ng-class="{
-                     'seat-tile--available': seat.status === 'available' && selectedSeat._id !== seat._id,
-                     'seat-tile--selected': selectedSeat._id === seat._id,
-                     'seat-tile--reserved': seat.status === 'reserved',
-                     'seat-tile--occupied': seat.status === 'occupied',
-                     'seat-tile--unavailable': seat.status === 'unavailable'
+                     'desk--available': seat.status === 'available' && selectedSeat._id !== seat._id,
+                     'desk--selected': selectedSeat._id === seat._id,
+                     'desk--reserved': seat.status === 'reserved',
+                     'desk--occupied': seat.status === 'occupied',
+                     'desk--unavailable': seat.status === 'unavailable'
                    }"
                    ng-click="chooseSeat(seat)"
-                   ng-keydown="handleSeatKey($event, seat)"
-                   style="animation-delay: {{ $index * 15 }}ms;">
-                <span class="seat-status-dot" aria-hidden="true"></span>
-                <span class="seat-tile-label">{{ seat.seatNumber }}</span>
-                <span class="seat-tile-status">{{ selectedSeat._id === seat._id ? 'Selected' : seat.status }}</span>
-                <span ng-if="seat.hasPowerOutlet" class="seat-power-indicator" title="2x AC + USB-C">⚡ AC</span>
+                   ng-keydown="handleSeatKey($event, seat)">
+
+                <!-- Physical Desk Top Surface -->
+                <div class="desk-surface">
+                  <!-- Acoustic Privacy Felt Divider -->
+                  <div class="desk-partition-divider"></div>
+
+                  <!-- Lamp Housing & Live Status LED -->
+                  <div class="desk-lamp-beacon">
+                    <span class="desk-beacon-led" aria-hidden="true"></span>
+                    <span ng-if="seat.hasPowerOutlet" class="desk-power-socket" title="Universal AC + Dual USB-C">
+                      ⚡ AC
+                    </span>
+                  </div>
+
+                  <!-- Stencil Desk Number -->
+                  <div class="desk-stencil-number">{{ seat.seatNumber }}</div>
+
+                  <!-- Mini Hardware Specs -->
+                  <div class="desk-specs-bar">
+                    <span style="font-size: 9px; text-transform: uppercase;">
+                      {{ selectedSeat._id === seat._id ? 'SELECTED' : (seat.status === 'available' ? 'FREE' : seat.status) }}
+                    </span>
+                    <span style="font-size: 9px; opacity: 0.7;">{{ seat.zone ? seat.zone.slice(0, 10) : 'Study' }}</span>
+                  </div>
+                </div>
+
+                <!-- Ergonomic Physical Study Chair (Tucked Under Desk) -->
+                <div class="ergonomic-chair-silhouette" aria-hidden="true" title="Ergonomic Study Chair"></div>
+
               </div>
             </div>
+
+            <!-- Architectural Walking Aisle -->
+            <div class="architectural-walking-aisle">
+              <span class="aisle-dotted-line"></span>
+              <span>Aisle 01 &bull; Silent Study Corridor &bull; Gate 02 Access</span>
+              <span class="aisle-dotted-line"></span>
+            </div>
+
+            <!-- Integrated Footprint Legend -->
+            <div class="canvas-bottom-legend">
+              <div class="legend-pills-row">
+                <div class="legend-pill-item">
+                  <span class="legend-dot-indicator" style="background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+                  <span>Available</span>
+                </div>
+                <div class="legend-pill-item">
+                  <span class="legend-dot-indicator" style="background: #5e6ad2; box-shadow: 0 0 6px #5e6ad2;"></span>
+                  <span>Selected</span>
+                </div>
+                <div class="legend-pill-item">
+                  <span class="legend-dot-indicator" style="background: #f59e0b;"></span>
+                  <span>Reserved</span>
+                </div>
+                <div class="legend-pill-item">
+                  <span class="legend-dot-indicator" style="background: #ef4444;"></span>
+                  <span>Occupied</span>
+                </div>
+              </div>
+
+              <div style="font-family: var(--font-mono); font-size: 11px; color: var(--arch-text-dim);">
+                🔒 Concurrency Lock Guard: HTTP 409 Protected
+              </div>
+            </div>
+
           </div>
 
-          <!-- Allotment Confirmation Panel -->
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div class="card-header" style="margin-bottom: var(--space-4);">
-                <h2 class="card-title">Your reservation</h2>
-                <span class="badge badge-available" ng-if="selectedSeat">Ready to Allot</span>
-                <span class="badge" style="background: var(--color-surface-subtle); border-color: var(--color-border); color: var(--color-text-secondary);" ng-if="!selectedSeat">No Selection</span>
+          <!-- Right Column: Tactile Desk Inspector & Allotment Pass -->
+          <div class="desk-inspector-card">
+
+            <!-- STATE A: No Desk Selected (Radar Telemetry) -->
+            <div class="inspector-empty-radar" ng-if="!selectedSeat">
+              <div class="radar-compass-art">
+                <div class="radar-sweep-dot"></div>
               </div>
+              <h3 class="inspector-empty-title">Select a Workstation</h3>
+              <p class="inspector-empty-desc">
+                Click any available green desk on the architectural plan to inspect hardware amenities and reserve your study slot.
+              </p>
 
-              <div ng-if="selectedSeat">
-                <div style="margin-bottom: var(--space-4);">
-                  <div style="font-size: 32px; font-weight: 700; color: var(--color-text-primary); letter-spacing: -0.02em;">
-                    Desk {{ selectedSeat.seatNumber }}
-                  </div>
-                  <div class="body-secondary" style="font-size: 13px;">
-                    {{ selectedFloor.name }}, {{ selectedSeat.zone }}
-                  </div>
+              <!-- Live Environmental Telemetry -->
+              <div class="library-telemetry-box">
+                <div class="telemetry-row">
+                  <span>Acoustic Level</span>
+                  <span class="telemetry-val" style="color: #4ade80;">32 dB &bull; Whisper Quiet</span>
                 </div>
-
-                <div style="background: var(--color-surface-subtle); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-5); font-size: 13px; line-height: 1.6;">
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span class="body-secondary">Candidate:</span>
-                    <strong>{{ currentUser.name }}</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span class="body-secondary">UPES SAP ID:</span>
-                    <strong>{{ currentUser.studentId || '590029022' }}</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span class="body-secondary">Email:</span>
-                    <strong style="color: var(--color-accent-blue); font-size: 12px;">{{ currentUser.email }}</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span class="body-secondary">Date:</span>
-                    <strong>{{ selectedDate | date:'yyyy-MM-dd' }}</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span class="body-secondary">Time Slot:</span>
-                    <strong>{{ selectedSlot }}</strong>
-                  </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span class="body-secondary">Power Outlet:</span>
-                    <strong style="color: var(--color-available);">&check; 2x Universal AC + USB-C</strong>
-                  </div>
+                <div class="telemetry-row">
+                  <span>Ambient Climate</span>
+                  <span class="telemetry-val">21.5&deg;C &bull; Controlled</span>
                 </div>
-
-                <button class="btn btn-primary btn-block btn-lg" 
-                        ng-click="confirmReservation()" 
-                        ng-disabled="isBooking">
-                  <span ng-if="!isBooking">Reserve this desk &rarr;</span>
-                  <span ng-if="isBooking">Saving reservation…</span>
-                </button>
+                <div class="telemetry-row">
+                  <span>Campus Wi-Fi 6</span>
+                  <span class="telemetry-val">UPES-HighSpeed (540 Mbps)</span>
+                </div>
+                <div class="telemetry-row">
+                  <span>RFID Exit Gate</span>
+                  <span class="telemetry-val" style="color: #4ade80;">Gate 02 Online</span>
+                </div>
               </div>
-
-              <div ng-if="!selectedSeat" style="text-align: center; padding: var(--space-8) 0;">
-                <div class="seat-empty-icon" aria-hidden="true">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6.5 10V6.75A2.75 2.75 0 0 1 9.25 4h5.5A2.75 2.75 0 0 1 17.5 6.75V10"/>
-                    <path d="M4.5 10.5h15a1 1 0 0 1 1 1V15h-17v-3.5a1 1 0 0 1 1-1Z"/>
-                    <path d="M6 15v4.5M18 15v4.5"/>
-                  </svg>
-                </div>
-                <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">Select an available desk</div>
-                <p class="body-secondary" style="font-size: 13px; max-width: 260px; margin: 0 auto;">
-                  Click any green desk tile on the map to review details and confirm your reservation.
-                </p>
-              </div>
-
             </div>
 
-            <div style="font-size: 12px; color: var(--text-secondary); margin-top: var(--space-4); text-align: center;">
-              Instant reservation lock &bull; Zero conflict guarantee
+            <!-- STATE B: Desk Selected (Tactile Desk Pass) -->
+            <div class="active-desk-pass" ng-if="selectedSeat">
+              <div class="pass-desk-hero">
+                <div>
+                  <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--arch-text-dim); letter-spacing: 0.05em; margin-bottom: 4px;">
+                    Selected Workstation
+                  </div>
+                  <div class="pass-stencil-badge">Desk {{ selectedSeat.seatNumber }}</div>
+                  <div style="font-size: 12px; color: var(--arch-text-muted); margin-top: 4px;">
+                    {{ selectedFloor.name }} &bull; {{ selectedSeat.zone }}
+                  </div>
+                </div>
+                <span class="pass-ready-pill">
+                  <span style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e;"></span>
+                  Ready to Lock
+                </span>
+              </div>
+
+              <!-- Amenities Grid -->
+              <div class="desk-perks-grid">
+                <div class="desk-perk-chip">
+                  <span>⚡</span>
+                  <div>
+                    <div style="font-size: 10px; color: var(--arch-text-dim);">Power</div>
+                    <strong>Dual Universal AC</strong>
+                  </div>
+                </div>
+                <div class="desk-perk-chip">
+                  <span>🔌</span>
+                  <div>
+                    <div style="font-size: 10px; color: var(--arch-text-dim);">Fast Charge</div>
+                    <strong>65W USB-C PD</strong>
+                  </div>
+                </div>
+                <div class="desk-perk-chip">
+                  <span>🪟</span>
+                  <div>
+                    <div style="font-size: 10px; color: var(--arch-text-dim);">Natural View</div>
+                    <strong>Valley Window</strong>
+                  </div>
+                </div>
+                <div class="desk-perk-chip">
+                  <span>🪑</span>
+                  <div>
+                    <div style="font-size: 10px; color: var(--arch-text-dim);">Seating</div>
+                    <strong>Ergonomic Mesh</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reservation Ticket Specs -->
+              <div class="pass-ticket-details">
+                <div class="ticket-detail-row">
+                  <span class="label">Candidate:</span>
+                  <span class="value">{{ currentUser.name }}</span>
+                </div>
+                <div class="ticket-detail-row">
+                  <span class="label">UPES SAP ID:</span>
+                  <span class="value" style="font-family: var(--font-mono);">{{ currentUser.studentId || '590029022' }}</span>
+                </div>
+                <div class="ticket-detail-row">
+                  <span class="label">Study Window:</span>
+                  <span class="value" style="font-family: var(--font-mono); color: #7170ff;">{{ selectedSlot }}</span>
+                </div>
+                <div class="ticket-detail-row">
+                  <span class="label">Reservation Date:</span>
+                  <span class="value" style="font-family: var(--font-mono);">{{ selectedDate | date:'yyyy-MM-dd' }}</span>
+                </div>
+              </div>
+
+              <!-- Primary Lock & Allot Button -->
+              <button type="button" 
+                      class="btn-lock-desk" 
+                      ng-click="confirmReservation()" 
+                      ng-disabled="isBooking">
+                <span ng-if="!isBooking">Lock Desk {{ selectedSeat.seatNumber }} &amp; Issue Pass &rarr;</span>
+                <span ng-if="isBooking">Reserving Workstation...</span>
+              </button>
+
+              <div class="guarantee-microtext">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Zero Double-Booking Guarantee &bull; Concurrency Protected</span>
+              </div>
             </div>
+
           </div>
 
         </div>

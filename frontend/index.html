@@ -20,12 +20,13 @@
   <title>SeatSync — Desk availability at UPES Central Library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/modern-ui.css">
+  <link rel="stylesheet" href="css/vercel-reference.css">
 </head>
 <body ng-controller="AuthController">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -75,7 +76,7 @@
 
         <!-- Unauthenticated State -->
         <div ng-if="!currentUser" style="display: flex; gap: 8px; align-items: center;">
-          <a href="/login.html" class="btn btn-ghost btn-sm">Sign In</a>
+          <a href="/login.html" class="btn btn-ghost btn-sm">Sign in</a>
           <a href="/register.html" class="btn btn-primary btn-sm">Register</a>
         </div>
       </div>
@@ -84,15 +85,29 @@
 
   <main id="main" class="app-main">
     <div class="container">
-      <section id="overview" data-enter style="padding-block: var(--space-12) var(--space-16); max-width: 860px;">
-        <p class="label-meta" style="margin-bottom: var(--space-4);">Live availability at UPES Central Library</p>
-        <h1 class="hero-title" style="margin-bottom: var(--space-5);">Find a desk at UPES Central Library.</h1>
-        <p class="body-secondary" style="max-width: 56ch; margin-bottom: var(--space-8);">
-          Check which study desks are free, reserve a two-hour slot, and use your digital pass at the exit gate.
-        </p>
-        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-          <a href="/student.html" class="btn btn-primary btn-lg">View available desks</a>
-          <a href="/login.html" class="btn btn-secondary btn-lg">Sign in</a>
+      <section id="overview" class="hero-section" data-enter>
+        <div class="hero-copy">
+          <p class="label-meta" style="margin-bottom: var(--space-4);">Live desk availability</p>
+          <h1 class="hero-title">Desks at UPES Central Library.</h1>
+          <div class="hero-actions">
+            <a href="/student.html" class="btn btn-primary btn-lg">View available desks</a>
+            <a href="/login.html" class="btn btn-secondary btn-lg">Sign in</a>
+          </div>
+        </div>
+
+        <div class="hero-mark-wrap" aria-hidden="true">
+          <div class="hero-glow"></div>
+          <div class="hero-mark">
+            <span></span><span></span><span class="is-active"></span>
+            <span></span><span class="is-active"></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="hero-points">
+          <span>See which desks are free.</span>
+          <span>Reserve a two-hour slot.</span>
+          <span>Punch your card at the exit gate.</span>
         </div>
       </section>
 
@@ -228,7 +243,7 @@
           </p>
           <div class="system-status-indicator">
             <span class="pulse-dot"></span>
-            <span>All systems operational &bull; Bidholi Campus</span>
+            <span>All systems operational at Bidholi Campus</span>
           </div>
         </div>
 
