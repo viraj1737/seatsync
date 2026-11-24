@@ -148,7 +148,7 @@
                 <span>&bull;</span>
                 <span>SAP ID: <span class="campus-student-tag">{{ currentUser.studentId || '590029022' }}</span></span>
                 <span>&bull;</span>
-                <span style="color: #4ade80;">Live Turnstile Gate 02 Active</span>
+                <span style="color: var(--arch-beige);">Live Turnstile Gate 02 Active</span>
               </div>
             </div>
 
@@ -303,25 +303,25 @@
             <div class="canvas-bottom-legend">
               <div class="legend-pills-row">
                 <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+                  <span class="legend-dot-indicator" style="background: var(--arch-beige); box-shadow: 0 0 6px var(--arch-beige);"></span>
                   <span>Available</span>
                 </div>
                 <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: #5e6ad2; box-shadow: 0 0 6px #5e6ad2;"></span>
+                  <span class="legend-dot-indicator" style="background: #ffffff; box-shadow: 0 0 6px #ffffff;"></span>
                   <span>Selected</span>
                 </div>
                 <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: #f59e0b;"></span>
+                  <span class="legend-dot-indicator" style="background: var(--status-reserved);"></span>
                   <span>Reserved</span>
                 </div>
                 <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: #ef4444;"></span>
+                  <span class="legend-dot-indicator" style="background: var(--status-occupied);"></span>
                   <span>Occupied</span>
                 </div>
               </div>
 
-              <div style="font-family: var(--font-mono); font-size: 11px; color: var(--arch-text-dim);">
-                🔒 Concurrency Lock Guard: HTTP 409 Protected
+              <div style="font-family: var(--font-mono); font-size: 11px; color: var(--arch-sand-dim);">
+                🔒 Concurrency Lock Guard: Atomic Check Active
               </div>
             </div>
 
@@ -337,14 +337,14 @@
               </div>
               <h3 class="inspector-empty-title">Select a Workstation</h3>
               <p class="inspector-empty-desc">
-                Click any available green desk on the architectural plan to inspect hardware amenities and reserve your study slot.
+                Click any available workstation on the architectural blueprint to inspect power sockets, lighting, and reserve your study slot.
               </p>
 
               <!-- Live Environmental Telemetry -->
               <div class="library-telemetry-box">
                 <div class="telemetry-row">
                   <span>Acoustic Level</span>
-                  <span class="telemetry-val" style="color: #4ade80;">32 dB &bull; Whisper Quiet</span>
+                  <span class="telemetry-val" style="color: var(--arch-beige);">32 dB &bull; Whisper Quiet</span>
                 </div>
                 <div class="telemetry-row">
                   <span>Ambient Climate</span>
@@ -356,7 +356,7 @@
                 </div>
                 <div class="telemetry-row">
                   <span>RFID Exit Gate</span>
-                  <span class="telemetry-val" style="color: #4ade80;">Gate 02 Online</span>
+                  <span class="telemetry-val" style="color: var(--arch-beige);">Gate 02 Online</span>
                 </div>
               </div>
             </div>
@@ -365,16 +365,16 @@
             <div class="active-desk-pass" ng-if="selectedSeat">
               <div class="pass-desk-hero">
                 <div>
-                  <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--arch-text-dim); letter-spacing: 0.05em; margin-bottom: 4px;">
+                  <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--arch-sand-dim); letter-spacing: 0.05em; margin-bottom: 4px;">
                     Selected Workstation
                   </div>
                   <div class="pass-stencil-badge">Desk {{ selectedSeat.seatNumber }}</div>
-                  <div style="font-size: 12px; color: var(--arch-text-muted); margin-top: 4px;">
+                  <div style="font-size: 12px; color: var(--arch-text-secondary); margin-top: 4px;">
                     {{ selectedFloor.name }} &bull; {{ selectedSeat.zone }}
                   </div>
                 </div>
                 <span class="pass-ready-pill">
-                  <span style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e;"></span>
+                  <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--arch-beige);"></span>
                   Ready to Lock
                 </span>
               </div>
@@ -423,7 +423,7 @@
                 </div>
                 <div class="ticket-detail-row">
                   <span class="label">Study Window:</span>
-                  <span class="value" style="font-family: var(--font-mono); color: #7170ff;">{{ selectedSlot }}</span>
+                  <span class="value" style="font-family: var(--font-mono); color: var(--arch-beige);">{{ selectedSlot }}</span>
                 </div>
                 <div class="ticket-detail-row">
                   <span class="label">Reservation Date:</span>

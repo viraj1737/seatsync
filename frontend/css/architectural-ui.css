@@ -1,89 +1,119 @@
 /**
- * SeatSync — Ultra-Refined Architectural Library Portal
- * High-craft, human-designed workspace with authentic UPES Library atmosphere,
- * realistic workstation rendering, natural light facade, and zero AI-slop clunkiness.
+ * SeatSync — Black, White & Warm Beige Architectural Library Design System
+ * Inspired by luxury architectural monographs, Nordic minimalism, and high-end editorial portfolios.
+ * Palette: Deep Matte Obsidian (#0a0a0c), Crisp Alabaster White (#f8f7f5), and Warm Architectural Beige (#e8dfd1).
+ * Zero cheap purple/blue AI gradients, zero radioactive neon greens.
  */
 
 /* ==========================================================================
-   1. Design Tokens & Atmosphere
+   1. The Black, White & Warm Beige Design Tokens
    ========================================================================== */
 :root {
-  --arch-canvas: #0c0e14;
-  --arch-canvas-gradient: radial-gradient(ellipse at 50% 0%, rgba(94, 106, 210, 0.08) 0%, transparent 60%), #0c0e14;
-  --arch-panel: #131620;
-  --arch-panel-subtle: #171b28;
-  --arch-panel-elevated: #1c2132;
-  --arch-border: rgba(255, 255, 255, 0.08);
-  --arch-border-hover: rgba(255, 255, 255, 0.16);
-  --arch-border-focus: #5e6ad2;
-  --arch-blueprint-grid: rgba(255, 255, 255, 0.02);
+  /* Carbon Black & Deep Obsidian Foundations */
+  --arch-canvas: #0a0a0c;
+  --arch-canvas-gradient: #0a0a0c;
+  --arch-panel: #121215;
+  --arch-panel-subtle: #18181c;
+  --arch-panel-elevated: #202026;
 
-  --arch-text-primary: #f8fafc;
-  --arch-text-secondary: #94a3b8;
-  --arch-text-dim: #64748b;
+  /* Luxury Architectural Beige & Warm Sand Tones */
+  --arch-beige: #e8dfd1;             /* Primary luxury beige / champagne */
+  --arch-beige-hover: #f3ece2;       /* Bright warm cream */
+  --arch-beige-subtle: rgba(232, 223, 209, 0.08);
+  --arch-beige-border: rgba(232, 223, 209, 0.2);
+  --arch-beige-glow: rgba(232, 223, 209, 0.35);
 
-  /* Desk status tokens */
-  --status-free: #10b981;
-  --status-free-bg: rgba(16, 185, 129, 0.08);
-  --status-free-border: rgba(16, 185, 129, 0.2);
+  --arch-sand: #d6ccbe;              /* Secondary warm sand */
+  --arch-sand-dim: #8c8579;          /* Subdued warm ash-sand */
 
-  --status-reserved: #f59e0b;
-  --status-reserved-bg: rgba(245, 158, 11, 0.08);
-  --status-reserved-border: rgba(245, 158, 11, 0.2);
+  /* Pure & Warm Typography */
+  --arch-text-primary: #f8f7f5;      /* Crisp warm alabaster white */
+  --arch-text-secondary: #c7c1b7;    /* Warm beige-tinted grey */
+  --arch-text-dim: #7a746a;          /* Muted ash-beige */
 
-  --status-occupied: #f43f5e;
-  --status-occupied-bg: rgba(244, 63, 94, 0.08);
-  --status-occupied-border: rgba(244, 63, 94, 0.2);
+  /* Hairline Architectural Borders */
+  --arch-border: rgba(232, 223, 209, 0.1);
+  --arch-border-hover: rgba(232, 223, 209, 0.26);
+  --arch-border-focus: #e8dfd1;
+  --arch-blueprint-grid: rgba(232, 223, 209, 0.022);
 
-  --status-selected: #5e6ad2;
-  --status-selected-glow: rgba(94, 106, 210, 0.4);
+  /* Status Colors (Refined Warm Neutrals) */
+  --status-free: #e8dfd1;            /* Warm cream badge */
+  --status-free-bg: rgba(232, 223, 209, 0.1);
+  --status-free-border: rgba(232, 223, 209, 0.28);
+  --status-available: #e8dfd1;
+  --status-available-subtle: rgba(232, 223, 209, 0.1);
+  --status-available-border: rgba(232, 223, 209, 0.28);
+  --color-available: #e8dfd1;
+
+  --status-reserved: #8c8375;        /* Subdued warm bronze-sand */
+  --status-reserved-bg: rgba(140, 131, 117, 0.1);
+  --status-reserved-border: rgba(140, 131, 117, 0.25);
+
+  --status-occupied: #544e45;        /* Muted deep carbon ash */
+  --status-occupied-bg: rgba(84, 78, 69, 0.1);
+  --status-occupied-border: rgba(84, 78, 69, 0.2);
+
+  --status-selected: #f8f7f5;        /* Pure alabaster white */
+  --status-selected-glow: rgba(232, 223, 209, 0.4);
 }
 
 :root[data-theme="light"] {
-  --arch-canvas: #f6f8fb;
-  --arch-canvas-gradient: radial-gradient(ellipse at 50% 0%, rgba(94, 106, 210, 0.06) 0%, transparent 60%), #f6f8fb;
+  --arch-canvas: #f8f7f4;
+  --arch-canvas-gradient: #f8f7f4;
   --arch-panel: #ffffff;
-  --arch-panel-subtle: #f1f4f9;
-  --arch-panel-elevated: #e8ecf3;
-  --arch-border: rgba(0, 0, 0, 0.07);
-  --arch-border-hover: rgba(0, 0, 0, 0.14);
-  --arch-border-focus: #4f46e5;
-  --arch-blueprint-grid: rgba(0, 0, 0, 0.025);
+  --arch-panel-subtle: #f2eee8;
+  --arch-panel-elevated: #e8e2d8;
 
-  --arch-text-primary: #0f172a;
-  --arch-text-secondary: #475569;
-  --arch-text-dim: #94a3b8;
+  --arch-beige: #121215;             /* Invert to dark in light mode */
+  --arch-beige-hover: #202025;
+  --arch-beige-subtle: rgba(18, 18, 21, 0.06);
+  --arch-beige-border: rgba(18, 18, 21, 0.18);
+  --arch-beige-glow: rgba(18, 18, 21, 0.15);
 
-  --status-free: #059669;
-  --status-free-bg: rgba(16, 185, 129, 0.08);
-  --status-free-border: rgba(16, 185, 129, 0.25);
+  --arch-sand: #423d35;
+  --arch-sand-dim: #8c8579;
 
-  --status-reserved: #d97706;
-  --status-reserved-bg: rgba(245, 158, 11, 0.08);
-  --status-reserved-border: rgba(245, 158, 11, 0.25);
+  --arch-text-primary: #121215;
+  --arch-text-secondary: #595349;
+  --arch-text-dim: #8c8579;
 
-  --status-occupied: #e11d48;
-  --status-occupied-bg: rgba(244, 63, 94, 0.08);
-  --status-occupied-border: rgba(244, 63, 94, 0.25);
+  --arch-border: rgba(18, 18, 21, 0.09);
+  --arch-border-hover: rgba(18, 18, 21, 0.2);
+  --arch-border-focus: #121215;
+  --arch-blueprint-grid: rgba(18, 18, 21, 0.03);
 
-  --status-selected: #4f46e5;
-  --status-selected-glow: rgba(79, 70, 229, 0.25);
+  --status-free: #2e2a24;
+  --status-free-bg: rgba(46, 42, 36, 0.08);
+  --status-free-border: rgba(46, 42, 36, 0.25);
+
+  --status-reserved: #8c8375;
+  --status-reserved-bg: rgba(140, 131, 117, 0.1);
+  --status-reserved-border: rgba(140, 131, 117, 0.25);
+
+  --status-occupied: #544e45;
+  --status-occupied-bg: rgba(84, 78, 69, 0.1);
+  --status-occupied-border: rgba(84, 78, 69, 0.2);
+
+  --status-selected: #121215;
+  --status-selected-glow: rgba(18, 18, 21, 0.2);
 }
 
 body {
-  background: var(--arch-canvas-gradient) !important;
+  background: var(--arch-canvas) !important;
+  color: var(--arch-text-primary) !important;
 }
 
 /* ==========================================================================
-   2. Cinematic UPES Campus Header Ribbon (Library Atmosphere)
+   2. Cinematic Campus Hero Banner (Real UPES Library Atmosphere)
    ========================================================================== */
 .campus-hero-banner {
   position: relative;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   border: 1px solid var(--arch-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
 .campus-hero-image-backdrop {
@@ -92,7 +122,7 @@ body {
   background-image: url('../assets/images/upes-library-hero.jpg');
   background-size: cover;
   background-position: center 35%;
-  filter: brightness(0.35) saturate(1.15);
+  filter: brightness(0.3) saturate(1.1);
 }
 
 .campus-hero-gradient-overlay {
@@ -100,9 +130,9 @@ body {
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(12, 14, 20, 0.95) 0%,
-    rgba(12, 14, 20, 0.8) 50%,
-    rgba(12, 14, 20, 0.5) 100%
+    rgba(10, 10, 12, 0.96) 0%,
+    rgba(10, 10, 12, 0.82) 55%,
+    rgba(10, 10, 12, 0.5) 100%
   );
 }
 
@@ -121,13 +151,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 4px 10px;
+  padding: 4px 11px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(232, 223, 209, 0.1);
+  border: 1px solid var(--arch-beige-border);
   font-size: 11px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--arch-beige);
   backdrop-filter: blur(8px);
   margin-bottom: 8px;
 }
@@ -136,21 +166,21 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
+  background: var(--arch-beige);
+  box-shadow: 0 0 8px var(--arch-beige);
 }
 
 .campus-hero-title {
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.025em;
-  color: #ffffff;
+  color: var(--arch-text-primary);
   margin-bottom: 4px;
 }
 
 .campus-hero-desc {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--arch-text-secondary);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -160,43 +190,43 @@ body {
 .campus-student-tag {
   font-family: var(--font-mono);
   font-weight: 600;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  color: var(--arch-beige);
+  background: rgba(232, 223, 209, 0.12);
   padding: 2px 8px;
   border-radius: 5px;
+  border: 1px solid var(--arch-border);
 }
 
-/* Quick pass trigger */
 .btn-view-pass-ribbon {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
+  background: var(--arch-beige);
+  color: #0a0a0c !important;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 650;
   cursor: pointer;
-  backdrop-filter: blur(10px);
+  border: none;
+  box-shadow: 0 4px 14px var(--arch-beige-glow);
   transition: all 160ms ease;
 }
 .btn-view-pass-ribbon:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--arch-beige-hover);
   transform: translateY(-1px);
 }
 
 /* ==========================================================================
-   3. Refined Architectural Command Ribbon (Floor, Date, Slot)
+   3. Architectural Command Ribbon (Floor, Date, Time Slot)
    ========================================================================== */
 .studio-ribbon {
   background: var(--arch-panel);
   border: 1px solid var(--arch-border);
   border-radius: 14px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   margin-bottom: 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .studio-ribbon-controls {
@@ -204,22 +234,22 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 20px;
 }
 
 .control-segment-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--arch-text-dim);
-  margin-bottom: 7px;
+  letter-spacing: 0.08em;
+  color: var(--arch-sand-dim);
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-/* Floor Picker */
+/* Floor Picker (Warm Beige Active State) */
 .arch-floor-picker {
   display: inline-flex;
   background: var(--arch-panel-subtle);
@@ -233,7 +263,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
+  padding: 7px 15px;
   border-radius: 7px;
   border: none;
   background: transparent;
@@ -251,11 +281,10 @@ body {
 }
 
 .arch-floor-btn.active {
-  background: var(--arch-panel);
-  color: var(--arch-text-primary);
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  border: 1px solid var(--arch-border);
+  background: var(--arch-beige);
+  color: #0a0a0c !important;
+  font-weight: 700;
+  box-shadow: 0 2px 10px var(--arch-beige-glow);
 }
 
 .floor-level-badge {
@@ -264,16 +293,21 @@ body {
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(94, 106, 210, 0.14);
-  color: #7170ff;
+  background: rgba(0, 0, 0, 0.12);
+  color: inherit;
 }
 
-/* Date Input */
+.arch-floor-btn.active .floor-level-badge {
+  background: rgba(0, 0, 0, 0.15);
+  color: #0a0a0c;
+}
+
+/* Date Selector */
 .arch-date-input {
   background: var(--arch-panel-subtle);
   border: 1px solid var(--arch-border);
   color: var(--arch-text-primary);
-  padding: 7px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
   font-family: var(--font-sans);
   font-size: 13px;
@@ -283,10 +317,11 @@ body {
   transition: border-color 140ms ease;
 }
 .arch-date-input:focus {
-  border-color: var(--arch-border-focus);
+  border-color: var(--arch-beige);
+  box-shadow: 0 0 0 2px var(--arch-beige-subtle);
 }
 
-/* Slot Strip */
+/* Slot Timeline Chips */
 .arch-slot-strip {
   display: flex;
   gap: 6px;
@@ -298,7 +333,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 8px;
   border: 1px solid var(--arch-border);
   background: var(--arch-panel-subtle);
@@ -308,7 +343,7 @@ body {
   white-space: nowrap;
   font-size: 12px;
   font-weight: 500;
-  min-width: 90px;
+  min-width: 92px;
 }
 
 .arch-slot-chip:hover {
@@ -317,18 +352,19 @@ body {
 }
 
 .arch-slot-chip.active {
-  background: rgba(94, 106, 210, 0.14);
-  border-color: var(--status-selected);
-  color: var(--arch-text-primary);
-  box-shadow: 0 0 14px var(--status-selected-glow);
+  background: var(--arch-beige);
+  border-color: var(--arch-beige);
+  color: #0a0a0c !important;
+  font-weight: 650;
+  box-shadow: 0 2px 12px var(--arch-beige-glow);
 }
 
 .arch-slot-chip .slot-period {
   font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   opacity: 0.75;
-  color: var(--arch-text-dim);
+  color: inherit;
 }
 
 /* ==========================================================================
@@ -355,7 +391,7 @@ body {
   padding: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .floor-canvas::before {
@@ -392,19 +428,19 @@ body {
 .canvas-compass-badge {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--arch-text-dim);
+  color: var(--arch-sand-dim);
   background: var(--arch-panel-subtle);
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 5px;
   border: 1px solid var(--arch-border);
 }
 
-/* Architectural Window Wall (Natural Daylight Facade) */
+/* Natural Sunlight Facade (Warm Architectural Glazing) */
 .architectural-window-wall {
   position: relative;
   z-index: 2;
-  background: linear-gradient(180deg, rgba(147, 197, 253, 0.06) 0%, transparent 100%);
-  border: 1px dashed rgba(147, 197, 253, 0.25);
+  background: linear-gradient(180deg, rgba(232, 223, 209, 0.06) 0%, transparent 100%);
+  border: 1px dashed var(--arch-beige-border);
   border-radius: 8px;
   padding: 8px 14px;
   margin-bottom: 22px;
@@ -412,7 +448,7 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 11px;
-  color: #93c5fd;
+  color: var(--arch-beige);
   font-family: var(--font-mono);
 }
 
@@ -423,13 +459,13 @@ body {
 .window-glass-pane {
   width: 20px;
   height: 2px;
-  background: rgba(147, 197, 253, 0.4);
+  background: rgba(232, 223, 209, 0.35);
   border-radius: 1px;
 }
 
 /* ==========================================================================
    5. REALISTIC REFINED PHYSICAL DESK WORKSTATIONS
-   (Tactile Wood/Slate Finish, Soft Pill Badges, Elegant Chair Silhouette)
+   (Black, Crisp White & Warm Beige Execution)
    ========================================================================== */
 .physical-desk-grid {
   display: grid;
@@ -439,7 +475,7 @@ body {
   z-index: 2;
 }
 
-/* Individual Physical Desk Module */
+/* Physical Desk Module */
 .physical-desk-module {
   position: relative;
   cursor: pointer;
@@ -455,7 +491,7 @@ body {
   transform: translateY(-3px);
 }
 
-/* Desktop Workstation Surface */
+/* Workstation Desktop Surface */
 .desk-surface {
   width: 100%;
   height: 86px;
@@ -467,32 +503,22 @@ body {
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 160ms ease;
 }
 
-/* Acoustic Partition Screen */
+/* Warm Walnut-Sand Felt Divider */
 .desk-partition-divider {
   position: absolute;
   top: -2px;
   left: 10px;
   right: 10px;
   height: 3px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(232, 223, 209, 0.2);
   border-radius: 2px;
 }
 
-:root[data-theme="light"] .desk-partition-divider {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-/* Desk Header: Stencil Code + Status Indicator */
-.desk-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
+/* Stencil Number */
 .desk-stencil-number {
   font-family: var(--font-mono);
   font-size: 15px;
@@ -501,14 +527,14 @@ body {
   color: var(--arch-text-primary);
 }
 
-/* Subtle Status Micro-Pill */
+/* Delicate Status Micro-Pill */
 .desk-status-pill {
   font-size: 10px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
 }
 
@@ -518,7 +544,12 @@ body {
   border-radius: 50%;
 }
 
-/* Desk Zone & Hardware Info */
+.desk-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .desk-footer-row {
   display: flex;
   align-items: flex-end;
@@ -540,21 +571,21 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: #38bdf8;
+  color: var(--arch-sand);
   font-weight: 500;
 }
 
-/* Ergonomic Study Chair (Proportional, Top-Down Silhouette) */
+/* Ergonomic Study Chair */
 .ergonomic-chair-silhouette {
   width: 44px;
   height: 12px;
   border-radius: 3px 3px 7px 7px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(232, 223, 209, 0.08);
   border: 1px solid var(--arch-border);
   margin-top: 5px;
   position: relative;
   transition: all 160ms ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .ergonomic-chair-silhouette::before {
@@ -564,96 +595,100 @@ body {
   left: 8px;
   right: 8px;
   height: 2px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(232, 223, 209, 0.18);
   border-radius: 1px;
 }
 
-:root[data-theme="light"] .ergonomic-chair-silhouette {
-  background: rgba(0, 0, 0, 0.06);
-}
-
-/* ---- DESK STATE: AVAILABLE ---- */
+/* ---- STATE: AVAILABLE (Warm Beige & Crisp White) ---- */
 .desk--available .desk-surface {
   background: var(--arch-panel-subtle);
   border-color: var(--arch-border);
 }
 
 .desk--available .desk-status-pill {
-  color: var(--status-free);
+  color: var(--arch-beige);
   background: var(--status-free-bg);
+  border: 1px solid var(--status-free-border);
 }
 
 .desk--available .desk-status-dot-sm {
-  background: var(--status-free);
-  box-shadow: 0 0 6px var(--status-free);
+  background: var(--arch-beige);
+  box-shadow: 0 0 6px var(--arch-beige);
 }
 
 .desk--available:hover .desk-surface {
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border-color: var(--arch-border-hover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .desk--available:hover .ergonomic-chair-silhouette {
   transform: translateY(2px);
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(232, 223, 209, 0.16);
+  border-color: var(--arch-beige-border);
 }
 
-/* ---- DESK STATE: SELECTED (Subtle Electric Indigo Glow) ---- */
+/* ---- STATE: SELECTED (Crisp Alabaster White & Warm Champagne Glow) ---- */
 .desk--selected .desk-surface {
-  background: rgba(94, 106, 210, 0.12) !important;
-  border-color: var(--status-selected) !important;
-  box-shadow: 0 0 0 2px var(--status-selected), 0 10px 28px rgba(94, 106, 210, 0.35) !important;
+  background: rgba(232, 223, 209, 0.12) !important;
+  border-color: var(--arch-beige) !important;
+  box-shadow: 0 0 0 2px var(--arch-beige), 0 12px 32px var(--arch-beige-glow) !important;
 }
 
 .desk--selected .desk-status-pill {
-  color: #fff !important;
-  background: var(--status-selected) !important;
+  color: #0a0a0c !important;
+  background: var(--arch-beige) !important;
+  font-weight: 700;
 }
 
 .desk--selected .desk-status-dot-sm {
-  background: #fff !important;
+  background: #0a0a0c !important;
+}
+
+.desk--selected .desk-stencil-number {
+  color: #ffffff !important;
 }
 
 .desk--selected .desk-partition-divider {
-  background: var(--status-selected) !important;
+  background: var(--arch-beige) !important;
 }
 
 .desk--selected .ergonomic-chair-silhouette {
   transform: translateY(3px) !important;
-  background: rgba(94, 106, 210, 0.3) !important;
-  border-color: var(--status-selected) !important;
+  background: var(--arch-beige) !important;
+  border-color: var(--arch-beige) !important;
 }
 
-/* ---- DESK STATE: RESERVED ---- */
+/* ---- STATE: RESERVED ---- */
 .desk--reserved {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 .desk--reserved .desk-status-pill {
   color: var(--status-reserved);
   background: var(--status-reserved-bg);
+  border: 1px solid var(--status-reserved-border);
 }
 .desk--reserved .desk-status-dot-sm {
   background: var(--status-reserved);
 }
 
-/* ---- DESK STATE: OCCUPIED ---- */
+/* ---- STATE: OCCUPIED ---- */
 .desk--occupied {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 .desk--occupied .desk-status-pill {
   color: var(--status-occupied);
   background: var(--status-occupied-bg);
+  border: 1px solid var(--status-occupied-border);
 }
 .desk--occupied .desk-status-dot-sm {
   background: var(--status-occupied);
 }
 
-/* ---- DESK STATE: UNAVAILABLE ---- */
+/* ---- STATE: UNAVAILABLE ---- */
 .desk--unavailable {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: not-allowed;
 }
 
@@ -665,10 +700,10 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--arch-text-dim);
+  color: var(--arch-sand-dim);
   font-size: 11px;
   font-family: var(--font-mono);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .aisle-dotted-line {
@@ -695,7 +730,7 @@ body {
 .legend-pills-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 .legend-pill-item {
   display: inline-flex;
@@ -717,7 +752,7 @@ body {
   border: 1px solid var(--arch-border);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
   position: sticky;
   top: 72px;
 }
@@ -740,11 +775,11 @@ body {
 }
 
 .radar-sweep-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--status-selected);
-  box-shadow: 0 0 12px var(--status-selected);
+  background: var(--arch-beige);
+  box-shadow: 0 0 12px var(--arch-beige);
 }
 
 .inspector-empty-title {
@@ -781,7 +816,7 @@ body {
 .telemetry-val {
   font-family: var(--font-mono);
   font-weight: 600;
-  color: var(--arch-text-primary);
+  color: var(--arch-beige);
 }
 
 /* Active Desk Selection Pass */
@@ -819,7 +854,7 @@ body {
   border-radius: 6px;
   background: var(--status-free-bg);
   border: 1px solid var(--status-free-border);
-  color: var(--status-free);
+  color: var(--arch-beige);
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -865,34 +900,35 @@ body {
   align-items: center;
 }
 .ticket-detail-row .label {
-  color: var(--arch-text-dim);
+  color: var(--arch-sand-dim);
 }
 .ticket-detail-row .value {
   font-weight: 550;
   color: var(--arch-text-primary);
 }
 
+/* Primary Warm Beige CTA */
 .btn-lock-desk {
   width: 100%;
   height: 44px;
   border-radius: 9px;
-  background: var(--status-selected);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--arch-beige);
+  color: #0a0a0c !important;
+  border: none;
   font-family: var(--font-sans);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 16px rgba(94, 106, 210, 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  box-shadow: 0 4px 16px var(--arch-beige-glow);
   transition: all 140ms ease;
 }
 
 .btn-lock-desk:hover:not(:disabled) {
-  background: #6e7ae0;
+  background: var(--arch-beige-hover);
   transform: translateY(-1px);
 }
 .btn-lock-desk:active:not(:disabled) {
@@ -906,10 +942,105 @@ body {
 .guarantee-microtext {
   text-align: center;
   font-size: 11px;
-  color: var(--arch-text-dim);
+  color: var(--arch-sand-dim);
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+
+/* ==========================================================================
+   7. Tab 2: Black, White & Warm Beige Digital Seat Pass & Turnstile Terminal
+   ========================================================================== */
+.digital-credential-card {
+  max-width: 540px;
+  margin: 0 auto;
+  background-color: var(--arch-panel) !important;
+  border: 1px solid var(--arch-border) !important;
+  border-radius: 14px !important;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.credential-header {
+  border-bottom: 1px solid var(--arch-border) !important;
+}
+
+.credential-title {
+  color: var(--arch-sand-dim) !important;
+}
+
+.credential-main-val {
+  color: var(--arch-text-primary) !important;
+}
+
+.credential-details-grid {
+  background-color: var(--arch-panel-subtle) !important;
+  border: 1px solid var(--arch-border) !important;
+  border-radius: 10px !important;
+}
+
+.credential-item-label {
+  color: var(--arch-sand-dim) !important;
+}
+
+.credential-item-value {
+  color: var(--arch-text-primary) !important;
+}
+
+.dark-barcode-card {
+  background-color: var(--arch-panel-subtle) !important;
+  border: 1px solid var(--arch-border) !important;
+  border-radius: 10px !important;
+}
+
+.dark-barcode-stripes {
+  background: repeating-linear-gradient(90deg, #e8dfd1, #e8dfd1 2px, transparent 2px, transparent 4px, #e8dfd1 4px, #e8dfd1 7px, transparent 7px, transparent 10px) !important;
+}
+
+.dark-barcode-label {
+  color: var(--arch-beige) !important;
+  font-family: var(--font-mono) !important;
+}
+
+.turnstile-iot-panel {
+  background-color: var(--arch-panel-subtle) !important;
+  border: 1px solid var(--arch-border) !important;
+  border-radius: 10px !important;
+}
+
+.turnstile-beacon {
+  background-color: rgba(232, 223, 209, 0.1) !important;
+  color: var(--arch-beige) !important;
+  border: 1px solid var(--arch-beige-border) !important;
+}
+
+.pulse-dot {
+  background-color: var(--arch-beige) !important;
+  box-shadow: 0 0 6px var(--arch-beige) !important;
+}
+
+.btn-primary {
+  background-color: var(--arch-beige) !important;
+  color: #0a0a0c !important;
+  border: none !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 16px var(--arch-beige-glow) !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--arch-beige-hover) !important;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--arch-panel-subtle) !important;
+  color: var(--arch-text-primary) !important;
+  border: 1px solid var(--arch-border) !important;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--arch-border-hover) !important;
+  color: var(--arch-beige) !important;
 }
