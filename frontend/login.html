@@ -3,196 +3,753 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0B0B0C">
-  <meta name="color-scheme" content="dark">
-  <script>
-    (function () {
-      try {
-        if (localStorage.getItem('seatsync-theme') === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-          var themeColor = document.querySelector('meta[name="theme-color"]');
-          if (themeColor) themeColor.setAttribute('content', '#F4F4F5');
-        }
-      } catch (error) {}
-    })();
-  </script>
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="color-scheme" content="dark light">
   <title>Sign In — SeatSync UPES</title>
   <meta name="description" content="Sign in to SeatSync with your UPES student credentials to reserve library desks and view live seat availability.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/modern-ui.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       SeatSync Login — Cinematic Split-Screen Layout
+       Reference: Linear.app / Vercel split-auth pattern
+       Background: Real UPES Central Library, Bidholi Campus
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      --login-bg: #0a0a0a;
+      --login-card-bg: rgba(255, 255, 255, 0.06);
+      --login-card-border: rgba(255, 255, 255, 0.1);
+      --login-card-bg-solid: #111113;
+      --login-input-bg: rgba(255, 255, 255, 0.05);
+      --login-input-border: rgba(255, 255, 255, 0.12);
+      --login-input-focus: #5e6ad2;
+      --login-text-primary: #f5f5f7;
+      --login-text-secondary: #8a8f98;
+      --login-text-tertiary: #565961;
+      --login-accent: #5e6ad2;
+      --login-accent-hover: #6e7ae0;
+      --login-danger: #ef4444;
+      --login-success: #22c55e;
+      --login-radius: 12px;
+      --login-radius-sm: 8px;
+      --login-radius-xs: 6px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-sans);
+      background: var(--login-bg);
+      color: var(--login-text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- Full-Viewport Split Layout ---- */
+    .login-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 960px) {
+      .login-split {
+        grid-template-columns: 1fr;
+      }
+      .login-hero {
+        display: none !important;
+      }
+      .login-form-side {
+        background-image: url('assets/images/upes-library-hero.jpg');
+        background-size: cover;
+        background-position: center;
+      }
+      .login-form-side::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 10, 10, 0.82);
+        backdrop-filter: blur(2px);
+        z-index: 0;
+      }
+      .login-form-wrapper {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    /* ---- LEFT: Cinematic Hero Panel ---- */
+    .login-hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    .login-hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/images/upes-library-hero.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      filter: brightness(0.65) saturate(1.1);
+      transition: transform 20s ease;
+    }
+
+    .login-hero:hover .login-hero-bg {
+      transform: scale(1.03);
+    }
+
+    .login-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10, 10, 10, 0.92) 0%,
+        rgba(10, 10, 10, 0.5) 40%,
+        rgba(10, 10, 10, 0.2) 70%,
+        rgba(10, 10, 10, 0.35) 100%
+      );
+    }
+
+    .login-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      position: absolute;
+      top: 48px;
+      left: 48px;
+      z-index: 2;
+    }
+
+    .hero-brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      font-family: var(--font-mono);
+    }
+
+    .hero-brand-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-campus-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-campus-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    .hero-title {
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .hero-tagline {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .hero-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.55);
+      max-width: 440px;
+      margin-bottom: 36px;
+    }
+
+    /* Feature Chips */
+    .hero-features {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-feature-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--login-radius-sm);
+      backdrop-filter: blur(12px);
+      transition: background 200ms ease, border-color 200ms ease;
+    }
+
+    .hero-feature-chip:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .hero-feature-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--login-radius-xs);
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.8);
+      flex-shrink: 0;
+    }
+
+    .hero-feature-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ---- RIGHT: Login Form Side ---- */
+    .login-form-side {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: var(--login-bg);
+    }
+
+    .login-form-wrapper {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* Glassmorphic Login Card */
+    .login-card {
+      background: var(--login-card-bg-solid);
+      border: 1px solid var(--login-card-border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-card-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--login-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 4px 16px rgba(94, 106, 210, 0.3);
+    }
+
+    .login-logo svg {
+      width: 26px;
+      height: 26px;
+      color: #fff;
+    }
+
+    .login-card-title {
+      font-size: 22px;
+      font-weight: 650;
+      color: var(--login-text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .login-card-subtitle {
+      font-size: 14px;
+      color: var(--login-text-secondary);
+    }
+
+    /* Alerts */
+    .login-alert {
+      padding: 10px 14px;
+      border-radius: var(--login-radius-xs);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .login-alert-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    .login-alert-success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      color: #86efac;
+    }
+
+    /* Form Inputs */
+    .login-form-group {
+      margin-bottom: 16px;
+    }
+
+    .login-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--login-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .login-label-hint {
+      font-size: 11px;
+      color: var(--login-text-tertiary);
+      font-weight: 400;
+    }
+
+    .login-input-wrapper {
+      position: relative;
+    }
+
+    .login-input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--login-text-tertiary);
+      pointer-events: none;
+    }
+
+    .login-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px 0 40px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--login-text-primary);
+      background: var(--login-input-bg);
+      border: 1px solid var(--login-input-border);
+      border-radius: var(--login-radius-sm);
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .login-input::placeholder {
+      color: var(--login-text-tertiary);
+    }
+
+    .login-input:focus {
+      border-color: var(--login-input-focus);
+      box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.15);
+    }
+
+    /* Primary Submit Button */
+    .login-submit-btn {
+      width: 100%;
+      height: 44px;
+      border: none;
+      border-radius: var(--login-radius-sm);
+      background: var(--login-text-primary);
+      color: var(--login-bg);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 150ms ease, transform 100ms ease;
+      margin-top: 4px;
+    }
+
+    .login-submit-btn:hover:not(:disabled) {
+      background: #e5e5e7;
+    }
+
+    .login-submit-btn:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+
+    .login-submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Divider */
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .login-divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .login-divider-text {
+      font-size: 12px;
+      color: var(--login-text-tertiary);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Demo Access Buttons */
+    .login-demo-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .login-demo-btn {
+      width: 100%;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--login-radius-sm);
+      background: transparent;
+      color: var(--login-text-primary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+
+    .login-demo-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .login-demo-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+
+    .login-demo-avatar--student {
+      background: rgba(94, 106, 210, 0.2);
+      color: #9ba3f0;
+      border: 1px solid rgba(94, 106, 210, 0.3);
+    }
+
+    .login-demo-avatar--admin {
+      background: rgba(242, 153, 74, 0.15);
+      color: #f2994a;
+      border: 1px solid rgba(242, 153, 74, 0.3);
+    }
+
+    /* Register Link */
+    .login-register-link {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--login-text-secondary);
+    }
+
+    .login-register-link a {
+      color: var(--login-accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-register-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer Credit */
+    .login-footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 11px;
+      color: var(--login-text-tertiary);
+      line-height: 1.5;
+    }
+
+    .login-footer a {
+      color: var(--login-text-secondary);
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      color: var(--login-text-primary);
+    }
+
+    /* ---- Animations ---- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card {
+      animation: fadeInUp 500ms ease-out;
+    }
+
+    .login-hero-content {
+      animation: fadeInUp 600ms ease-out 200ms both;
+    }
+
+    /* Skip Link */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: var(--login-accent);
+      color: #fff;
+      padding: 8px 16px;
+      z-index: 100;
+      font-size: 14px;
+      border-radius: 0 0 8px 0;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* Password toggle */
+    .login-pass-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--login-text-tertiary);
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+    }
+    .login-pass-toggle:hover { color: var(--login-text-secondary); }
+  </style>
 </head>
-<body ng-controller="AuthController" style="display: flex; flex-direction: column; min-height: 100vh;">
+<body ng-controller="AuthController">
 
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="app-header">
-    <div class="header-inner">
-      <a href="/" class="brand-wrapper" aria-label="SeatSync home">
-        <div class="brand-mark" aria-hidden="true">S</div>
-        <div class="brand-meta">
-          <span class="brand-text">SeatSync</span>
-          <span class="brand-subtext">UPES Library</span>
-        </div>
-      </a>
-      <div class="nav-user-actions">
-        <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Switch visual theme" title="Toggle theme">
-          <svg class="theme-toggle-icon theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
-          <svg class="theme-toggle-icon theme-toggle-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
-        <span class="body-secondary" style="font-size: 13px;">New student?</span>
-        <a href="/register.html" class="btn btn-primary btn-sm">Create account</a>
-      </div>
-    </div>
-  </header>
 
-  <!-- Login Card Form -->
-  <main id="main" class="app-main" style="display: flex; align-items: center; justify-content: center; padding: var(--space-8) var(--space-4);">
-    <div class="card" style="max-width: 440px; width: 100%; padding: var(--space-8);">
-      
-      <!-- Brand & Title -->
-      <div style="text-align: center; margin-bottom: var(--space-6);">
-        <div class="brand-mark" style="width: 48px; height: 48px; font-size: 22px; margin: 0 auto var(--space-3);" aria-hidden="true">S</div>
-        <h1 class="page-title" style="font-size: 24px; margin-bottom: var(--space-1);">Sign in to SeatSync</h1>
-        <p class="body-secondary">Use your UPES credentials to reserve a study desk.</p>
+  <div class="login-split">
+
+    <!-- ============================================================
+         LEFT PANEL: Cinematic UPES Library Hero
+         ============================================================ -->
+    <div class="login-hero">
+      <div class="login-hero-bg" aria-hidden="true"></div>
+      <div class="login-hero-overlay" aria-hidden="true"></div>
+
+      <!-- Top Brand -->
+      <div class="hero-brand">
+        <div class="hero-brand-icon" aria-hidden="true">S</div>
+        <span class="hero-brand-name">SeatSync</span>
       </div>
 
-      <!-- Alerts -->
-      <div class="alert alert-danger" role="alert" ng-if="errorMessage">
-        <span>&times;</span>
-        <span>{{ errorMessage }}</span>
-      </div>
-
-      <div class="alert alert-success" role="status" aria-live="polite" ng-if="successMessage">
-        <span>&check;</span>
-        <span>{{ successMessage }}</span>
-      </div>
-
-      <!-- Login Form with Robust Submission -->
-      <form name="loginForm" ng-submit="submitLogin()" novalidate>
-        
-        <div class="form-group">
-          <label class="form-label" for="login-email">UPES student email</label>
-          <input type="email"
-                 id="login-email"
-                 name="email"
-                 class="form-control"
-                 placeholder="name@stu.upes.ac.in…"
-                 ng-model="loginData.email"
-                 autocomplete="username"
-                 spellcheck="false"
-                 required>
+      <!-- Bottom Hero Content -->
+      <div class="login-hero-content">
+        <div class="hero-campus-tag">
+          <span class="hero-campus-dot"></span>
+          UPES Central Library
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="login-password">
-            <span>Password</span>
-            <span class="body-secondary" style="font-size: 12px;">(Default: Password123)</span>
-          </label>
-          <input type="password" 
-                 id="login-password" 
-                 name="password"
-                 class="form-control" 
-                 placeholder="Enter password" 
-                 ng-model="loginData.password" 
-                 autocomplete="current-password"
-                 required>
-        </div>
+        <h1 class="hero-title">SeatSync</h1>
+        <p class="hero-tagline">Find. Reserve. Focus.</p>
+        <p class="hero-description">
+          Smart Library Seat Availability &amp; Reservation System for UPES Students. Real-time desk maps, 2-hour study slots, and RFID turnstile exit.
+        </p>
 
-        <button type="submit" 
-                class="btn btn-primary btn-block btn-lg" 
-                style="margin-top: var(--space-2);"
-                ng-disabled="isLoading">
-          <span ng-if="!isLoading">Sign in</span>
-          <span ng-if="isLoading">Checking credentials…</span>
-        </button>
-
-      </form>
-
-      <!-- Demo accounts -->
-      <div style="margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-border-subtle); text-align: center;">
-        <span class="label-meta" style="display: block; margin-bottom: var(--space-3); font-weight: 600;">Demo accounts</span>
-        <div style="display: flex; flex-direction: column; gap: var(--space-2);">
-          <button type="button" class="btn btn-secondary btn-sm" ng-click="fillAndSubmitViraj()">Continue as Viraj Kumar</button>
-          <button type="button" class="btn btn-secondary btn-sm" ng-click="fillAndSubmitAdmin()">Continue as library administrator</button>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Enterprise Multi-Column Footer (Industry Standard) -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        
-        <!-- Col 1: Brand & Status -->
-        <div>
-          <div class="brand-wrapper" style="margin-bottom: 12px;">
-            <div class="brand-mark" aria-hidden="true">S</div>
-            <span class="brand-text">SeatSync</span>
+        <div class="hero-features">
+          <div class="hero-feature-chip">
+            <div class="hero-feature-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <span class="hero-feature-label">Check Availability</span>
           </div>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px 0; max-width: 280px;">
-            Automated seat allotment and RFID exit turnstile management system for the UPES Central Library.
-          </p>
-          <div class="system-status-indicator">
-            <span class="pulse-dot"></span>
-            <span>All systems operational &bull; Bidholi Campus</span>
+          <div class="hero-feature-chip">
+            <div class="hero-feature-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <span class="hero-feature-label">Book a Seat</span>
+          </div>
+          <div class="hero-feature-chip">
+            <div class="hero-feature-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </div>
+            <span class="hero-feature-label">Track Usage</span>
           </div>
         </div>
-
-        <!-- Col 2: Library Wings -->
-        <div>
-          <div class="footer-col-title">Library Wings</div>
-          <ul class="footer-links">
-            <li><a href="/student.html">Floor 1 &mdash; Tech &amp; Engineering</a></li>
-            <li><a href="/student.html">Floor 2 &mdash; Silent Research Zone</a></li>
-            <li><a href="/student.html">Quiet Commons</a></li>
-            <li><a href="/student.html">Exit Turnstile Gate 02</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 3: Guidelines & Policy -->
-        <div>
-          <div class="footer-col-title">Policies &amp; Access</div>
-          <ul class="footer-links">
-            <li><a href="#rules">2-Hour Study Slot Rules</a></li>
-            <li><a href="#rfid">RFID Punch Exit Protocol</a></li>
-            <li><a href="#concurrency">Zero Double-Booking Guard</a></li>
-            <li><a href="mailto:library@upes.ac.in">Library Support Desk</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 4: Engineering & Project Credits -->
-        <div>
-          <div class="footer-col-title">Coursework &amp; Candidate</div>
-          <ul class="footer-links" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-            <li>Course: <strong style="color: var(--text-primary);">Advanced Web Technologies</strong></li>
-            <li>Candidate: <strong style="color: var(--text-primary);">Viraj Kumar</strong></li>
-            <li>SAP ID: <span class="mono-num" style="color: var(--text-primary);">590029022</span></li>
-            <li>Email: <a href="mailto:viraj.29022@stu.upes.ac.in" style="color: var(--text-secondary);">viraj.29022@stu.upes.ac.in</a></li>
-            <li>GitHub: <a href="https://github.com/viraj1737/seatsync" target="_blank" rel="noopener">viraj1737/seatsync &nearr;</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Sub-footer / Legal Bar -->
-      <div class="footer-bottom">
-        <div>
-          &copy; 2026 UPES Central Library Desk Reservation System. Academic Coursework Submission.
-        </div>
-        <div style="display: flex; gap: 16px;">
-          <span>Node.js / Express / AngularJS / MongoDB</span>
-          <span>HTTP 409 Concurrency Protected</span>
-        </div>
       </div>
     </div>
-  </footer>
+
+    <!-- ============================================================
+         RIGHT PANEL: Glassmorphic Login Card
+         ============================================================ -->
+    <div class="login-form-side" id="main">
+      <div class="login-form-wrapper">
+
+        <div class="login-card">
+          <!-- Card Header -->
+          <div class="login-card-header">
+            <div class="login-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6.5 10V6.75A2.75 2.75 0 0 1 9.25 4h5.5A2.75 2.75 0 0 1 17.5 6.75V10"/>
+                <path d="M4.5 10.5h15a1 1 0 0 1 1 1V15h-17v-3.5a1 1 0 0 1 1-1Z"/>
+                <path d="M6 15v4.5M18 15v4.5"/>
+              </svg>
+            </div>
+            <h2 class="login-card-title">Welcome Back</h2>
+            <p class="login-card-subtitle">Sign in to continue to SeatSync</p>
+          </div>
+
+          <!-- Alerts -->
+          <div class="login-alert login-alert-danger" ng-if="errorMessage">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div class="login-alert login-alert-success" ng-if="successMessage">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>{{ successMessage }}</span>
+          </div>
+
+          <!-- Login Form -->
+          <form name="loginForm" ng-submit="submitLogin()" novalidate>
+
+            <div class="login-form-group">
+              <label class="login-label" for="login-email">UPES Student Email</label>
+              <div class="login-input-wrapper">
+                <span class="login-input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </span>
+                <input type="email"
+                       id="login-email"
+                       name="email"
+                       class="login-input"
+                       placeholder="name@stu.upes.ac.in"
+                       ng-model="loginData.email"
+                       autocomplete="username"
+                       spellcheck="false"
+                       required>
+              </div>
+            </div>
+
+            <div class="login-form-group">
+              <label class="login-label" for="login-password">
+                <span>Password</span>
+                <span class="login-label-hint">(Default: Password123)</span>
+              </label>
+              <div class="login-input-wrapper">
+                <span class="login-input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input type="password"
+                       id="login-password"
+                       name="password"
+                       class="login-input"
+                       placeholder="Enter password"
+                       ng-model="loginData.password"
+                       autocomplete="current-password"
+                       required>
+              </div>
+            </div>
+
+            <button type="submit"
+                    class="login-submit-btn"
+                    ng-disabled="isLoading">
+              <span ng-if="!isLoading">Sign In &rarr;</span>
+              <span ng-if="isLoading">Checking credentials…</span>
+            </button>
+
+          </form>
+
+          <!-- Demo Access Divider -->
+          <div class="login-divider">
+            <div class="login-divider-line"></div>
+            <span class="login-divider-text">Demo Access</span>
+            <div class="login-divider-line"></div>
+          </div>
+
+          <!-- Demo One-Click Buttons -->
+          <div class="login-demo-section">
+            <button type="button" class="login-demo-btn" ng-click="fillAndSubmitViraj()">
+              <span class="login-demo-avatar login-demo-avatar--student">VK</span>
+              Continue as Viraj Kumar
+            </button>
+            <button type="button" class="login-demo-btn" ng-click="fillAndSubmitAdmin()">
+              <span class="login-demo-avatar login-demo-avatar--admin">A</span>
+              Continue as Library Administrator
+            </button>
+          </div>
+        </div>
+
+        <!-- Register Link -->
+        <p class="login-register-link">
+          New to SeatSync? <a href="/register.html">Create an account</a>
+        </p>
+
+        <!-- Footer Credit -->
+        <div class="login-footer">
+          <p>Advanced Web Technologies &bull; UPES Dehradun</p>
+          <p><strong style="color: var(--login-text-secondary);">Viraj Kumar</strong> &bull; SAP <span style="font-family: var(--font-mono);">590029022</span> &bull; <a href="https://github.com/viraj1737/seatsync" target="_blank" rel="noopener">GitHub ↗</a></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -200,8 +757,5 @@
   <script src="js/app.js"></script>
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
-  <script src="js/jquery-effects.js"></script>
-  <script src="js/tabs.js"></script>
-  <script src="js/theme.js"></script>
 </body>
 </html>
