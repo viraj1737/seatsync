@@ -202,6 +202,11 @@ angular.module('seatSyncApp').controller('StudentController', ['$scope', '$windo
     }, 700); // realistic sensor scan feedback
   };
 
+  // Fallback / legacy alias for exit and release seat
+  $scope.exitAndReleaseSeat = function (booking) {
+    $scope.punchCardExit();
+  };
+
   // Fallback manual cancel if needed
   $scope.manualCancel = function (booking) {
     if (!confirm('Release this seat?')) return;
