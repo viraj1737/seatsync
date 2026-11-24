@@ -23,6 +23,12 @@
   --arch-beige-border: rgba(232, 223, 209, 0.2);
   --arch-beige-glow: rgba(232, 223, 209, 0.35);
 
+  /* Primary Button / Active Pill Actions */
+  --arch-btn-bg: #e8dfd1;
+  --arch-btn-text: #0a0a0c;
+  --arch-btn-hover: #f3ece2;
+  --arch-btn-glow: rgba(232, 223, 209, 0.35);
+
   --arch-sand: #d6ccbe;              /* Secondary warm sand */
   --arch-sand-dim: #8c8579;          /* Subdued warm ash-sand */
 
@@ -36,6 +42,16 @@
   --arch-border-hover: rgba(232, 223, 209, 0.26);
   --arch-border-focus: #e8dfd1;
   --arch-blueprint-grid: rgba(232, 223, 209, 0.022);
+
+  /* Legacy & Framework Color Overrides */
+  --color-primary: #e8dfd1;
+  --color-primary-hover: #f3ece2;
+  --color-primary-subtle: rgba(232, 223, 209, 0.1);
+  --color-primary-border: rgba(232, 223, 209, 0.28);
+  --color-accent-blue: #d6ccbe;
+  --color-accent-blue-hover: #f8f7f5;
+  --color-accent-blue-subtle: rgba(232, 223, 209, 0.1);
+  --color-accent-blue-border: rgba(232, 223, 209, 0.28);
 
   /* Status Colors (Refined Warm Neutrals) */
   --status-free: #e8dfd1;            /* Warm cream badge */
@@ -54,49 +70,124 @@
   --status-occupied-bg: rgba(84, 78, 69, 0.1);
   --status-occupied-border: rgba(84, 78, 69, 0.2);
 
-  --status-selected: #f8f7f5;        /* Pure alabaster white */
+  --status-selected: #ffffff;        /* Pure alabaster white */
   --status-selected-glow: rgba(232, 223, 209, 0.4);
+
+  /* Ambient Shadows */
+  --arch-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --arch-shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+  /* Campus Hero Atmosphere */
+  --arch-hero-overlay: linear-gradient(90deg, rgba(10, 10, 12, 0.96) 0%, rgba(10, 10, 12, 0.82) 55%, rgba(10, 10, 12, 0.5) 100%);
+  --arch-hero-title: #f8f7f5;
+  --arch-hero-lead: rgba(255, 255, 255, 0.8);
+  --arch-hero-candidate: #ffffff;
+  --arch-hero-badge-bg: rgba(232, 223, 209, 0.1);
+  --arch-hero-badge-text: #e8dfd1;
+  --arch-hero-badge-border: rgba(232, 223, 209, 0.2);
+  --arch-hero-backdrop-filter: brightness(0.3) saturate(1.1);
+
+  /* Chair & Barcode */
+  --arch-chair-bg: rgba(232, 223, 209, 0.08);
+  --arch-chair-border: var(--arch-border);
+  --arch-barcode-stripe: #e8dfd1;
 }
 
 :root[data-theme="light"] {
-  --arch-canvas: #f8f7f4;
-  --arch-canvas-gradient: #f8f7f4;
+  /* Warm Alabaster Canvas & Pure White Elevated Panels */
+  --arch-canvas: #faf8f5;
+  --arch-canvas-gradient: #faf8f5;
   --arch-panel: #ffffff;
-  --arch-panel-subtle: #f2eee8;
-  --arch-panel-elevated: #e8e2d8;
+  --arch-panel-subtle: #f5f1ea;
+  --arch-panel-elevated: #ede7dc;
 
-  --arch-beige: #121215;             /* Invert to dark in light mode */
-  --arch-beige-hover: #202025;
-  --arch-beige-subtle: rgba(18, 18, 21, 0.06);
-  --arch-beige-border: rgba(18, 18, 21, 0.18);
-  --arch-beige-glow: rgba(18, 18, 21, 0.15);
+  /* Primary Accent & Action (Matte Obsidian Black in Light Mode) */
+  --arch-beige: #18181b;
+  --arch-beige-hover: #27272a;
+  --arch-beige-subtle: rgba(24, 24, 27, 0.05);
+  --arch-beige-border: rgba(24, 24, 27, 0.18);
+  --arch-beige-glow: rgba(24, 24, 27, 0.12);
 
-  --arch-sand: #423d35;
-  --arch-sand-dim: #8c8579;
+  /* Primary Button / Active Pill (Obsidian Black with Crisp White Text) */
+  --arch-btn-bg: #18181b;
+  --arch-btn-text: #ffffff;
+  --arch-btn-hover: #27272a;
+  --arch-btn-glow: rgba(24, 24, 27, 0.16);
 
-  --arch-text-primary: #121215;
-  --arch-text-secondary: #595349;
-  --arch-text-dim: #8c8579;
+  /* Warm Sandstone & Camel Accents */
+  --arch-sand: #705e49;
+  --arch-sand-dim: #8f8577;
 
-  --arch-border: rgba(18, 18, 21, 0.09);
-  --arch-border-hover: rgba(18, 18, 21, 0.2);
-  --arch-border-focus: #121215;
-  --arch-blueprint-grid: rgba(18, 18, 21, 0.03);
+  /* Crisp Typography */
+  --arch-text-primary: #121215;      /* Deep ebony */
+  --arch-text-secondary: #5a544b;    /* Warm slate-taupe */
+  --arch-text-dim: #8f8577;          /* Muted sand-grey */
 
-  --status-free: #2e2a24;
-  --status-free-bg: rgba(46, 42, 36, 0.08);
-  --status-free-border: rgba(46, 42, 36, 0.25);
+  /* Hairline Borders */
+  --arch-border: rgba(35, 30, 24, 0.1);
+  --arch-border-hover: rgba(35, 30, 24, 0.24);
+  --arch-border-focus: #18181b;
+  --arch-blueprint-grid: rgba(35, 30, 24, 0.035);
 
-  --status-reserved: #8c8375;
-  --status-reserved-bg: rgba(140, 131, 117, 0.1);
-  --status-reserved-border: rgba(140, 131, 117, 0.25);
+  /* Legacy & Framework Color Overrides in Light Theme */
+  --color-primary: #18181b;
+  --color-primary-hover: #27272a;
+  --color-primary-subtle: rgba(24, 24, 27, 0.06);
+  --color-primary-border: rgba(24, 24, 27, 0.2);
+  --color-accent-blue: #705e49;
+  --color-accent-blue-hover: #5a544b;
+  --color-accent-blue-subtle: rgba(112, 94, 73, 0.08);
+  --color-accent-blue-border: rgba(112, 94, 73, 0.2);
 
-  --status-occupied: #544e45;
-  --status-occupied-bg: rgba(84, 78, 69, 0.1);
-  --status-occupied-border: rgba(84, 78, 69, 0.2);
+  /* Status Colors */
+  --status-free: #705e49;
+  --status-free-bg: rgba(112, 94, 73, 0.08);
+  --status-free-border: rgba(112, 94, 73, 0.22);
+  --status-available: #705e49;
+  --status-available-subtle: rgba(112, 94, 73, 0.08);
+  --status-available-border: rgba(112, 94, 73, 0.22);
+  --color-available: #705e49;
 
-  --status-selected: #121215;
-  --status-selected-glow: rgba(18, 18, 21, 0.2);
+  --status-reserved: #9c8e7e;
+  --status-reserved-bg: rgba(156, 142, 126, 0.12);
+  --status-reserved-border: rgba(156, 142, 126, 0.25);
+
+  --status-occupied: #6e675e;
+  --status-occupied-bg: rgba(110, 103, 94, 0.1);
+  --status-occupied-border: rgba(110, 103, 94, 0.2);
+
+  --status-selected: #18181b;
+  --status-selected-glow: rgba(24, 24, 27, 0.18);
+
+  /* Diffuse Architectural Shadows */
+  --arch-shadow-card: 0 4px 18px rgba(45, 38, 28, 0.06);
+  --arch-shadow-panel: 0 8px 28px rgba(45, 38, 28, 0.08);
+
+  /* Campus Hero in Light Theme (Refined Frosted White & Natural Daylight) */
+  --arch-hero-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.88) 55%, rgba(255, 255, 255, 0.62) 100%);
+  --arch-hero-title: #121215;
+  --arch-hero-lead: #5a544b;
+  --arch-hero-candidate: #121215;
+  --arch-hero-badge-bg: rgba(112, 94, 73, 0.08);
+  --arch-hero-badge-text: #705e49;
+  --arch-hero-badge-border: rgba(112, 94, 73, 0.2);
+  --arch-hero-backdrop-filter: brightness(0.95) saturate(1.05);
+
+  /* Chair & Barcode */
+  --arch-chair-bg: #ece7df;
+  --arch-chair-border: rgba(35, 30, 24, 0.12);
+  --arch-barcode-stripe: #18181b;
+
+  /* Overriding general modern-ui variables for complete cohesion */
+  --bg-canvas: #faf8f5 !important;
+  --bg-surface-1: #ffffff !important;
+  --bg-surface-2: #f5f1ea !important;
+  --bg-surface-3: #ede7dc !important;
+  --bg-overlay: rgba(250, 248, 245, 0.92) !important;
+  --text-primary: #121215 !important;
+  --text-secondary: #5a544b !important;
+  --border-default: rgba(35, 30, 24, 0.1) !important;
+  --border-subtle: rgba(35, 30, 24, 0.06) !important;
 }
 
 body {
@@ -113,7 +204,7 @@ body {
   overflow: hidden;
   margin-bottom: 22px;
   border: 1px solid var(--arch-border);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--arch-shadow-panel);
 }
 
 .campus-hero-image-backdrop {
@@ -122,18 +213,15 @@ body {
   background-image: url('../assets/images/upes-library-hero.jpg');
   background-size: cover;
   background-position: center 35%;
-  filter: brightness(0.3) saturate(1.1);
+  filter: var(--arch-hero-backdrop-filter);
+  transition: filter 200ms ease;
 }
 
 .campus-hero-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(10, 10, 12, 0.96) 0%,
-    rgba(10, 10, 12, 0.82) 55%,
-    rgba(10, 10, 12, 0.5) 100%
-  );
+  background: var(--arch-hero-overlay);
+  transition: background 200ms ease;
 }
 
 .campus-hero-content {
@@ -153,11 +241,11 @@ body {
   gap: 7px;
   padding: 4px 11px;
   border-radius: 20px;
-  background: rgba(232, 223, 209, 0.1);
-  border: 1px solid var(--arch-beige-border);
+  background: var(--arch-hero-badge-bg);
+  border: 1px solid var(--arch-hero-badge-border);
   font-size: 11px;
   font-weight: 500;
-  color: var(--arch-beige);
+  color: var(--arch-hero-badge-text);
   backdrop-filter: blur(8px);
   margin-bottom: 8px;
 }
@@ -166,15 +254,15 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--arch-beige);
-  box-shadow: 0 0 8px var(--arch-beige);
+  background: var(--arch-hero-badge-text);
+  box-shadow: 0 0 8px var(--arch-hero-badge-text);
 }
 
 .campus-hero-title {
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.025em;
-  color: var(--arch-text-primary);
+  color: var(--arch-hero-title);
   margin-bottom: 4px;
 }
 
@@ -190,8 +278,8 @@ body {
 .campus-student-tag {
   font-family: var(--font-mono);
   font-weight: 600;
-  color: var(--arch-beige);
-  background: rgba(232, 223, 209, 0.12);
+  color: var(--arch-sand);
+  background: var(--arch-panel-subtle);
   padding: 2px 8px;
   border-radius: 5px;
   border: 1px solid var(--arch-border);
@@ -203,17 +291,17 @@ body {
   gap: 8px;
   padding: 8px 16px;
   border-radius: 8px;
-  background: var(--arch-beige);
-  color: #0a0a0c !important;
+  background: var(--arch-btn-bg);
+  color: var(--arch-btn-text) !important;
   font-size: 13px;
   font-weight: 650;
   cursor: pointer;
   border: none;
-  box-shadow: 0 4px 14px var(--arch-beige-glow);
+  box-shadow: 0 4px 14px var(--arch-btn-glow);
   transition: all 160ms ease;
 }
 .btn-view-pass-ribbon:hover {
-  background: var(--arch-beige-hover);
+  background: var(--arch-btn-hover);
   transform: translateY(-1px);
 }
 
@@ -226,7 +314,7 @@ body {
   border-radius: 14px;
   padding: 18px 22px;
   margin-bottom: 22px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--arch-shadow-card);
 }
 
 .studio-ribbon-controls {
@@ -249,7 +337,7 @@ body {
   gap: 6px;
 }
 
-/* Floor Picker (Warm Beige Active State) */
+/* Floor Picker (Warm Beige / Obsidian Active State) */
 .arch-floor-picker {
   display: inline-flex;
   background: var(--arch-panel-subtle);
@@ -281,10 +369,10 @@ body {
 }
 
 .arch-floor-btn.active {
-  background: var(--arch-beige);
-  color: #0a0a0c !important;
+  background: var(--arch-btn-bg);
+  color: var(--arch-btn-text) !important;
   font-weight: 700;
-  box-shadow: 0 2px 10px var(--arch-beige-glow);
+  box-shadow: 0 2px 10px var(--arch-btn-glow);
 }
 
 .floor-level-badge {
@@ -293,13 +381,13 @@ body {
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(128, 128, 128, 0.15);
   color: inherit;
 }
 
 .arch-floor-btn.active .floor-level-badge {
-  background: rgba(0, 0, 0, 0.15);
-  color: #0a0a0c;
+  background: rgba(128, 128, 128, 0.25);
+  color: inherit;
 }
 
 /* Date Selector */
@@ -317,7 +405,7 @@ body {
   transition: border-color 140ms ease;
 }
 .arch-date-input:focus {
-  border-color: var(--arch-beige);
+  border-color: var(--arch-border-focus);
   box-shadow: 0 0 0 2px var(--arch-beige-subtle);
 }
 
@@ -352,11 +440,11 @@ body {
 }
 
 .arch-slot-chip.active {
-  background: var(--arch-beige);
-  border-color: var(--arch-beige);
-  color: #0a0a0c !important;
+  background: var(--arch-btn-bg);
+  border-color: var(--arch-btn-bg);
+  color: var(--arch-btn-text) !important;
   font-weight: 650;
-  box-shadow: 0 2px 12px var(--arch-beige-glow);
+  box-shadow: 0 2px 12px var(--arch-btn-glow);
 }
 
 .arch-slot-chip .slot-period {
@@ -452,6 +540,12 @@ body {
   font-family: var(--font-mono);
 }
 
+:root[data-theme="light"] .architectural-window-wall {
+  background: linear-gradient(180deg, rgba(112, 94, 73, 0.05) 0%, transparent 100%);
+  border-color: rgba(112, 94, 73, 0.22);
+  color: var(--arch-sand);
+}
+
 .window-wall-glass-lines {
   display: flex;
   gap: 6px;
@@ -461,6 +555,10 @@ body {
   height: 2px;
   background: rgba(232, 223, 209, 0.35);
   border-radius: 1px;
+}
+
+:root[data-theme="light"] .window-glass-pane {
+  background: rgba(112, 94, 73, 0.3);
 }
 
 /* ==========================================================================
@@ -503,8 +601,13 @@ body {
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--arch-shadow-card);
   transition: all 160ms ease;
+}
+
+:root[data-theme="light"] .desk-surface {
+  background: #ffffff;
+  border-color: var(--arch-border);
 }
 
 /* Warm Walnut-Sand Felt Divider */
@@ -516,6 +619,10 @@ body {
   height: 3px;
   background: rgba(232, 223, 209, 0.2);
   border-radius: 2px;
+}
+
+:root[data-theme="light"] .desk-partition-divider {
+  background: rgba(35, 30, 24, 0.12);
 }
 
 /* Stencil Number */
@@ -580,12 +687,12 @@ body {
   width: 44px;
   height: 12px;
   border-radius: 3px 3px 7px 7px;
-  background: rgba(232, 223, 209, 0.08);
-  border: 1px solid var(--arch-border);
+  background: var(--arch-chair-bg);
+  border: 1px solid var(--arch-chair-border);
   margin-top: 5px;
   position: relative;
   transition: all 160ms ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
 
 .ergonomic-chair-silhouette::before {
@@ -595,7 +702,7 @@ body {
   left: 8px;
   right: 8px;
   height: 2px;
-  background: rgba(232, 223, 209, 0.18);
+  background: var(--arch-border);
   border-radius: 1px;
 }
 
@@ -605,57 +712,67 @@ body {
   border-color: var(--arch-border);
 }
 
+:root[data-theme="light"] .desk--available .desk-surface {
+  background: #ffffff;
+}
+
 .desk--available .desk-status-pill {
-  color: var(--arch-beige);
+  color: var(--status-free);
   background: var(--status-free-bg);
   border: 1px solid var(--status-free-border);
 }
 
 .desk--available .desk-status-dot-sm {
-  background: var(--arch-beige);
-  box-shadow: 0 0 6px var(--arch-beige);
+  background: var(--status-free);
+  box-shadow: 0 0 6px var(--status-free);
 }
 
 .desk--available:hover .desk-surface {
   border-color: var(--arch-border-hover);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--arch-shadow-card);
 }
 
 .desk--available:hover .ergonomic-chair-silhouette {
   transform: translateY(2px);
-  background: rgba(232, 223, 209, 0.16);
+  background: var(--arch-beige-subtle);
   border-color: var(--arch-beige-border);
 }
 
-/* ---- STATE: SELECTED (Crisp Alabaster White & Warm Champagne Glow) ---- */
+/* ---- STATE: SELECTED (Crisp Contrast & Glow) ---- */
 .desk--selected .desk-surface {
   background: rgba(232, 223, 209, 0.12) !important;
   border-color: var(--arch-beige) !important;
   box-shadow: 0 0 0 2px var(--arch-beige), 0 12px 32px var(--arch-beige-glow) !important;
 }
 
+:root[data-theme="light"] .desk--selected .desk-surface {
+  background: #ffffff !important;
+  border-color: #18181b !important;
+  box-shadow: 0 0 0 2px #18181b, 0 10px 24px rgba(24, 24, 27, 0.14) !important;
+}
+
 .desk--selected .desk-status-pill {
-  color: #0a0a0c !important;
-  background: var(--arch-beige) !important;
+  color: var(--arch-btn-text) !important;
+  background: var(--arch-btn-bg) !important;
   font-weight: 700;
 }
 
 .desk--selected .desk-status-dot-sm {
-  background: #0a0a0c !important;
+  background: var(--arch-btn-text) !important;
 }
 
 .desk--selected .desk-stencil-number {
-  color: #ffffff !important;
+  color: var(--arch-text-primary) !important;
 }
 
 .desk--selected .desk-partition-divider {
-  background: var(--arch-beige) !important;
+  background: var(--arch-btn-bg) !important;
 }
 
 .desk--selected .ergonomic-chair-silhouette {
   transform: translateY(3px) !important;
-  background: var(--arch-beige) !important;
-  border-color: var(--arch-beige) !important;
+  background: var(--arch-btn-bg) !important;
+  border-color: var(--arch-btn-bg) !important;
 }
 
 /* ---- STATE: RESERVED ---- */
@@ -778,8 +895,8 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--arch-beige);
-  box-shadow: 0 0 12px var(--arch-beige);
+  background: var(--arch-sand);
+  box-shadow: 0 0 10px var(--arch-sand);
 }
 
 .inspector-empty-title {
@@ -807,6 +924,10 @@ body {
   font-size: 11px;
 }
 
+:root[data-theme="light"] .library-telemetry-box {
+  background: #f5f1ea;
+}
+
 .telemetry-row {
   display: flex;
   justify-content: space-between;
@@ -816,7 +937,7 @@ body {
 .telemetry-val {
   font-family: var(--font-mono);
   font-weight: 600;
-  color: var(--arch-beige);
+  color: var(--arch-sand);
 }
 
 /* Active Desk Selection Pass */
@@ -854,7 +975,7 @@ body {
   border-radius: 6px;
   background: var(--status-free-bg);
   border: 1px solid var(--status-free-border);
-  color: var(--arch-beige);
+  color: var(--status-free);
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -878,6 +999,9 @@ body {
   gap: 6px;
   color: var(--arch-text-secondary);
 }
+:root[data-theme="light"] .desk-perk-chip {
+  background: #f5f1ea;
+}
 .desk-perk-chip strong {
   color: var(--arch-text-primary);
 }
@@ -894,6 +1018,10 @@ body {
   font-size: 12px;
 }
 
+:root[data-theme="light"] .pass-ticket-details {
+  background: #f5f1ea;
+}
+
 .ticket-detail-row {
   display: flex;
   justify-content: space-between;
@@ -907,13 +1035,13 @@ body {
   color: var(--arch-text-primary);
 }
 
-/* Primary Warm Beige CTA */
+/* Primary Warm Beige / Obsidian CTA */
 .btn-lock-desk {
   width: 100%;
   height: 44px;
   border-radius: 9px;
-  background: var(--arch-beige);
-  color: #0a0a0c !important;
+  background: var(--arch-btn-bg);
+  color: var(--arch-btn-text) !important;
   border: none;
   font-family: var(--font-sans);
   font-size: 14px;
@@ -923,12 +1051,12 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 16px var(--arch-beige-glow);
+  box-shadow: 0 4px 16px var(--arch-btn-glow);
   transition: all 140ms ease;
 }
 
 .btn-lock-desk:hover:not(:disabled) {
-  background: var(--arch-beige-hover);
+  background: var(--arch-btn-hover);
   transform: translateY(-1px);
 }
 .btn-lock-desk:active:not(:disabled) {
@@ -960,7 +1088,11 @@ body {
   border: 1px solid var(--arch-border) !important;
   border-radius: 14px !important;
   padding: 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: var(--arch-shadow-card) !important;
+}
+
+:root[data-theme="light"] .digital-credential-card {
+  background-color: #ffffff !important;
 }
 
 .credential-header {
@@ -981,6 +1113,10 @@ body {
   border-radius: 10px !important;
 }
 
+:root[data-theme="light"] .credential-details-grid {
+  background-color: #f5f1ea !important;
+}
+
 .credential-item-label {
   color: var(--arch-sand-dim) !important;
 }
@@ -995,12 +1131,16 @@ body {
   border-radius: 10px !important;
 }
 
+:root[data-theme="light"] .dark-barcode-card {
+  background-color: #f5f1ea !important;
+}
+
 .dark-barcode-stripes {
-  background: repeating-linear-gradient(90deg, #e8dfd1, #e8dfd1 2px, transparent 2px, transparent 4px, #e8dfd1 4px, #e8dfd1 7px, transparent 7px, transparent 10px) !important;
+  background: repeating-linear-gradient(90deg, var(--arch-barcode-stripe), var(--arch-barcode-stripe) 2px, transparent 2px, transparent 4px, var(--arch-barcode-stripe) 4px, var(--arch-barcode-stripe) 7px, transparent 7px, transparent 10px) !important;
 }
 
 .dark-barcode-label {
-  color: var(--arch-beige) !important;
+  color: var(--arch-barcode-stripe) !important;
   font-family: var(--font-mono) !important;
 }
 
@@ -1010,27 +1150,31 @@ body {
   border-radius: 10px !important;
 }
 
+:root[data-theme="light"] .turnstile-iot-panel {
+  background-color: #f5f1ea !important;
+}
+
 .turnstile-beacon {
-  background-color: rgba(232, 223, 209, 0.1) !important;
-  color: var(--arch-beige) !important;
-  border: 1px solid var(--arch-beige-border) !important;
+  background-color: var(--status-free-bg) !important;
+  color: var(--status-free) !important;
+  border: 1px solid var(--status-free-border) !important;
 }
 
 .pulse-dot {
-  background-color: var(--arch-beige) !important;
-  box-shadow: 0 0 6px var(--arch-beige) !important;
+  background-color: var(--status-free) !important;
+  box-shadow: 0 0 6px var(--status-free) !important;
 }
 
 .btn-primary {
-  background-color: var(--arch-beige) !important;
-  color: #0a0a0c !important;
+  background-color: var(--arch-btn-bg) !important;
+  color: var(--arch-btn-text) !important;
   border: none !important;
   font-weight: 700 !important;
-  box-shadow: 0 4px 16px var(--arch-beige-glow) !important;
+  box-shadow: 0 4px 16px var(--arch-btn-glow) !important;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--arch-beige-hover) !important;
+  background-color: var(--arch-btn-hover) !important;
   transform: translateY(-1px);
 }
 
@@ -1040,7 +1184,82 @@ body {
   border: 1px solid var(--arch-border) !important;
 }
 
+:root[data-theme="light"] .btn-secondary {
+  background-color: #f5f1ea !important;
+}
+
 .btn-secondary:hover:not(:disabled) {
   border-color: var(--arch-border-hover) !important;
-  color: var(--arch-beige) !important;
+  color: var(--arch-text-primary) !important;
+}
+
+/* ==========================================================================
+   8. Global Architectural Navigation Bar & Header Tabs
+   ========================================================================== */
+.app-header {
+  background: var(--arch-canvas) !important;
+  border-bottom: 1px solid var(--arch-border) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.brand-badge {
+  background: var(--arch-btn-bg) !important;
+  color: var(--arch-btn-text) !important;
+  border: 1px solid var(--arch-border) !important;
+}
+
+.brand-name {
+  color: var(--arch-text-primary) !important;
+}
+
+.brand-campus-pill {
+  background: var(--arch-panel-subtle) !important;
+  color: var(--arch-sand) !important;
+  border: 1px solid var(--arch-border) !important;
+}
+
+.tabs-list {
+  background: var(--arch-panel-subtle) !important;
+  border: 1px solid var(--arch-border) !important;
+}
+
+.tabs-trigger {
+  color: var(--arch-text-secondary) !important;
+}
+
+.tabs-trigger:hover {
+  color: var(--arch-text-primary) !important;
+}
+
+.tabs-trigger.active {
+  background: var(--arch-panel) !important;
+  color: var(--arch-text-primary) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+:root[data-theme="light"] .tabs-trigger.active {
+  background: #ffffff !important;
+  color: #121215 !important;
+  box-shadow: 0 2px 8px rgba(35, 30, 24, 0.08) !important;
+}
+
+.user-avatar-circle {
+  background: var(--arch-btn-bg) !important;
+  color: var(--arch-btn-text) !important;
+}
+
+.user-account-name {
+  color: var(--arch-text-primary) !important;
+}
+
+.role-tag {
+  background: var(--status-free-bg) !important;
+  color: var(--status-free) !important;
+  border-color: var(--status-free-border) !important;
+}
+
+.theme-toggle-btn {
+  background: var(--arch-panel-subtle) !important;
+  border: 1px solid var(--arch-border) !important;
+  color: var(--arch-text-primary) !important;
 }

@@ -144,7 +144,7 @@
               </div>
               <h1 class="campus-hero-title">Reading &amp; Research Hall Allotment</h1>
               <div class="campus-hero-desc">
-                <span>Candidate: <strong style="color: #fff;">{{ currentUser.name || 'Viraj Kumar' }}</strong></span>
+                <span>Candidate: <strong style="color: var(--arch-hero-candidate, #fff);">{{ currentUser.name || 'Viraj Kumar' }}</strong></span>
                 <span>&bull;</span>
                 <span>SAP ID: <span class="campus-student-tag">{{ currentUser.studentId || '590029022' }}</span></span>
                 <span>&bull;</span>
@@ -307,7 +307,7 @@
                   <span>Available</span>
                 </div>
                 <div class="legend-pill-item">
-                  <span class="legend-dot-indicator" style="background: #ffffff; box-shadow: 0 0 6px #ffffff;"></span>
+                  <span class="legend-dot-indicator" style="background: var(--status-selected); box-shadow: 0 0 6px var(--status-selected-glow);"></span>
                   <span>Selected</span>
                 </div>
                 <div class="legend-pill-item">
