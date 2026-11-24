@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/modern-ui.css">
   <link rel="stylesheet" href="css/vercel-reference.css">
+  <link rel="stylesheet" href="css/architectural-ui.css">
 </head>
 <body ng-controller="AuthController">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -85,29 +86,27 @@
 
   <main id="main" class="app-main">
     <div class="container">
-      <section id="overview" class="hero-section" data-enter>
-        <div class="hero-copy">
-          <p class="label-meta" style="margin-bottom: var(--space-4);">Live desk availability</p>
-          <h1 class="hero-title">Desks at UPES Central Library.</h1>
-          <div class="hero-actions">
-            <a href="/student.html" class="btn btn-primary btn-lg">View available desks</a>
-            <a href="/login.html" class="btn btn-secondary btn-lg">Sign in</a>
+      <!-- Cinematic Campus Hero Section -->
+      <section id="overview" class="campus-hero-banner" style="margin-bottom: var(--space-12);" data-enter>
+        <div class="campus-hero-image-backdrop" aria-hidden="true"></div>
+        <div class="campus-hero-gradient-overlay" aria-hidden="true"></div>
+        <div class="campus-hero-content" style="padding: var(--space-12) var(--space-8);">
+          <div style="max-width: 640px;">
+            <div class="campus-meta-badge">
+              <span class="campus-pulse-dot"></span>
+              <span>UPES Central Library &bull; Bidholi Campus</span>
+            </div>
+            <h1 class="campus-hero-title" style="font-size: 38px; line-height: 1.15; margin-bottom: var(--space-3);">
+              Find your ideal study desk at UPES Central Library.
+            </h1>
+            <p style="font-size: 15px; color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin-bottom: var(--space-6);">
+              Live 32-desk architectural allotment, 2-hour reserved study windows, and automated RFID turnstile exit for engineering and management scholars.
+            </p>
+            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+              <a href="/student.html" class="btn btn-primary btn-lg">View available desks &rarr;</a>
+              <a href="/login.html" class="btn btn-secondary btn-lg">Student sign in</a>
+            </div>
           </div>
-        </div>
-
-        <div class="hero-mark-wrap" aria-hidden="true">
-          <div class="hero-glow"></div>
-          <div class="hero-mark">
-            <span></span><span></span><span class="is-active"></span>
-            <span></span><span class="is-active"></span><span></span>
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div class="hero-points">
-          <span>See which desks are free.</span>
-          <span>Reserve a two-hour slot.</span>
-          <span>Punch your card at the exit gate.</span>
         </div>
       </section>
 
@@ -130,8 +129,8 @@
           </div>
           <div class="metric-card">
             <span class="metric-label">Double-book guard</span>
-            <span class="metric-value" style="color: var(--color-accent-blue); font-size: 24px;">HTTP 409</span>
-            <span class="metric-subtext">Rejects conflicting reservations</span>
+            <span class="metric-value" style="color: var(--color-available); font-size: 22px;">Atomic Lock</span>
+            <span class="metric-subtext">Zero double-booking guarantee</span>
           </div>
         </div>
       </section>
