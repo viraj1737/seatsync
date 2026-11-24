@@ -1,193 +1,198 @@
 /**
- * SeatSync — Black, White & Warm Beige Architectural Library Design System
- * Inspired by luxury architectural monographs, Nordic minimalism, and high-end editorial portfolios.
- * Palette: Deep Matte Obsidian (#0a0a0c), Crisp Alabaster White (#f8f7f5), and Warm Architectural Beige (#e8dfd1).
- * Zero cheap purple/blue AI gradients, zero radioactive neon greens.
+ * SeatSync — Ultra-Premium Monochrome & Pure White Architectural Design System
+ * Inspired by Apple Pro, Leica, Vercel, and Linear luxury craft.
+ * Palette: Pure Crisp White (#ffffff), Deep Carbon Obsidian (#09090b), and Delicate Platinum Cashmere.
+ * Zero generic AI gradients, zero muddy browns, zero radioactive neons.
  */
 
 /* ==========================================================================
-   1. The Black, White & Warm Beige Design Tokens
+   1. The Ultra-Premium Pure White & Obsidian Tokens
    ========================================================================== */
 :root {
   /* Carbon Black & Deep Obsidian Foundations */
-  --arch-canvas: #0a0a0c;
-  --arch-canvas-gradient: #0a0a0c;
-  --arch-panel: #121215;
-  --arch-panel-subtle: #18181c;
-  --arch-panel-elevated: #202026;
+  --arch-canvas: #09090b;
+  --arch-canvas-gradient: #09090b;
+  --arch-panel: #111115;
+  --arch-panel-subtle: #18181e;
+  --arch-panel-elevated: #22222a;
 
-  /* Luxury Architectural Beige & Warm Sand Tones */
-  --arch-beige: #e8dfd1;             /* Primary luxury beige / champagne */
-  --arch-beige-hover: #f3ece2;       /* Bright warm cream */
-  --arch-beige-subtle: rgba(232, 223, 209, 0.08);
-  --arch-beige-border: rgba(232, 223, 209, 0.2);
-  --arch-beige-glow: rgba(232, 223, 209, 0.35);
+  /* Pure White Primary Hero & Action (Ultra-Premium Tech Luxury) */
+  --arch-white: #ffffff;
+  --arch-white-glow: rgba(255, 255, 255, 0.25);
+  --arch-white-subtle: rgba(255, 255, 255, 0.08);
 
-  /* Primary Button / Active Pill Actions */
-  --arch-btn-bg: #e8dfd1;
-  --arch-btn-text: #0a0a0c;
-  --arch-btn-hover: #f3ece2;
-  --arch-btn-glow: rgba(232, 223, 209, 0.35);
+  /* Primary Button / Active Pill: PURE WHITE with JET BLACK TEXT */
+  --arch-btn-bg: #ffffff;
+  --arch-btn-text: #09090b;
+  --arch-btn-hover: #f4f4f5;
+  --arch-btn-glow: rgba(255, 255, 255, 0.22);
 
-  --arch-sand: #d6ccbe;              /* Secondary warm sand */
-  --arch-sand-dim: #8c8579;          /* Subdued warm ash-sand */
+  /* Refined Architectural Accents */
+  --arch-beige: #ffffff;             /* Primary accent is Pure Crisp White */
+  --arch-beige-hover: #f4f4f5;
+  --arch-beige-subtle: rgba(255, 255, 255, 0.08);
+  --arch-beige-border: rgba(255, 255, 255, 0.2);
+  --arch-beige-glow: rgba(255, 255, 255, 0.25);
 
-  /* Pure & Warm Typography */
-  --arch-text-primary: #f8f7f5;      /* Crisp warm alabaster white */
-  --arch-text-secondary: #c7c1b7;    /* Warm beige-tinted grey */
-  --arch-text-dim: #7a746a;          /* Muted ash-beige */
+  --arch-sand: #d4cfc7;              /* Delicate platinum-cashmere */
+  --arch-sand-dim: #8e8880;          /* Subdued warm ash */
 
-  /* Hairline Architectural Borders */
-  --arch-border: rgba(232, 223, 209, 0.1);
-  --arch-border-hover: rgba(232, 223, 209, 0.26);
-  --arch-border-focus: #e8dfd1;
-  --arch-blueprint-grid: rgba(232, 223, 209, 0.022);
+  /* Crisp Pure White Typography */
+  --arch-text-primary: #ffffff;      /* Pure crisp white */
+  --arch-text-secondary: #a1a1aa;    /* Refined silver */
+  --arch-text-dim: #71717a;          /* Muted ash */
+
+  /* Hairline Architectural Glass Borders */
+  --arch-border: rgba(255, 255, 255, 0.1);
+  --arch-border-hover: rgba(255, 255, 255, 0.25);
+  --arch-border-focus: #ffffff;
+  --arch-blueprint-grid: rgba(255, 255, 255, 0.03);
 
   /* Legacy & Framework Color Overrides */
-  --color-primary: #e8dfd1;
-  --color-primary-hover: #f3ece2;
-  --color-primary-subtle: rgba(232, 223, 209, 0.1);
-  --color-primary-border: rgba(232, 223, 209, 0.28);
-  --color-accent-blue: #d6ccbe;
-  --color-accent-blue-hover: #f8f7f5;
-  --color-accent-blue-subtle: rgba(232, 223, 209, 0.1);
-  --color-accent-blue-border: rgba(232, 223, 209, 0.28);
+  --color-primary: #ffffff;
+  --color-primary-hover: #f4f4f5;
+  --color-primary-subtle: rgba(255, 255, 255, 0.1);
+  --color-primary-border: rgba(255, 255, 255, 0.28);
+  --color-accent-blue: #ffffff;
+  --color-accent-blue-hover: #f4f4f5;
+  --color-accent-blue-subtle: rgba(255, 255, 255, 0.1);
+  --color-accent-blue-border: rgba(255, 255, 255, 0.28);
 
-  /* Status Colors (Refined Warm Neutrals) */
-  --status-free: #e8dfd1;            /* Warm cream badge */
-  --status-free-bg: rgba(232, 223, 209, 0.1);
-  --status-free-border: rgba(232, 223, 209, 0.28);
-  --status-available: #e8dfd1;
-  --status-available-subtle: rgba(232, 223, 209, 0.1);
-  --status-available-border: rgba(232, 223, 209, 0.28);
-  --color-available: #e8dfd1;
+  /* Status Colors (Ultra-Clean Monochromatic Contrast) */
+  --status-free: #ffffff;            /* Pure white badge */
+  --status-free-bg: rgba(255, 255, 255, 0.08);
+  --status-free-border: rgba(255, 255, 255, 0.22);
+  --status-available: #ffffff;
+  --status-available-subtle: rgba(255, 255, 255, 0.08);
+  --status-available-border: rgba(255, 255, 255, 0.22);
+  --color-available: #ffffff;
 
-  --status-reserved: #8c8375;        /* Subdued warm bronze-sand */
-  --status-reserved-bg: rgba(140, 131, 117, 0.1);
-  --status-reserved-border: rgba(140, 131, 117, 0.25);
+  --status-reserved: #8e8880;        /* Subdued platinum-sand */
+  --status-reserved-bg: rgba(142, 136, 128, 0.12);
+  --status-reserved-border: rgba(142, 136, 128, 0.25);
 
-  --status-occupied: #544e45;        /* Muted deep carbon ash */
-  --status-occupied-bg: rgba(84, 78, 69, 0.1);
-  --status-occupied-border: rgba(84, 78, 69, 0.2);
+  --status-occupied: #52525b;        /* Muted deep carbon ash */
+  --status-occupied-bg: rgba(82, 82, 91, 0.12);
+  --status-occupied-border: rgba(82, 82, 91, 0.22);
 
-  --status-selected: #ffffff;        /* Pure alabaster white */
-  --status-selected-glow: rgba(232, 223, 209, 0.4);
+  --status-selected: #ffffff;        /* Pure luminous white */
+  --status-selected-glow: rgba(255, 255, 255, 0.4);
 
   /* Ambient Shadows */
-  --arch-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
-  --arch-shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --arch-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --arch-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.45);
 
   /* Campus Hero Atmosphere */
-  --arch-hero-overlay: linear-gradient(90deg, rgba(10, 10, 12, 0.96) 0%, rgba(10, 10, 12, 0.82) 55%, rgba(10, 10, 12, 0.5) 100%);
-  --arch-hero-title: #f8f7f5;
-  --arch-hero-lead: rgba(255, 255, 255, 0.8);
+  --arch-hero-overlay: linear-gradient(90deg, rgba(9, 9, 11, 0.96) 0%, rgba(9, 9, 11, 0.82) 55%, rgba(9, 9, 11, 0.5) 100%);
+  --arch-hero-title: #ffffff;
+  --arch-hero-lead: rgba(255, 255, 255, 0.85);
   --arch-hero-candidate: #ffffff;
-  --arch-hero-badge-bg: rgba(232, 223, 209, 0.1);
-  --arch-hero-badge-text: #e8dfd1;
-  --arch-hero-badge-border: rgba(232, 223, 209, 0.2);
-  --arch-hero-backdrop-filter: brightness(0.3) saturate(1.1);
+  --arch-hero-badge-bg: rgba(255, 255, 255, 0.1);
+  --arch-hero-badge-text: #ffffff;
+  --arch-hero-badge-border: rgba(255, 255, 255, 0.22);
+  --arch-hero-backdrop-filter: brightness(0.35) saturate(1.1);
 
   /* Chair & Barcode */
-  --arch-chair-bg: rgba(232, 223, 209, 0.08);
-  --arch-chair-border: var(--arch-border);
-  --arch-barcode-stripe: #e8dfd1;
+  --arch-chair-bg: rgba(255, 255, 255, 0.08);
+  --arch-chair-border: rgba(255, 255, 255, 0.12);
+  --arch-barcode-stripe: #ffffff;
 }
 
 :root[data-theme="light"] {
-  /* Warm Alabaster Canvas & Pure White Elevated Panels */
-  --arch-canvas: #faf8f5;
-  --arch-canvas-gradient: #faf8f5;
+  /* Crisp Porcelain White Foundations */
+  --arch-canvas: #ffffff;
+  --arch-canvas-gradient: #ffffff;
   --arch-panel: #ffffff;
-  --arch-panel-subtle: #f5f1ea;
-  --arch-panel-elevated: #ede7dc;
+  --arch-panel-subtle: #f8f8fa;
+  --arch-panel-elevated: #f0f0f4;
 
-  /* Primary Accent & Action (Matte Obsidian Black in Light Mode) */
-  --arch-beige: #18181b;
-  --arch-beige-hover: #27272a;
-  --arch-beige-subtle: rgba(24, 24, 27, 0.05);
-  --arch-beige-border: rgba(24, 24, 27, 0.18);
-  --arch-beige-glow: rgba(24, 24, 27, 0.12);
+  /* Primary Accent & Action */
+  --arch-beige: #09090b;
+  --arch-beige-hover: #18181b;
+  --arch-beige-subtle: rgba(9, 9, 11, 0.05);
+  --arch-beige-border: rgba(9, 9, 11, 0.18);
+  --arch-beige-glow: rgba(9, 9, 11, 0.12);
 
-  /* Primary Button / Active Pill (Obsidian Black with Crisp White Text) */
-  --arch-btn-bg: #18181b;
+  /* Primary Button / Active Pill: SOLID JET OBSIDIAN with CRISP PURE WHITE TEXT */
+  --arch-btn-bg: #09090b;
   --arch-btn-text: #ffffff;
   --arch-btn-hover: #27272a;
-  --arch-btn-glow: rgba(24, 24, 27, 0.16);
+  --arch-btn-glow: rgba(9, 9, 11, 0.18);
 
-  /* Warm Sandstone & Camel Accents */
-  --arch-sand: #705e49;
-  --arch-sand-dim: #8f8577;
+  /* Refined Platinum & Slate Accents */
+  --arch-sand: #475569;
+  --arch-sand-dim: #94a3b8;
 
-  /* Crisp Typography */
-  --arch-text-primary: #121215;      /* Deep ebony */
-  --arch-text-secondary: #5a544b;    /* Warm slate-taupe */
-  --arch-text-dim: #8f8577;          /* Muted sand-grey */
+  /* Razor-Sharp Pure Typography */
+  --arch-text-primary: #09090b;      /* Deepest crisp obsidian */
+  --arch-text-secondary: #475569;    /* Clean slate */
+  --arch-text-dim: #94a3b8;          /* Muted platinum */
 
   /* Hairline Borders */
-  --arch-border: rgba(35, 30, 24, 0.1);
-  --arch-border-hover: rgba(35, 30, 24, 0.24);
-  --arch-border-focus: #18181b;
-  --arch-blueprint-grid: rgba(35, 30, 24, 0.035);
+  --arch-border: rgba(0, 0, 0, 0.08);
+  --arch-border-hover: rgba(0, 0, 0, 0.2);
+  --arch-border-focus: #09090b;
+  --arch-blueprint-grid: rgba(0, 0, 0, 0.03);
 
   /* Legacy & Framework Color Overrides in Light Theme */
-  --color-primary: #18181b;
-  --color-primary-hover: #27272a;
-  --color-primary-subtle: rgba(24, 24, 27, 0.06);
-  --color-primary-border: rgba(24, 24, 27, 0.2);
-  --color-accent-blue: #705e49;
-  --color-accent-blue-hover: #5a544b;
-  --color-accent-blue-subtle: rgba(112, 94, 73, 0.08);
-  --color-accent-blue-border: rgba(112, 94, 73, 0.2);
+  --color-primary: #09090b;
+  --color-primary-hover: #18181b;
+  --color-primary-subtle: rgba(9, 9, 11, 0.06);
+  --color-primary-border: rgba(9, 9, 11, 0.2);
+  --color-accent-blue: #09090b;
+  --color-accent-blue-hover: #475569;
+  --color-accent-blue-subtle: rgba(9, 9, 11, 0.08);
+  --color-accent-blue-border: rgba(9, 9, 11, 0.2);
 
   /* Status Colors */
-  --status-free: #705e49;
-  --status-free-bg: rgba(112, 94, 73, 0.08);
-  --status-free-border: rgba(112, 94, 73, 0.22);
-  --status-available: #705e49;
-  --status-available-subtle: rgba(112, 94, 73, 0.08);
-  --status-available-border: rgba(112, 94, 73, 0.22);
-  --color-available: #705e49;
+  --status-free: #09090b;
+  --status-free-bg: rgba(9, 9, 11, 0.06);
+  --status-free-border: rgba(9, 9, 11, 0.18);
+  --status-available: #09090b;
+  --status-available-subtle: rgba(9, 9, 11, 0.06);
+  --status-available-border: rgba(9, 9, 11, 0.18);
+  --color-available: #09090b;
 
-  --status-reserved: #9c8e7e;
-  --status-reserved-bg: rgba(156, 142, 126, 0.12);
-  --status-reserved-border: rgba(156, 142, 126, 0.25);
+  --status-reserved: #64748b;
+  --status-reserved-bg: rgba(100, 116, 139, 0.1);
+  --status-reserved-border: rgba(100, 116, 139, 0.2);
 
-  --status-occupied: #6e675e;
-  --status-occupied-bg: rgba(110, 103, 94, 0.1);
-  --status-occupied-border: rgba(110, 103, 94, 0.2);
+  --status-occupied: #94a3b8;
+  --status-occupied-bg: rgba(148, 163, 184, 0.1);
+  --status-occupied-border: rgba(148, 163, 184, 0.2);
 
-  --status-selected: #18181b;
-  --status-selected-glow: rgba(24, 24, 27, 0.18);
+  --status-selected: #09090b;
+  --status-selected-glow: rgba(9, 9, 11, 0.18);
 
   /* Diffuse Architectural Shadows */
-  --arch-shadow-card: 0 4px 18px rgba(45, 38, 28, 0.06);
-  --arch-shadow-panel: 0 8px 28px rgba(45, 38, 28, 0.08);
+  --arch-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --arch-shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.08);
 
-  /* Campus Hero in Light Theme (Refined Frosted White & Natural Daylight) */
-  --arch-hero-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.88) 55%, rgba(255, 255, 255, 0.62) 100%);
-  --arch-hero-title: #121215;
-  --arch-hero-lead: #5a544b;
-  --arch-hero-candidate: #121215;
-  --arch-hero-badge-bg: rgba(112, 94, 73, 0.08);
-  --arch-hero-badge-text: #705e49;
-  --arch-hero-badge-border: rgba(112, 94, 73, 0.2);
-  --arch-hero-backdrop-filter: brightness(0.95) saturate(1.05);
+  /* Campus Hero in Light Theme (Crisp Frosted Daylight) */
+  --arch-hero-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 55%, rgba(255, 255, 255, 0.6) 100%);
+  --arch-hero-title: #09090b;
+  --arch-hero-lead: #475569;
+  --arch-hero-candidate: #09090b;
+  --arch-hero-badge-bg: rgba(0, 0, 0, 0.06);
+  --arch-hero-badge-text: #09090b;
+  --arch-hero-badge-border: rgba(0, 0, 0, 0.15);
+  --arch-hero-backdrop-filter: brightness(0.96) saturate(1.05);
 
   /* Chair & Barcode */
-  --arch-chair-bg: #ece7df;
-  --arch-chair-border: rgba(35, 30, 24, 0.12);
-  --arch-barcode-stripe: #18181b;
+  --arch-chair-bg: #f1f1f4;
+  --arch-chair-border: rgba(0, 0, 0, 0.1);
+  --arch-barcode-stripe: #09090b;
 
   /* Overriding general modern-ui variables for complete cohesion */
-  --bg-canvas: #faf8f5 !important;
+  --bg-canvas: #ffffff !important;
   --bg-surface-1: #ffffff !important;
-  --bg-surface-2: #f5f1ea !important;
-  --bg-surface-3: #ede7dc !important;
-  --bg-overlay: rgba(250, 248, 245, 0.92) !important;
-  --text-primary: #121215 !important;
-  --text-secondary: #5a544b !important;
-  --border-default: rgba(35, 30, 24, 0.1) !important;
-  --border-subtle: rgba(35, 30, 24, 0.06) !important;
+  --bg-surface-2: #f8f8fa !important;
+  --bg-surface-3: #f0f0f4 !important;
+  --bg-overlay: rgba(255, 255, 255, 0.94) !important;
+  --text-primary: #09090b !important;
+  --text-secondary: #475569 !important;
+  --border-default: rgba(0, 0, 0, 0.08) !important;
+  --border-subtle: rgba(0, 0, 0, 0.05) !important;
 }
 
 body {
@@ -523,12 +528,12 @@ body {
   border: 1px solid var(--arch-border);
 }
 
-/* Natural Sunlight Facade (Warm Architectural Glazing) */
+/* Natural Daylight Facade (Architectural Glazing) */
 .architectural-window-wall {
   position: relative;
   z-index: 2;
-  background: linear-gradient(180deg, rgba(232, 223, 209, 0.06) 0%, transparent 100%);
-  border: 1px dashed var(--arch-beige-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  border: 1px dashed var(--arch-border);
   border-radius: 8px;
   padding: 8px 14px;
   margin-bottom: 22px;
@@ -536,14 +541,14 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 11px;
-  color: var(--arch-beige);
+  color: var(--arch-text-primary);
   font-family: var(--font-mono);
 }
 
 :root[data-theme="light"] .architectural-window-wall {
-  background: linear-gradient(180deg, rgba(112, 94, 73, 0.05) 0%, transparent 100%);
-  border-color: rgba(112, 94, 73, 0.22);
-  color: var(--arch-sand);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, transparent 100%);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: var(--arch-text-primary);
 }
 
 .window-wall-glass-lines {
@@ -553,12 +558,12 @@ body {
 .window-glass-pane {
   width: 20px;
   height: 2px;
-  background: rgba(232, 223, 209, 0.35);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 1px;
 }
 
 :root[data-theme="light"] .window-glass-pane {
-  background: rgba(112, 94, 73, 0.3);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================================================================
@@ -740,15 +745,15 @@ body {
 
 /* ---- STATE: SELECTED (Crisp Contrast & Glow) ---- */
 .desk--selected .desk-surface {
-  background: rgba(232, 223, 209, 0.12) !important;
-  border-color: var(--arch-beige) !important;
-  box-shadow: 0 0 0 2px var(--arch-beige), 0 12px 32px var(--arch-beige-glow) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 2px #ffffff, 0 12px 32px rgba(255, 255, 255, 0.3) !important;
 }
 
 :root[data-theme="light"] .desk--selected .desk-surface {
   background: #ffffff !important;
-  border-color: #18181b !important;
-  box-shadow: 0 0 0 2px #18181b, 0 10px 24px rgba(24, 24, 27, 0.14) !important;
+  border-color: #09090b !important;
+  box-shadow: 0 0 0 2px #09090b, 0 10px 24px rgba(9, 9, 11, 0.14) !important;
 }
 
 .desk--selected .desk-status-pill {
@@ -925,7 +930,7 @@ body {
 }
 
 :root[data-theme="light"] .library-telemetry-box {
-  background: #f5f1ea;
+  background: #f8f8fa;
 }
 
 .telemetry-row {
@@ -1000,7 +1005,7 @@ body {
   color: var(--arch-text-secondary);
 }
 :root[data-theme="light"] .desk-perk-chip {
-  background: #f5f1ea;
+  background: #f8f8fa;
 }
 .desk-perk-chip strong {
   color: var(--arch-text-primary);
@@ -1019,7 +1024,7 @@ body {
 }
 
 :root[data-theme="light"] .pass-ticket-details {
-  background: #f5f1ea;
+  background: #f8f8fa;
 }
 
 .ticket-detail-row {
@@ -1114,7 +1119,7 @@ body {
 }
 
 :root[data-theme="light"] .credential-details-grid {
-  background-color: #f5f1ea !important;
+  background-color: #f8f8fa !important;
 }
 
 .credential-item-label {
@@ -1132,7 +1137,7 @@ body {
 }
 
 :root[data-theme="light"] .dark-barcode-card {
-  background-color: #f5f1ea !important;
+  background-color: #f8f8fa !important;
 }
 
 .dark-barcode-stripes {
@@ -1151,7 +1156,7 @@ body {
 }
 
 :root[data-theme="light"] .turnstile-iot-panel {
-  background-color: #f5f1ea !important;
+  background-color: #f8f8fa !important;
 }
 
 .turnstile-beacon {
@@ -1185,7 +1190,7 @@ body {
 }
 
 :root[data-theme="light"] .btn-secondary {
-  background-color: #f5f1ea !important;
+  background-color: #f8f8fa !important;
 }
 
 .btn-secondary:hover:not(:disabled) {
