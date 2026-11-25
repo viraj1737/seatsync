@@ -12,7 +12,7 @@
       <a href="/" class="logo">SeatSync</a>
       <nav class="nav"><a href="/">Home</a></nav>
       <div class="header-actions">
-        <span>{{ currentUser.name }}</span>
+        <span>{{ currentUser ? currentUser.name : 'Student' }}</span>
         <button class="button button-secondary button-small" ng-click="signOut()">Sign out</button>
       </div>
     </div>
@@ -119,6 +119,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/demo.service.js"></script>
   <script src="js/services/api.service.js"></script>
   <script src="js/directives/seat.directive.js"></script>
   <script src="js/controllers/student.controller.js"></script>
