@@ -3,296 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0B0B0C">
-  <meta name="color-scheme" content="dark">
-  <meta name="description" content="Check live desk availability at UPES Central Library, reserve a two-hour study slot and manage your digital seat pass.">
-  <script>
-    (function () {
-      try {
-        if (localStorage.getItem('seatsync-theme') === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-          var themeColor = document.querySelector('meta[name="theme-color"]');
-          if (themeColor) themeColor.setAttribute('content', '#F4F4F5');
-        }
-      } catch (error) {}
-    })();
-  </script>
-  <title>SeatSync — Desk availability at UPES Central Library</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/modern-ui.css">
-  <link rel="stylesheet" href="css/vercel-reference.css">
-  <link rel="stylesheet" href="css/architectural-ui.css">
+  <meta name="description" content="Check live desk availability at the UPES library and reserve a study slot.">
+  <title>SeatSync — Library desk booking</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body ng-controller="AuthController">
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="app-header">
-    <div class="header-inner">
-      <a href="/" class="brand-wrapper" aria-label="SeatSync home">
-        <div class="brand-mark" aria-hidden="true">S</div>
-        <div class="brand-meta">
-          <span class="brand-text">SeatSync</span>
-          <span class="brand-subtext">UPES Library</span>
-        </div>
-      </a>
-
-      <nav aria-label="Primary">
-        <ul class="nav-links">
-          <li><a href="#overview" class="nav-link active" aria-current="location">Overview</a></li>
-          <li><a href="#live-seat-map" class="nav-link">Live Desks</a></li>
-          <li><a href="#syllabus" class="nav-link">Syllabus Map</a></li>
-        </ul>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">SeatSync</a>
+      <nav class="nav">
+        <a href="#how-it-works">How it works</a>
+        <a href="/student.html">Desks</a>
       </nav>
-
-      <!-- Refined Account & Actions Bar (shadcn/ui & Google guidelines) -->
-      <div class="nav-user-actions">
-        <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Switch visual theme" title="Toggle theme">
-          <svg class="theme-toggle-icon theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
-          <svg class="theme-toggle-icon theme-toggle-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
-
-        <!-- Authenticated State (No more bubble buttons!) -->
-        <div ng-if="currentUser" style="display: flex; align-items: center; gap: 8px;">
-          <div class="user-account-badge">
-            <span class="user-avatar-circle" aria-hidden="true">VK</span>
-            <span class="user-account-name">{{ currentUser.name }}</span>
-            <span class="role-tag">{{ currentUser.role }}</span>
-          </div>
-          <a ng-if="currentUser.role === 'student'" href="/student.html" class="btn btn-secondary btn-sm">
-            Student Portal
-          </a>
-          <a ng-if="currentUser.role === 'admin'" href="/admin.html" class="btn btn-secondary btn-sm">
-            Admin Console
-          </a>
-          <button type="button" class="btn btn-ghost btn-sm" ng-click="signOut()" style="color: var(--text-secondary);">
-            Sign Out
-          </button>
-        </div>
-
-        <!-- Unauthenticated State -->
-        <div ng-if="!currentUser" style="display: flex; gap: 8px; align-items: center;">
-          <a href="/login.html" class="btn btn-ghost btn-sm">Sign in</a>
-          <a href="/register.html" class="btn btn-primary btn-sm">Register</a>
-        </div>
+      <div class="header-actions" ng-if="currentUser">
+        <span>{{ currentUser.name }}</span>
+        <a href="/student.html" ng-if="currentUser.role === 'student'">Student portal</a>
+        <a href="/admin.html" ng-if="currentUser.role === 'admin'">Admin console</a>
+        <button class="button button-secondary button-small" ng-click="signOut()">Sign out</button>
+      </div>
+      <div class="header-actions" ng-if="!currentUser">
+        <a href="/login.html">Sign in</a>
+        <a class="button button-small" href="/register.html">Register</a>
       </div>
     </div>
   </header>
 
-  <main id="main" class="app-main">
-    <div class="container">
-      <!-- Cinematic Campus Hero Section -->
-      <section id="overview" class="campus-hero-banner" style="margin-bottom: var(--space-12);" data-enter>
-        <div class="campus-hero-image-backdrop" aria-hidden="true"></div>
-        <div class="campus-hero-gradient-overlay" aria-hidden="true"></div>
-        <div class="campus-hero-content" style="padding: var(--space-12) var(--space-8);">
-          <div style="max-width: 640px;">
-            <div class="campus-meta-badge">
-              <span class="campus-pulse-dot"></span>
-              <span>UPES Central Library &bull; Bidholi Campus</span>
-            </div>
-            <h1 class="campus-hero-title" style="font-size: 38px; line-height: 1.15; margin-bottom: var(--space-3);">
-              Find your ideal study desk at UPES Central Library.
-            </h1>
-            <p class="campus-hero-lead" style="font-size: 15px; color: var(--arch-hero-lead, rgba(255, 255, 255, 0.8)); line-height: 1.6; margin-bottom: var(--space-6);">
-              Live 32-desk architectural allotment, 2-hour reserved study windows, and automated RFID turnstile exit for engineering and management scholars.
-            </p>
-            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-              <a href="/student.html" class="btn btn-primary btn-lg">View available desks &rarr;</a>
-              <a href="/login.html" class="btn btn-secondary btn-lg">Student sign in</a>
-            </div>
-          </div>
+  <main class="container page">
+    <section class="hero">
+      <div>
+        <h1>Find a study desk at the UPES library</h1>
+        <p class="muted">SeatSync shows which desks are free right now. Choose a floor, pick a two-hour slot and reserve a desk in a few clicks.</p>
+        <div class="hero-actions">
+          <a class="button" href="/student.html">Check available desks</a>
+          <a class="button button-secondary" href="/register.html">Create an account</a>
         </div>
-      </section>
+      </div>
+      <img src="assets/images/upes-library-front.jpg" alt="UPES Central Library building">
+    </section>
 
-      <section class="stats-row" aria-label="Library at a glance" style="margin-bottom: var(--space-16);">
-        <div class="metrics-grid">
-          <div class="metric-card">
-            <span class="metric-label">Study desks</span>
-            <span class="metric-value">32</span>
-            <span class="metric-subtext">Across two reading floors</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Free right now</span>
-            <span class="metric-value" style="color: var(--color-available);">28</span>
-            <span class="metric-subtext">09:00–11:00 slot</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Desks with power</span>
-            <span class="metric-value">100%</span>
-            <span class="metric-subtext">USB-C and universal AC</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">Double-book guard</span>
-            <span class="metric-value" style="color: var(--color-available); font-size: 22px;">Atomic Lock</span>
-            <span class="metric-subtext">Zero double-booking guarantee</span>
-          </div>
+    <section id="how-it-works">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="card">
+          <h3>1. Sign in</h3>
+          <p class="muted">Use your college account to log in.</p>
         </div>
-      </section>
+        <div class="card">
+          <h3>2. Pick a desk</h3>
+          <p class="muted">Select a floor, date and time slot, then choose a free desk from the map.</p>
+        </div>
+        <div class="card">
+          <h3>3. Reserve and exit</h3>
+          <p class="muted">See your booking in “My bookings” and tap the card at the exit gate to release it.</p>
+        </div>
+      </div>
+    </section>
 
-      <section id="live-seat-map" style="margin-bottom: var(--space-16);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-5);">
-          <div>
-            <h2 class="section-title" style="margin-bottom: var(--space-2);">Floor 1 reading wing</h2>
-            <p class="body-secondary">Desk status for the current two-hour slot.</p>
-          </div>
-          <a href="/student.html" class="btn btn-secondary btn-sm">Reserve in student portal</a>
-        </div>
-
-        <div class="seat-legend" aria-label="Desk status legend">
-          <span class="label-meta" style="font-weight: 600;">Status</span>
-          <span class="legend-item"><span class="legend-swatch" style="border-color: var(--color-available-border); background: var(--color-surface-subtle);"></span>Available</span>
-          <span class="legend-item"><span class="legend-swatch" style="border-color: var(--color-reserved-border); background: var(--color-reserved-bg);"></span>Reserved</span>
-          <span class="legend-item"><span class="legend-swatch" style="border-color: var(--color-occupied-border); background: var(--color-occupied-bg);"></span>Occupied</span>
-          <span class="legend-item"><span class="legend-swatch" style="border-color: var(--color-unavailable-border); background: var(--color-unavailable-bg);"></span>Maintenance</span>
-        </div>
-
-        <div class="seat-grid-container">
-          <div class="seat-grid">
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-01</span><span class="seat-tile-status">Free</span><span class="seat-power-glyph" title="Power outlet" aria-label="Power outlet">⚡</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-02</span><span class="seat-tile-status">Free</span><span class="seat-power-glyph" title="Power outlet" aria-label="Power outlet">⚡</span></div>
-            <div class="seat-tile seat-tile--reserved"><span class="seat-beacon"></span><span class="seat-tile-label">A-03</span><span class="seat-tile-status">Reserved</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-04</span><span class="seat-tile-status">Free</span><span class="seat-power-glyph" title="Power outlet" aria-label="Power outlet">⚡</span></div>
-            <div class="seat-tile seat-tile--occupied"><span class="seat-beacon"></span><span class="seat-tile-label">A-05</span><span class="seat-tile-status">Occupied</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-06</span><span class="seat-tile-status">Free</span></div>
-            <div class="seat-tile seat-tile--reserved"><span class="seat-beacon"></span><span class="seat-tile-label">A-07</span><span class="seat-tile-status">Reserved</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-08</span><span class="seat-tile-status">Free</span><span class="seat-power-glyph" title="Power outlet" aria-label="Power outlet">⚡</span></div>
-            <div class="seat-tile seat-tile--unavailable"><span class="seat-beacon"></span><span class="seat-tile-label">A-09</span><span class="seat-tile-status">Service</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-10</span><span class="seat-tile-status">Free</span></div>
-            <div class="seat-tile seat-tile--reserved"><span class="seat-beacon"></span><span class="seat-tile-label">A-11</span><span class="seat-tile-status">Reserved</span></div>
-            <div class="seat-tile seat-tile--available"><span class="seat-beacon"></span><span class="seat-tile-label">A-12</span><span class="seat-tile-status">Free</span><span class="seat-power-glyph" title="Power outlet" aria-label="Power outlet">⚡</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="syllabus" class="card">
-        <div class="card-header">
-          <div>
-            <h2 class="section-title" style="margin-bottom: var(--space-2);">Where each course unit appears</h2>
-            <p class="body-secondary">AWT syllabus mapped to working code in this project.</p>
-          </div>
-          <span class="badge badge-available">5 units</span>
-        </div>
-        <div class="table-wrapper">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Unit</th>
-                <th scope="col">Topic</th>
-                <th scope="col">Implementation</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Unit I</th>
-                <td>jQuery selectors, events and DOM effects</td>
-                <td>Toast notifications and hover micro-interactions in <span class="code-snippet">jquery-effects.js</span></td>
-                <td><span class="badge badge-available">Working</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Unit II</th>
-                <td>AngularJS controllers, directives and binding</td>
-                <td><span class="code-snippet">ng-model</span>, <span class="code-snippet">ng-repeat</span>, custom <span class="code-snippet">seatBadge</span> directive and modular controllers</td>
-                <td><span class="badge badge-available">Working</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Unit III</th>
-                <td>Node.js and Express.js</td>
-                <td>REST routes, controllers, middleware and static delivery in <span class="code-snippet">server.js</span> and <span class="code-snippet">app.js</span></td>
-                <td><span class="badge badge-available">Working</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Unit IV</th>
-                <td>Sessions, cookies and MongoDB CRUD</td>
-                <td><span class="code-snippet">connect-mongo</span> sessions, HTTP-only cookies, <span class="code-snippet">bcryptjs</span>, Mongoose schemas and 409 conflict checks</td>
-                <td><span class="badge badge-available">Working</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Unit V</th>
-                <td>D3.js and SVG visualisation</td>
-                <td>Live occupancy bar chart with scales, axes and tooltips in <span class="code-snippet">charts.js</span></td>
-                <td><span class="badge badge-available">Working</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
+    <section>
+      <h2>What you get</h2>
+      <div class="card">
+        <ul class="muted">
+          <li>Live desk status for each floor and time slot</li>
+          <li>Two-hour reservations with clash protection</li>
+          <li>A simple admin screen for library staff</li>
+        </ul>
+      </div>
+    </section>
   </main>
 
-  <!-- Enterprise Multi-Column Footer (Industry Standard) -->
   <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        
-        <!-- Col 1: Brand & Status -->
-        <div>
-          <div class="brand-wrapper" style="margin-bottom: 12px;">
-            <div class="brand-mark" aria-hidden="true">S</div>
-            <span class="brand-text">SeatSync</span>
-          </div>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px 0; max-width: 280px;">
-            Automated seat allotment and RFID exit turnstile management system for the UPES Central Library.
-          </p>
-          <div class="system-status-indicator">
-            <span class="pulse-dot"></span>
-            <span>All systems operational at Bidholi Campus</span>
-          </div>
-        </div>
-
-        <!-- Col 2: Library Wings -->
-        <div>
-          <div class="footer-col-title">Library Wings</div>
-          <ul class="footer-links">
-            <li><a href="/student.html">Floor 1 &mdash; Tech &amp; Engineering</a></li>
-            <li><a href="/student.html">Floor 2 &mdash; Silent Research Zone</a></li>
-            <li><a href="/student.html">Quiet Commons</a></li>
-            <li><a href="/student.html">Exit Turnstile Gate 02</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 3: Guidelines & Policy -->
-        <div>
-          <div class="footer-col-title">Policies &amp; Access</div>
-          <ul class="footer-links">
-            <li><a href="#rules">2-Hour Study Slot Rules</a></li>
-            <li><a href="#rfid">RFID Punch Exit Protocol</a></li>
-            <li><a href="#concurrency">Zero Double-Booking Guard</a></li>
-            <li><a href="mailto:library@upes.ac.in">Library Support Desk</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 4: Engineering & Project Credits -->
-        <div>
-          <div class="footer-col-title">Coursework &amp; Candidate</div>
-          <ul class="footer-links" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-            <li>Course: <strong style="color: var(--text-primary);">Advanced Web Technologies</strong></li>
-            <li>Candidate: <strong style="color: var(--text-primary);">Viraj Kumar</strong></li>
-            <li>SAP ID: <span class="mono-num" style="color: var(--text-primary);">590029022</span></li>
-            <li>Email: <a href="mailto:viraj.29022@stu.upes.ac.in" style="color: var(--text-secondary);">viraj.29022@stu.upes.ac.in</a></li>
-            <li>GitHub: <a href="https://github.com/viraj1737/seatsync" target="_blank" rel="noopener">viraj1737/seatsync &nearr;</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Sub-footer / Legal Bar -->
-      <div class="footer-bottom">
-        <div>
-          &copy; 2026 UPES Central Library Desk Reservation System. Academic Coursework Submission.
-        </div>
-        <div style="display: flex; gap: 16px;">
-          <span>Node.js / Express / AngularJS / MongoDB</span>
-          <span>HTTP 409 Concurrency Protected</span>
-        </div>
-      </div>
-    </div>
+    <div class="container">SeatSync — Advanced Web Technologies project, UPES.</div>
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -300,7 +80,5 @@
   <script src="js/app.js"></script>
   <script src="js/services/api.service.js"></script>
   <script src="js/controllers/auth.controller.js"></script>
-  <script src="js/jquery-effects.js"></script>
-  <script src="js/theme.js"></script>
 </body>
 </html>

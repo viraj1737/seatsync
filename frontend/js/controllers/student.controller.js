@@ -1,278 +1,138 @@
-/**
- * SeatSync Student Portal Controller
- * Drives real-time seat browsing, slot selection, seat allotment, and RFID turnstile exit
- */
-angular.module('seatSyncApp').controller('StudentController', ['$scope', '$window', 'ApiService', function ($scope, $window, ApiService) {
-  $scope.currentUser = null;
-  $scope.floors = [];
-  $scope.selectedFloor = null;
-  $scope.selectedDate = new Date();
-  $scope.slots = [
-    { code: '09:00-11:00', label: '09:00 AM – 11:00 AM', timeLabel: 'Morning Slot' },
-    { code: '11:00-13:00', label: '11:00 AM – 01:00 PM', timeLabel: 'Midday Slot' },
-    { code: '13:00-15:00', label: '01:00 PM – 03:00 PM', timeLabel: 'Afternoon Slot' },
-    { code: '15:00-17:00', label: '03:00 PM – 05:00 PM', timeLabel: 'Evening Slot' },
-    { code: '17:00-19:00', label: '05:00 PM – 07:00 PM', timeLabel: 'Night Slot' }
-  ];
-  $scope.selectedSlot = '09:00-11:00';
+/* Student portal: pick a floor, date and slot, then reserve a desk. */
+angular.module('seatSyncApp').controller('StudentController', ['$scope', '$window', 'ApiService',
+  function ($scope, $window, ApiService) {
 
-  $scope.seats = [];
-  $scope.selectedSeat = null;
-  $scope.myBookings = [];
-  $scope.activeBooking = null;
+    $scope.currentUser = null;
+    $scope.floors = [];
+    $scope.selectedFloor = null;
+    $scope.selectedDate = new Date();
+    $scope.selectedSlot = '09:00-11:00';
+    $scope.slots = [
+      { code: '09:00-11:00', label: '09:00 – 11:00' },
+      { code: '11:00-13:00', label: '11:00 – 13:00' },
+      { code: '13:00-15:00', label: '13:00 – 15:00' },
+      { code: '15:00-17:00', label: '15:00 – 17:00' },
+      { code: '17:00-19:00', label: '17:00 – 19:00' }
+    ];
+    $scope.seats = [];
+    $scope.selectedSeat = null;
+    $scope.myBookings = [];
+    $scope.activeTab = 'reserve';
+    $scope.errorMessage = '';
+    $scope.isBooking = false;
 
-  $scope.isLoadingSeats = false;
-  $scope.isBooking = false;
-  $scope.isPunching = false;
-  $scope.turnstileStatus = null; // feedback after punch
-  $scope.statusMessage = null; // { type: 'success'|'danger'|'info', text: '...' }
-  $scope.activeTab = 'reserve'; // 'reserve' | 'my-bookings'
-
-  // 2D Virtual Campus Interactive Map Controls (TuteDude / Gather.town style)
-  $scope.mapZoom = 80;
-  $scope.isMuted = true;
-  $scope.isCameraOn = false;
-  $scope.isDND = false;
-
-  $scope.zoomIn = function () {
-    if ($scope.mapZoom < 140) $scope.mapZoom += 10;
-  };
-  $scope.zoomOut = function () {
-    if ($scope.mapZoom > 50) $scope.mapZoom -= 10;
-  };
-  $scope.resetZoom = function () {
-    $scope.mapZoom = 80;
-  };
-
-  $scope.toggleMic = function () {
-    $scope.isMuted = !$scope.isMuted;
-    $scope.showMessage('info', $scope.isMuted ? 'Microphone muted (Silent Library Policy).' : 'Microphone unmuted.');
-  };
-  $scope.toggleCamera = function () {
-    $scope.isCameraOn = !$scope.isCameraOn;
-    $scope.showMessage('info', $scope.isCameraOn ? 'Study Cam enabled.' : 'Study Cam disabled.');
-  };
-  $scope.toggleDND = function () {
-    $scope.isDND = !$scope.isDND;
-    $scope.showMessage('info', $scope.isDND ? 'Silent Study Mode (DND) active.' : 'Silent Study Mode disabled.');
-  };
-  $scope.showCampusGuide = function () {
-    $scope.showMessage('info', 'Click any vacant wooden desk in the Central Reading Hall to seat Viraj Kumar and lock your reservation!');
-  };
-
-  // Dedicated tab switcher function to cleanly update parent scope across child scopes (ng-if/ng-repeat)
-  $scope.switchTab = function (tabName) {
-    $scope.activeTab = tabName;
-    if (tabName === 'reserve') {
-      $scope.loadSeats();
-    } else if (tabName === 'my-bookings') {
-      $scope.loadMyBookings();
-    }
-  };
-
-  // Initialize student session & data
-  $scope.init = function () {
+    // Load the logged-in student, the floors and their bookings
     ApiService.getMe()
       .then(function (response) {
         $scope.currentUser = response.data.data;
         $scope.loadFloors();
         $scope.loadMyBookings();
       })
-      .catch(function () {
-        $window.location.href = '/login.html';
+      .catch(function () { $window.location.href = '/login.html'; });
+
+    $scope.loadFloors = function () {
+      ApiService.getFloors().then(function (response) {
+        $scope.floors = response.data.data || [];
+        if ($scope.floors.length) {
+          $scope.selectedFloor = $scope.floors[0];
+          $scope.loadSeats();
+        }
       });
-  };
-
-  // Load available library floors
-  $scope.loadFloors = function () {
-    ApiService.getFloors().then(function (response) {
-      $scope.floors = response.data.data || [];
-      if ($scope.floors.length > 0) {
-        $scope.selectedFloor = $scope.floors[0];
-        $scope.loadSeats();
-      }
-    });
-  };
-
-  // Switch floor
-  $scope.selectFloor = function (floor) {
-    $scope.selectedFloor = floor;
-    $scope.selectedSeat = null;
-    $scope.loadSeats();
-  };
-
-  // Switch slot
-  $scope.selectSlot = function (slotCode) {
-    $scope.selectedSlot = slotCode;
-    $scope.selectedSeat = null;
-    $scope.loadSeats();
-  };
-
-  // Format a Date as a local YYYY-MM-DD string for the booking API
-  $scope.formatDate = function (date) {
-    if (!date) return '';
-    var d = new Date(date);
-    var month = String(d.getMonth() + 1).padStart(2, '0');
-    var day = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + month + '-' + day;
-  };
-
-  // Load seats with computed live statuses
-  $scope.loadSeats = function () {
-    if (!$scope.selectedFloor) return;
-
-    $scope.isLoadingSeats = true;
-    ApiService.getSeats($scope.selectedFloor._id, $scope.formatDate($scope.selectedDate), $scope.selectedSlot)
-      .then(function (response) {
-        $scope.seats = response.data.data || [];
-        $scope.isLoadingSeats = false;
-      })
-      .catch(function () {
-        $scope.isLoadingSeats = false;
-        $scope.showMessage('danger', 'Failed to retrieve library seating map.');
-      });
-  };
-
-  // Select a seat on the grid
-  $scope.chooseSeat = function (seat) {
-    $scope.bookingError = null;
-    if (seat.status !== 'available') {
-      if (seat.status === 'reserved') {
-        $scope.showMessage('danger', `Desk ${seat.seatNumber} is already reserved for this slot.`);
-      } else if (seat.status === 'occupied') {
-        $scope.showMessage('danger', `Desk ${seat.seatNumber} is physically occupied by library staff.`);
-      } else {
-        $scope.showMessage('danger', `Desk ${seat.seatNumber} is temporarily out of service.`);
-      }
-      return;
-    }
-
-    $scope.selectedSeat = seat;
-  };
-
-  // Keyboard parity for seat tiles (Enter / Space), matching Apple HIG accessibility
-  $scope.handleSeatKey = function (event, seat) {
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-      event.preventDefault();
-      $scope.chooseSeat(seat);
-    }
-  };
-
-  // Confirm reservation / Seat Allotment
-  $scope.confirmReservation = function () {
-    if (!$scope.selectedSeat || !$scope.selectedFloor) return;
-
-    $scope.isBooking = true;
-    $scope.bookingError = null;
-    const payload = {
-      seatId: $scope.selectedSeat._id,
-      floorId: $scope.selectedFloor._id,
-      date: $scope.formatDate($scope.selectedDate),
-      slot: $scope.selectedSlot
     };
 
-    ApiService.createBooking(payload)
-      .then(function (response) {
-        $scope.isBooking = false;
-        $scope.selectedSeat = null;
-        $scope.bookingError = null;
-        $scope.showMessage('success', response.data.message || 'Seat reserved successfully!');
-        
-        if (typeof window.showSeatSyncToast === 'function') {
-          window.showSeatSyncToast('Seat Allotted Successfully!', response.data.message, false);
-        }
+    // AngularJS date inputs use a Date object; the API wants YYYY-MM-DD
+    $scope.formatDate = function (date) {
+      var d = new Date(date);
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') +
+             '-' + String(d.getDate()).padStart(2, '0');
+    };
 
-        $scope.loadSeats();
-        $scope.loadMyBookings();
-        $scope.activeTab = 'my-bookings'; // Switch to show active pass!
+    // Ask the server for seats with their status for the chosen date and slot
+    $scope.loadSeats = function () {
+      if (!$scope.selectedFloor) return;
+      $scope.selectedSeat = null;
+      ApiService.getSeats($scope.selectedFloor._id, $scope.formatDate($scope.selectedDate), $scope.selectedSlot)
+        .then(function (response) { $scope.seats = response.data.data || []; });
+    };
+
+    $scope.selectFloor = function (floor) {
+      $scope.selectedFloor = floor;
+      $scope.loadSeats();
+    };
+
+    $scope.selectSlot = function (code) {
+      $scope.selectedSlot = code;
+      $scope.loadSeats();
+    };
+
+    // Only free desks can be chosen
+    $scope.chooseSeat = function (seat) {
+      $scope.errorMessage = '';
+      if (seat.status !== 'available') {
+        $scope.errorMessage = 'Desk ' + seat.seatNumber + ' is not available for this slot.';
+        return;
+      }
+      $scope.selectedSeat = seat;
+    };
+
+    $scope.confirmReservation = function () {
+      if (!$scope.selectedSeat || !$scope.selectedFloor) return;
+      $scope.isBooking = true;
+      $scope.errorMessage = '';
+
+      ApiService.createBooking({
+        seatId: $scope.selectedSeat._id,
+        floorId: $scope.selectedFloor._id,
+        date: $scope.formatDate($scope.selectedDate),
+        slot: $scope.selectedSlot
       })
-      .catch(function (error) {
-        $scope.isBooking = false;
-        const msg = (error.data && error.data.message) ? error.data.message : 'Reservation failed.';
-        $scope.bookingError = msg;
-        $scope.showMessage('danger', msg);
-        if (typeof window.showSeatSyncToast === 'function') {
-          window.showSeatSyncToast('Reservation Notice', msg, true);
-        }
-      });
-  };
-
-  // Load student's bookings
-  $scope.loadMyBookings = function () {
-    ApiService.getMyBookings().then(function (response) {
-      $scope.myBookings = response.data.data || [];
-      $scope.activeBooking = $scope.myBookings.find(b => b.status === 'confirmed') || null;
-    });
-  };
-
-  // RFID Turnstile Card Punch Exit (Simulates touching UPES ID Card to Turnstile Scanner)
-  $scope.punchCardExit = function () {
-    $scope.isPunching = true;
-    $scope.turnstileStatus = 'Scanning Smart Card...';
-
-    setTimeout(function () {
-      const studentId = ($scope.currentUser && $scope.currentUser.studentId) || '590029022';
-      
-      ApiService.punchExit(studentId)
-        .then(function (response) {
-          $scope.isPunching = false;
-          $scope.turnstileStatus = 'Card Punched! Gate Unlocked & Desk Released.';
-          $scope.showMessage('success', response.data.message);
-          
-          if (typeof window.showSeatSyncToast === 'function') {
-            window.showSeatSyncToast('RFID Card Punched', 'Turnstile Gate 02 Opened • Seat Released!');
-          }
-
+        .then(function () {
+          $scope.isBooking = false;
+          $scope.selectedSeat = null;
           $scope.loadSeats();
           $scope.loadMyBookings();
-
-          setTimeout(function () {
-            $scope.$apply(function () {
-              $scope.turnstileStatus = null;
-            });
-          }, 5000);
+          $scope.activeTab = 'my-bookings';
+          if (window.showSeatSyncToast) window.showSeatSyncToast('Desk reserved', 'Your seat is confirmed.', false);
         })
         .catch(function (error) {
-          $scope.isPunching = false;
-          $scope.turnstileStatus = null;
-          const msg = (error.data && error.data.message) ? error.data.message : 'Turnstile card punch failed.';
-          $scope.showMessage('danger', msg);
+          $scope.isBooking = false;
+          $scope.errorMessage = (error.data && error.data.message) || 'Reservation failed.';
         });
-    }, 700); // realistic sensor scan feedback
-  };
+    };
 
-  // Fallback / legacy alias for exit and release seat
-  $scope.exitAndReleaseSeat = function (booking) {
-    $scope.punchCardExit();
-  };
-
-  // Fallback manual cancel if needed
-  $scope.manualCancel = function (booking) {
-    if (!confirm('Release this seat?')) return;
-    ApiService.cancelBooking(booking._id).then(function () {
-      $scope.showMessage('success', 'Seat released successfully.');
-      $scope.loadSeats();
-      $scope.loadMyBookings();
-    });
-  };
-
-  $scope.showMessage = function (type, text) {
-    $scope.statusMessage = { type: type, text: text };
-    if (typeof window.showSeatSyncToast === 'function') {
-      window.showSeatSyncToast(type === 'danger' ? 'Notice' : (type === 'success' ? 'Confirmed' : 'SeatSync Info'), text, type === 'danger');
-    }
-    setTimeout(function () {
-      $scope.$apply(function () {
-        $scope.statusMessage = null;
+    $scope.loadMyBookings = function () {
+      ApiService.getMyBookings().then(function (response) {
+        $scope.myBookings = response.data.data || [];
       });
-    }, 4500);
-  };
+    };
 
-  $scope.signOut = function () {
-    ApiService.logout().finally(function () {
-      $window.location.href = '/login.html';
-    });
-  };
+    $scope.cancelBooking = function (booking) {
+      if (!window.confirm('Release this desk?')) return;
+      ApiService.cancelBooking(booking._id).then(function () {
+        $scope.loadSeats();
+        $scope.loadMyBookings();
+      });
+    };
 
-  $scope.init();
-}]);
+    // Simulates tapping the campus card at the exit gate
+    $scope.punchExit = function () {
+      ApiService.punchExit($scope.currentUser.studentId).then(function (response) {
+        $scope.loadSeats();
+        $scope.loadMyBookings();
+        if (window.showSeatSyncToast) window.showSeatSyncToast('Gate opened', response.data.message, false);
+      }).catch(function (error) {
+        $scope.errorMessage = (error.data && error.data.message) || 'Card punch failed.';
+      });
+    };
+
+    $scope.switchTab = function (tab) {
+      $scope.activeTab = tab;
+      if (tab === 'my-bookings') $scope.loadMyBookings();
+      else $scope.loadSeats();
+    };
+
+    $scope.signOut = function () {
+      ApiService.logout().finally(function () { $window.location.href = '/login.html'; });
+    };
+  }
+]);

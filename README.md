@@ -1,6 +1,6 @@
 # SeatSync — Smart Library Seat Availability & Reservation System
 
-SeatSync is a responsive, premium web application built for the Advanced Web Technologies (AWT) course. It enables university students to check real-time seat availability across library floors/zones and reserve seats for defined time slots, while providing library staff with an administrative dashboard to manage seating layout and inspect occupancy analytics.
+SeatSync is a simple, responsive web application built for the Advanced Web Technologies (AWT) course. It enables university students to check real-time seat availability across library floors/zones and reserve seats for defined time slots, while providing library staff with an administrative dashboard to manage seating layout and inspect occupancy analytics.
 
 ---
 

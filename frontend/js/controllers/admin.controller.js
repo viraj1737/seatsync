@@ -1,18 +1,15 @@
-/**
- * SeatSync Admin Portal Controller
- * Real-time floor/seat maintenance, physical overrides, and occupancy analytics
- */
-angular.module('seatSyncApp').controller('AdminController', ['$scope', '$window', 'ApiService', function ($scope, $window, ApiService) {
-  $scope.currentUser = null;
-  $scope.summary = {};
-  $scope.floors = [];
-  $scope.selectedFloor = null;
-  $scope.seats = [];
-  $scope.allBookings = [];
-  $scope.isLoading = false;
-  $scope.activeTab = 'overview'; // 'overview' | 'seats' | 'bookings' | 'analytics'
+/* Admin portal: overview numbers, desk status, bookings and a small chart. */
+angular.module('seatSyncApp').controller('AdminController', ['$scope', '$window', 'ApiService',
+  function ($scope, $window, ApiService) {
 
-  $scope.init = function () {
+    $scope.currentUser = null;
+    $scope.summary = {};
+    $scope.floors = [];
+    $scope.selectedFloor = null;
+    $scope.seats = [];
+    $scope.allBookings = [];
+    $scope.activeTab = 'overview';
+
     ApiService.getMe()
       .then(function (response) {
         $scope.currentUser = response.data.data;
@@ -22,73 +19,72 @@ angular.module('seatSyncApp').controller('AdminController', ['$scope', '$window'
         }
         $scope.loadSummary();
         $scope.loadFloors();
-        $scope.loadAllBookings();
+        $scope.loadBookings();
       })
-      .catch(function () {
-        $window.location.href = '/login.html';
+      .catch(function () { $window.location.href = '/login.html'; });
+
+    $scope.loadSummary = function () {
+      ApiService.getAdminSummary().then(function (response) {
+        $scope.summary = response.data.data || {};
       });
-  };
+    };
 
-  $scope.loadSummary = function () {
-    ApiService.getAdminSummary().then(function (response) {
-      $scope.summary = response.data.data || {};
-    });
-  };
+    $scope.loadFloors = function () {
+      ApiService.getFloors().then(function (response) {
+        $scope.floors = response.data.data || [];
+        if ($scope.floors.length) {
+          $scope.selectedFloor = $scope.floors[0];
+          $scope.loadSeats();
+        }
+      });
+    };
 
-  $scope.loadFloors = function () {
-    ApiService.getFloors().then(function (response) {
-      $scope.floors = response.data.data || [];
-      if ($scope.floors.length > 0) {
-        $scope.selectedFloor = $scope.floors[0];
-        $scope.loadSeatsForFloor();
-      }
-    });
-  };
+    $scope.loadSeats = function () {
+      if (!$scope.selectedFloor) return;
+      ApiService.getSeats($scope.selectedFloor._id).then(function (response) {
+        $scope.seats = response.data.data || [];
+      });
+    };
 
-  $scope.selectFloor = function (floor) {
-    $scope.selectedFloor = floor;
-    $scope.loadSeatsForFloor();
-  };
+    $scope.selectFloor = function (floor) {
+      $scope.selectedFloor = floor;
+      $scope.loadSeats();
+    };
 
-  $scope.loadSeatsForFloor = function () {
-    if (!$scope.selectedFloor) return;
-    ApiService.getSeats($scope.selectedFloor._id).then(function (response) {
-      $scope.seats = response.data.data || [];
-    });
-  };
+    // Staff can mark a desk as free, occupied or under maintenance
+    $scope.setSeatStatus = function (seat, status) {
+      ApiService.updateSeatStatus(seat._id, status).then(function () {
+        seat.status = status;
+        $scope.loadSummary();
+        $scope.loadChart();
+      });
+    };
 
-  // Staff Physical Override: Toggle status between Available, Occupied, and Unavailable
-  $scope.updatePhysicalStatus = function (seat, newStatus) {
-    ApiService.updateSeatStatus(seat._id, newStatus).then(function () {
-      seat.status = newStatus;
-      seat.physicalStatus = newStatus;
-      $scope.loadSummary();
-      if (typeof window.renderOccupancyChart === 'function') {
-        window.renderOccupancyChart();
-      }
-    });
-  };
+    $scope.loadBookings = function () {
+      ApiService.getAllBookings().then(function (response) {
+        $scope.allBookings = response.data.data || [];
+      });
+    };
 
-  $scope.loadAllBookings = function () {
-    ApiService.getAllBookings().then(function (response) {
-      $scope.allBookings = response.data.data || [];
-    });
-  };
+    $scope.cancelBooking = function (booking) {
+      if (!window.confirm('Cancel this reservation?')) return;
+      ApiService.cancelBooking(booking._id).then(function () {
+        $scope.loadBookings();
+        $scope.loadSummary();
+        $scope.loadSeats();
+        $scope.loadChart();
+      });
+    };
 
-  $scope.cancelStudentBooking = function (booking) {
-    if (!confirm('Cancel this student reservation and release seat immediately?')) return;
-    ApiService.cancelBooking(booking._id).then(function () {
-      $scope.loadAllBookings();
-      $scope.loadSummary();
-      $scope.loadSeatsForFloor();
-    });
-  };
+    // Send occupancy figures to charts.js (D3.js)
+    $scope.loadChart = function () {
+      ApiService.getOccupancyAnalytics().then(function (response) {
+        if (window.renderOccupancyChart) window.renderOccupancyChart(response.data.data || []);
+      });
+    };
 
-  $scope.signOut = function () {
-    ApiService.logout().finally(function () {
-      $window.location.href = '/login.html';
-    });
-  };
-
-  $scope.init();
-}]);
+    $scope.signOut = function () {
+      ApiService.logout().finally(function () { $window.location.href = '/login.html'; });
+    };
+  }
+]);
